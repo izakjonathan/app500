@@ -1,0 +1,20 @@
+/* Typography controls */
+:root{
+  --type-caption:10px;
+  --type-small:12px;
+  --type-body:13px;
+  --type-body-lg:14px;
+  --type-title:16px;
+  --type-title-lg:18px;
+  --type-display-sm:22px;
+  --type-display:28px;
+  --type-input:34px;
+  --type-score:42px;
+
+  --weight-regular:400;
+  --weight-medium:500;
+  --weight-semibold:600;
+  --weight-bold:700;
+  --weight-heavy:800;
+  --weight-black:900;
+}
