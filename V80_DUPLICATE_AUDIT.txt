@@ -1,0 +1,16 @@
+V80 DUPLICATE SELECTOR AUDIT
+
+Selector | Base | Theme | Typography
+.player-name | Y | - | Y
+.total | Y | - | Y
+.round-input | Y | - | Y
+.quick | Y | - | Y
+.penalty | Y | - | Y
+.add-round | Y | - | Y
+.pill | - | Y | Y
+.modal | - | Y | -
+.card | - | - | -
+.last-round-player-score | - | - | Y
+
+No CSS removed in this pass.
+This creates the audit foundation for safe duplicate deletion.
