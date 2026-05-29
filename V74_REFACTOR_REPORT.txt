@@ -1,0 +1,12 @@
+V74 PASS 1
+
+Safe refactor only.
+
+- Kept all original CSS in globals-base.css
+- Copied major typography selectors into typography.css
+- Added theme tokens to theme.css
+- No selectors removed yet
+- UI should render identically
+
+Next pass:
+Remove duplicated typography selectors from globals-base.css after visual verification.
