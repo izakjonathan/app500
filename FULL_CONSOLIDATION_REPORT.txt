@@ -1,0 +1,1 @@
+Removed legacy font-size/font-weight declarations from globals.css and replaced with a single token-driven typography system.
