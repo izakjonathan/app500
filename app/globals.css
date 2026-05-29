@@ -2019,3 +2019,51 @@ justify-content:center !important;
  overflow:auto !important;
  border-radius:28px !important;
 }
+
+
+/* V64 Apple typography pass */
+.player-name{font-size:13px !important;font-weight:600 !important;}
+.total{font-size:27px !important;letter-spacing:-0.03em !important;}
+.ring{font-size:6px !important;}
+.pill{font-size:12px !important;font-weight:600 !important;}
+
+.last-round-top.centered .last-round-label{
+ font-size:10px !important;
+ letter-spacing:.24em !important;
+}
+
+.last-round-player-name{
+ font-size:11px !important;
+ font-weight:600 !important;
+}
+
+.last-round-player-score{
+ font-size:clamp(22px,3.6vh,34px) !important;
+ letter-spacing:-0.04em !important;
+}
+
+.round-input{
+ font-size:clamp(24px,4vh,38px) !important;
+ line-height:1.15 !important;
+ padding-top:4px !important;
+}
+
+.quick{
+ font-size:14px !important;
+ font-weight:600 !important;
+}
+
+.penalty{
+ font-size:18px !important;
+ font-weight:700 !important;
+}
+
+.add-round{
+ font-size:22px !important;
+ font-weight:700 !important;
+}
+
+.label{
+ font-size:8px !important;
+ letter-spacing:.28em !important;
+}
