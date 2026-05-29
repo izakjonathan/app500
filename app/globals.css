@@ -46,7 +46,7 @@ input {
   min-width: 0;
   border: 0;
   color: inherit;
-  
+  font-size: 16px;
 }
 
 /*
@@ -148,8 +148,8 @@ input {
   height: 42px;
   border-radius: 999px;
   padding: 0 14px;
-  
-  
+  font-size: 15px;
+  font-weight: 760;
   letter-spacing: -0.02em;
   display: grid;
   place-items: center;
@@ -169,9 +169,9 @@ input {
   position: relative;
   z-index: 1;
   text-align: center;
-  
+  font-size: 10px;
   line-height: 1;
-  
+  font-weight: 760;
   letter-spacing: .18em;
   text-transform: uppercase;
   color: rgba(255,255,255,.58);
@@ -202,13 +202,13 @@ input {
   place-items: center;
   border-radius: 50%;
   border: 4px solid currentColor;
-  
-  
+  font-size: 10px;
+  font-weight: 820;
 }
 
 .player-name {
-  
-  
+  font-size: 17px;
+  font-weight: 760;
   letter-spacing: -0.04em;
   color: rgba(255,255,255,.88);
 }
@@ -228,9 +228,9 @@ input {
 }
 
 .total {
-  
+  font-size: 40px;
   line-height: .85;
-  
+  font-weight: 900;
   letter-spacing: -0.085em;
   color: white;
 }
@@ -245,14 +245,14 @@ input {
 }
 
 .empty-title {
-  
-  
+  font-size: 22px;
+  font-weight: 820;
   letter-spacing: -0.045em;
 }
 
 .empty-sub {
   margin-top: 8px;
-  
+  font-size: 15px;
   color: rgba(255,255,255,.62);
 }
 
@@ -284,8 +284,8 @@ input {
 
 .round-head {
   text-align: center;
-  
-  
+  font-size: 14px;
+  font-weight: 800;
   letter-spacing: -0.02em;
   margin-bottom: 10px;
 }
@@ -296,8 +296,8 @@ input {
   place-items: center;
   border-radius: 14px;
   margin-bottom: 7px;
-  
-  
+  font-size: 18px;
+  font-weight: 820;
   letter-spacing: -0.04em;
   background: rgba(255,255,255,.025);
 }
@@ -323,8 +323,8 @@ input {
 }
 
 .input-name {
-  
-  
+  font-size: 15px;
+  font-weight: 760;
   letter-spacing: -0.03em;
 }
 
@@ -333,8 +333,8 @@ input {
   background: transparent;
   outline: none;
   text-align: center;
-  
-  
+  font-size: 26px;
+  font-weight: 860;
   letter-spacing: -0.06em;
   color: #d3d8e9;
 }
@@ -345,8 +345,8 @@ input {
   border-radius: 14px;
   display: grid;
   place-items: center;
-  
-  
+  font-size: 24px;
+  font-weight: 760;
   background: rgba(255,255,255,.055);
 }
 
@@ -366,8 +366,8 @@ input {
   height: 28px;
   border-radius: 999px;
   background: rgba(255,255,255,.035);
-  
-  
+  font-size: 13px;
+  font-weight: 720;
   color: rgba(255,255,255,.76);
 }
 
@@ -384,8 +384,8 @@ input {
   border-radius: 999px;
   background: rgba(255, 90, 90, .14);
   color: rgba(255,235,235,.84);
-  
-  
+  font-size: 15px;
+  font-weight: 760;
 }
 
 .add-round {
@@ -394,8 +394,8 @@ input {
   width: 100%;
   height: 52px;
   border-radius: 999px;
-  
-  
+  font-size: 20px;
+  font-weight: 820;
   letter-spacing: -0.045em;
   color: rgba(255,255,255,.94);
 }
@@ -431,10 +431,10 @@ input {
 
 .modal-title {
   text-align: center;
-  
+  font-size: 11px;
   letter-spacing: .18em;
   text-transform: uppercase;
-  
+  font-weight: 800;
   color: rgba(255,255,255,.55);
   margin-bottom: 14px;
 }
@@ -448,8 +448,8 @@ input {
 .modal-btn {
   height: 50px;
   border-radius: 18px;
-  
-  
+  font-size: 14px;
+  font-weight: 760;
 }
 
 .form-grid {
@@ -479,8 +479,8 @@ input {
   border-radius: 13px;
   background: transparent;
   color: rgba(255,255,255,.7);
-  
-  
+  font-size: 12px;
+  font-weight: 760;
 }
 
 .segment button.selected {
@@ -493,8 +493,8 @@ input {
   border-radius: 17px;
   background: rgba(255,255,255,.92);
   color: #050506;
-  
-  
+  font-size: 15px;
+  font-weight: 820;
 }
 
 .history {
@@ -510,25 +510,25 @@ input {
   padding: 10px;
   border-radius: 16px;
   background: rgba(255,255,255,.055);
-  
+  font-size: 12px;
 }
 
 @media (max-height: 760px) {
   :root {
     --gap: 8px;
   }
-  .pill { height: 38px;  }
+  .pill { height: 38px; font-size: 14px; }
   .scoreboard { padding: 10px; border-radius: 24px; }
   .player-card { min-height: 52px; padding: 8px 11px; }
   .ring { width: 32px; height: 32px; border-width: 3px; }
-  .player-name {  }
-  .total {  }
-  .empty-title {  }
-  .empty-sub {  }
+  .player-name { font-size: 16px; }
+  .total { font-size: 34px; }
+  .empty-title { font-size: 20px; }
+  .empty-sub { font-size: 14px; }
   .dock-panel { padding: 10px; border-radius: 26px; }
   .input-row { padding: 8px; }
   .icon-btn { width: 36px; height: 36px; }
-  .round-input {  }
+  .round-input { font-size: 24px; }
   .add-round { height: 48px; }
 }
 
@@ -555,8 +555,8 @@ input {
 
 .pill{
   height: 40px !important;
-  
-  
+  font-size: 14px !important;
+  font-weight: 740 !important;
   padding-inline: 12px !important;
 }
 
@@ -584,11 +584,11 @@ input {
   width: 34px !important;
   height: 34px !important;
   border-width: 3px !important;
-  
+  font-size: 9px !important;
 }
 
 .player-name{
-  
+  font-size: 16px !important;
 }
 
 .progress{
@@ -597,16 +597,16 @@ input {
 }
 
 .total{
-  
+  font-size: 36px !important;
 }
 
 /* rounds indicator: more compact, less empty */
 .empty-title{
-  
+  font-size: 20px !important;
 }
 
 .empty-sub{
-  
+  font-size: 13px !important;
   color: rgba(255,255,255,.56) !important;
 }
 
@@ -632,7 +632,7 @@ input {
 }
 
 .input-name{
-  
+  font-size: 14px !important;
 }
 
 .icon-btn{
@@ -642,7 +642,7 @@ input {
 }
 
 .round-input{
-  
+  font-size: 25px !important;
 }
 
 .quick-grid{
@@ -652,7 +652,7 @@ input {
 
 .quick{
   height: 28px !important;
-  
+  font-size: 12.5px !important;
 }
 
 .penalties{
@@ -662,12 +662,12 @@ input {
 
 .penalty{
   height: 38px !important;
-  
+  font-size: 14px !important;
 }
 
 .add-round{
   height: 52px !important;
-  
+  font-size: 20px !important;
 }
 
 /* Glass consistency: clearer than milky, but readable */
@@ -733,9 +733,9 @@ input {
   .pill{ height: 38px !important; }
   .scoreboard{ padding: 10px !important; }
   .player-card{ min-height: 50px !important; }
-  .total{  }
+  .total{ font-size: 32px !important; }
   .last-round{ min-height: 112px !important; }
-  .last-round-player-score{  }
+  .last-round-player-score{ font-size: 24px !important; }
   .dock-panel{ padding: 9px !important; }
   .input-row{ padding: 7px !important; margin-bottom: 7px !important; }
   .quick{ height: 26px !important; }
@@ -782,8 +782,8 @@ input:disabled{
 .sync-line{
   margin:-4px 0 14px;
   text-align:center;
-  
-  
+  font-size:12px;
+  font-weight:650;
   color:rgba(255,255,255,.58);
   text-transform:capitalize;
 }
@@ -862,12 +862,12 @@ input:disabled{
 }
 
 .analytics-grid span{
-  
+  font-size:9px;
   line-height:1;
   text-transform:uppercase;
   letter-spacing:.14em;
   color:rgba(255,255,255,.42);
-  
+  font-weight:760;
 }
 
 .analytics-grid strong{
@@ -875,7 +875,7 @@ input:disabled{
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
-  
+  font-size:14px;
   line-height:1;
   color:rgba(255,255,255,.88);
 }
@@ -956,12 +956,12 @@ input:disabled{
   max-width: calc(100% - 72px) !important;
   overflow: visible !important;
   white-space: nowrap !important;
-  
+  font-size: 15px !important;
   line-height: 1.1 !important;
   letter-spacing: .20em !important;
   text-transform: uppercase !important;
   color: rgba(255,255,255,.62) !important;
-  
+  font-weight: 850 !important;
   padding: 0 !important;
   margin: 0 !important;
 }
@@ -970,9 +970,9 @@ input:disabled{
   flex: 0 0 auto !important;
   overflow: visible !important;
   white-space: nowrap !important;
-  
+  font-size: 28px !important;
   line-height: 1 !important;
-  
+  font-weight: 900 !important;
   letter-spacing: -.04em !important;
   color: rgba(255,255,255,.95) !important;
   padding: 0 !important;
@@ -1003,16 +1003,16 @@ input:disabled{
 }
 
 .last-round-player-name {
-  
+  font-size: 16px !important;
   line-height: 1 !important;
-  
+  font-weight: 820 !important;
   margin: 0 !important;
 }
 
 .last-round-player-score {
-  
+  font-size: 32px !important;
   line-height: 1 !important;
-  
+  font-weight: 920 !important;
   letter-spacing: -.07em !important;
   color: white !important;
   margin: 0 !important;
@@ -1022,7 +1022,7 @@ input:disabled{
   position: relative !important;
   z-index: 1 !important;
   text-align: center !important;
-  
+  font-size: 12px !important;
   line-height: 1 !important;
   color: rgba(255,255,255,.42) !important;
   margin: 0 !important;
@@ -1033,9 +1033,9 @@ input:disabled{
   position: relative !important;
   z-index: 1 !important;
   align-self: end !important;
-  
+  font-size: 28px !important;
   line-height: 1.05 !important;
-  
+  font-weight: 900 !important;
   letter-spacing: -.055em !important;
   margin: 0 !important;
 }
@@ -1044,7 +1044,7 @@ input:disabled{
   position: relative !important;
   z-index: 1 !important;
   align-self: start !important;
-  
+  font-size: 15px !important;
   line-height: 1.25 !important;
   color: rgba(255,255,255,.52) !important;
   margin: 0 !important;
@@ -1064,11 +1064,11 @@ input:disabled{
   }
 
   .last-round-label {
-    
+    font-size: 13px !important;
   }
 
   .last-round-number {
-    
+    font-size: 24px !important;
   }
 
   .last-round-player {
@@ -1076,7 +1076,7 @@ input:disabled{
   }
 
   .last-round-player-score {
-    
+    font-size: 28px !important;
   }
 }
 
@@ -1172,8 +1172,8 @@ body {
 .pill {
   height: 49px !important;
   border-radius: 999px !important;
-  
-  
+  font-size: 17px !important;
+  font-weight: 850 !important;
   letter-spacing: -.035em !important;
   color: rgba(255,255,255,.96) !important;
   background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.012)) !important;
@@ -1219,7 +1219,7 @@ body {
 }
 
 .label {
-  
+  font-size: 13px !important;
   letter-spacing: .28em !important;
   margin: 0 0 18px !important;
   color: rgba(255,255,255,.68) !important;
@@ -1239,13 +1239,13 @@ body {
   width: 48px !important;
   height: 48px !important;
   border-width: 5px !important;
-  
-  
+  font-size: 12px !important;
+  font-weight: 900 !important;
 }
 
 .player-name {
-  
-  
+  font-size: 23px !important;
+  font-weight: 900 !important;
   letter-spacing: -.055em !important;
 }
 
@@ -1257,8 +1257,8 @@ body {
 }
 
 .total {
-  
-  
+  font-size: 56px !important;
+  font-weight: 950 !important;
   letter-spacing: -.095em !important;
 }
 
@@ -1316,11 +1316,11 @@ body {
   min-width: 0 !important;
   overflow: visible !important;
   white-space: nowrap !important;
-  
+  font-size: 17px !important;
   line-height: 1.1 !important;
   letter-spacing: .28em !important;
   text-transform: uppercase !important;
-  
+  font-weight: 900 !important;
   color: rgba(255,255,255,.72) !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -1331,9 +1331,9 @@ body {
   display: block !important;
   overflow: visible !important;
   white-space: nowrap !important;
-  
+  font-size: 30px !important;
   line-height: 1 !important;
-  
+  font-weight: 950 !important;
   letter-spacing: -.06em !important;
   color: rgba(255,255,255,.98) !important;
   margin: 0 !important;
@@ -1368,16 +1368,16 @@ body {
 }
 
 .last-round-player-name {
-  
+  font-size: 18px !important;
   line-height: 1 !important;
-  
+  font-weight: 900 !important;
   margin: 0 !important;
 }
 
 .last-round-player-score {
-  
+  font-size: 38px !important;
   line-height: 1 !important;
-  
+  font-weight: 950 !important;
   letter-spacing: -.075em !important;
   color: #fff !important;
   margin: 0 !important;
@@ -1391,9 +1391,9 @@ body {
   position: relative !important;
   z-index: 2 !important;
   align-self: end !important;
-  
+  font-size: 29px !important;
   line-height: 1.05 !important;
-  
+  font-weight: 950 !important;
   letter-spacing: -.065em !important;
   margin: 0 !important;
 }
@@ -1402,7 +1402,7 @@ body {
   position: relative !important;
   z-index: 2 !important;
   align-self: start !important;
-  
+  font-size: 18px !important;
   line-height: 1.25 !important;
   color: rgba(255,255,255,.62) !important;
   margin: 0 !important;
@@ -1440,8 +1440,8 @@ body {
 }
 
 .input-name {
-  
-  
+  font-size: 22px !important;
+  font-weight: 900 !important;
   letter-spacing: -.055em !important;
 }
 
@@ -1449,13 +1449,13 @@ body {
   width: 48px !important;
   height: 48px !important;
   border-radius: 18px !important;
-  
+  font-size: 32px !important;
   background: rgba(255,255,255,.075) !important;
 }
 
 .round-input {
-  
-  
+  font-size: 38px !important;
+  font-weight: 950 !important;
 }
 
 .quick-grid {
@@ -1466,8 +1466,8 @@ body {
 .quick {
   height: 41px !important;
   border-radius: 999px !important;
-  
-  
+  font-size: 18px !important;
+  font-weight: 900 !important;
   background: rgba(255,255,255,.07) !important;
 }
 
@@ -1479,8 +1479,8 @@ body {
 .penalty {
   height: 54px !important;
   border-radius: 999px !important;
-  
-  
+  font-size: 22px !important;
+  font-weight: 900 !important;
   color: rgba(255,235,235,.95) !important;
   background: linear-gradient(180deg, rgba(177,31,31,.72), rgba(118,20,24,.72)) !important;
 }
@@ -1492,8 +1492,8 @@ body {
   grid-template-columns: 1fr 44px !important;
   align-items: center !important;
   padding: 0 22px 0 64px !important;
-  
-  
+  font-size: 28px !important;
+  font-weight: 950 !important;
 }
 
 .add-round span:first-child {
@@ -1509,30 +1509,30 @@ body {
   place-items: center !important;
   color: #65ee9c !important;
   border: 2px solid rgba(101,238,156,.75) !important;
-  
+  font-size: 30px !important;
   line-height: 1 !important;
-  
+  font-weight: 650 !important;
 }
 
 @media (max-height: 760px) {
   .ui { padding-top: calc(var(--safe-top) + 12px) !important; }
   .header { margin-bottom: 12px !important; }
-  .pill { height: 44px !important;  }
+  .pill { height: 44px !important; font-size: 15px !important; }
   .scoreboard { padding: 18px 18px 15px !important; margin-bottom: 14px !important; }
   .player-card { min-height: 72px !important; }
-  .total {  }
+  .total { font-size: 45px !important; }
   .rounds-card { min-height: 145px !important; padding: 22px 20px 19px !important; border-radius: 30px !important; }
-  .last-round-label {  }
-  .last-round-number {  }
+  .last-round-label { font-size: 14px !important; }
+  .last-round-number { font-size: 25px !important; }
   .last-round-player { min-height: 60px !important; }
-  .last-round-player-score {  }
+  .last-round-player-score { font-size: 32px !important; }
   .dock-panel { padding: 15px !important; }
   .input-main { grid-template-columns: 62px 42px 1fr 42px !important; }
   .icon-btn { width: 42px !important; height: 42px !important; }
-  .round-input {  }
-  .quick { height: 35px !important;  }
-  .penalty { height: 48px !important;  }
-  .add-round { height: 60px !important;  }
+  .round-input { font-size: 32px !important; }
+  .quick { height: 35px !important; font-size: 16px !important; }
+  .penalty { height: 48px !important; font-size: 19px !important; }
+  .add-round { height: 60px !important; font-size: 24px !important; }
 }
 
 
@@ -1540,45 +1540,75 @@ body {
 
 .ui{padding:calc(var(--safe-top) + 4px) 14px 0!important}
 .header{gap:8px!important;margin:0 0 6px!important}
-.pill{height:30px!important;min-height:30px!important;max-height:30px!important;padding:0 9px!important;line-height:1!important;padding:7px 10px 7px!important;margin:0 0 6px!important}
-.label{line-height:1!important;letter-spacing:.22em!important;margin:0 0 5px!important}
+.pill{height:30px!important;min-height:30px!important;max-height:30px!important;padding:0 9px!important;font-size:11px!important;line-height:1!important;font-weight:800!important}
+
+.scoreboard{border-radius:19px!important;padding:7px 10px 7px!important;margin:0 0 6px!important}
+.label{font-size:7px!important;line-height:1!important;letter-spacing:.22em!important;margin:0 0 5px!important}
 .player-card{min-height:36px!important;height:36px!important;max-height:36px!important;border-radius:14px!important;grid-template-columns:27px 1fr auto!important;gap:7px!important;padding:4px 8px!important;margin-bottom:4px!important}
-.ring{width:24px!important;height:24px!important;min-width:24px!important;border-width:2px!important;line-height:1!important}
-.player-name{line-height:1!important;height:2px!important;max-width:125px!important}
-.total{line-height:.85!important;height:70px!important;max-height:70px!important;border-radius:18px!important;padding:9px 12px 8px!important;gap:4px!important;display:grid!important;grid-template-rows:12px 1fr!important;overflow:hidden!important}
+.ring{width:24px!important;height:24px!important;min-width:24px!important;border-width:2px!important;font-size:6px!important;line-height:1!important}
+.player-name{font-size:12px!important;line-height:1!important;font-weight:850!important}
+.progress{margin-top:3px!important;height:2px!important;max-width:125px!important}
+.total{font-size:23px!important;line-height:.85!important;font-weight:950!important}
+
+.rounds{margin:0 0 6px!important}
+.rounds-card{min-height:70px!important;height:70px!important;max-height:70px!important;border-radius:18px!important;padding:9px 12px 8px!important;gap:4px!important;display:grid!important;grid-template-rows:12px 1fr!important;overflow:hidden!important}
 .last-round-top{min-height:12px!important;height:12px!important;line-height:1!important}
-.last-round-label{line-height:1!important;letter-spacing:.18em!important}
-.last-round-number{line-height:1!important}
+.last-round-label{font-size:7px!important;line-height:1!important;letter-spacing:.18em!important}
+.last-round-number{font-size:14px!important;line-height:1!important}
 .last-round-grid{min-height:0!important;height:37px!important;align-items:center!important}
 .last-round-player{min-height:33px!important;height:33px!important;gap:2px!important}
-.last-round-player-name{line-height:1!important}
-.last-round-player-score{line-height:.9!important}
-.empty-title{line-height:1!important}
-.empty-sub{line-height:1.1!important}
+.last-round-player-name{font-size:9px!important;line-height:1!important}
+.last-round-player-score{font-size:18px!important;line-height:.9!important}
+.empty-title{font-size:17px!important;line-height:1!important}
+.empty-sub{font-size:10px!important;line-height:1.1!important}
 
 .dock{padding:0 14px calc(var(--safe-bottom) + 6px)!important}
 .dock-panel{border-radius:19px!important;padding:7px 9px 8px!important}
 .input-row{padding:0 0 6px!important;margin:0 0 6px!important}
 .input-main{grid-template-columns:38px 25px 1fr 25px!important;gap:6px!important}
-.input-name{line-height:1!important;height:25px!important;min-height:25px!important;border-radius:9px!important;line-height:1!important}
-.round-input{height:25px!important;min-height:25px!important;line-height:1!important}
+.input-name{font-size:12px!important;line-height:1!important;font-weight:850!important}
+.icon-btn{width:25px!important;height:25px!important;min-height:25px!important;border-radius:9px!important;font-size:16px!important;line-height:1!important}
+.round-input{height:25px!important;min-height:25px!important;font-size:18px!important;line-height:1!important}
 .quick-grid{margin-top:5px!important;gap:5px!important}
-.quick{height:19px!important;min-height:19px!important;border-radius:999px!important;line-height:1!important;margin:0 0 6px!important}
-.penalty{height:26px!important;min-height:26px!important;border-radius:999px!important;line-height:1!important;min-height:34px!important;border-radius:999px!important;line-height:1!important;padding:0 11px 0 34px!important;grid-template-columns:1fr 20px!important}
-.add-round-plus{width:19px!important;height:19px!important;border-width:2px!important}
+.quick{height:19px!important;min-height:19px!important;border-radius:999px!important;font-size:9px!important;line-height:1!important;font-weight:850!important}
+.penalties{gap:6px!important;margin:0 0 6px!important}
+.penalty{height:26px!important;min-height:26px!important;border-radius:999px!important;font-size:11px!important;line-height:1!important;font-weight:850!important}
+.add-round{height:34px!important;min-height:34px!important;border-radius:999px!important;font-size:15px!important;line-height:1!important;padding:0 11px 0 34px!important;grid-template-columns:1fr 20px!important}
+.add-round-plus{width:19px!important;height:19px!important;font-size:15px!important;border-width:2px!important}
 
 .modal,.sheet{border-radius:20px!important;padding:10px!important}
-.modal-title{margin-bottom:8px!important}
-.modal-btn{height:36px!important;border-radius:12px!important;margin-bottom:7px!important}
+.modal-title{font-size:8px!important;margin-bottom:8px!important}
+.modal-btn{height:36px!important;border-radius:12px!important;font-size:11px!important}
+.analytics-grid{gap:5px!important;margin-bottom:7px!important}
 .analytics-grid div{min-height:38px!important;border-radius:11px!important}
-.analytics-grid span{min-height:32px!important;max-height:32px!important;border-radius:21px!important}
+.analytics-grid span{font-size:7px!important}
+.analytics-grid strong{font-size:11px!important}
+
+@media (min-height: 761px){
+  .ui{padding-top:calc(var(--safe-top) + 6px)!important}
+  .pill{height:32px!important;min-height:32px!important;max-height:32px!important;font-size:12px!important}
+  .scoreboard{padding:8px 11px 8px!important;border-radius:21px!important}
   .player-card{min-height:39px!important;height:39px!important;max-height:39px!important;border-radius:15px!important}
   .ring{width:26px!important;height:26px!important}
-  .player-name{height:78px!important;max-height:78px!important;border-radius:20px!important}
-  .last-round-player-score{padding:8px 10px 9px!important}
+  .player-name{font-size:13px!important}
+  .total{font-size:25px!important}
+  .rounds-card{min-height:78px!important;height:78px!important;max-height:78px!important;border-radius:20px!important}
+  .last-round-player-score{font-size:20px!important}
+  .dock-panel{border-radius:21px!important;padding:8px 10px 9px!important}
   .input-main{grid-template-columns:42px 28px 1fr 28px!important}
   .icon-btn{width:28px!important;height:28px!important;min-height:28px!important}
-  .round-input{height:28px!important;min-height:28px!important;min-height:21px!important;min-height:29px!important;min-height:37px!important;
+  .round-input{height:28px!important;min-height:28px!important;font-size:20px!important}
+  .quick{height:21px!important;min-height:21px!important;font-size:10px!important}
+  .penalty{height:29px!important;min-height:29px!important;font-size:12px!important}
+  .add-round{height:37px!important;min-height:37px!important;font-size:16px!important}
+}
+
+
+/* ===== v59 layout polish ===== */
+
+/* 2. flatten vertical flow */
+.app{
+  display:flex !important;
   flex-direction:column !important;
   justify-content:flex-start !important;
   align-items:stretch !important;
@@ -1729,7 +1759,7 @@ body{
   min-height:38px !important;
   max-height:38px !important;
   padding:0 14px !important;
-  
+  font-size:13px !important;
   border-radius:999px !important;
 }
 
@@ -1741,7 +1771,7 @@ body{
 }
 
 .label{
-  
+  font-size:9px !important;
   margin-bottom:8px !important;
 }
 
@@ -1761,16 +1791,16 @@ body{
   width:29px !important;
   height:29px !important;
   min-width:29px !important;
-  
+  font-size:7px !important;
 }
 
 .player-name{
-  
+  font-size:15px !important;
 }
 
 /* Bigger totals again */
 .total{
-  
+  font-size:31px !important;
   line-height:.9 !important;
 }
 
@@ -1795,19 +1825,19 @@ body{
 }
 
 .last-round-label{
-  
+  font-size:8px !important;
 }
 
 .last-round-number{
-  
+  font-size:16px !important;
 }
 
 .last-round-player-name{
-  
+  font-size:10px !important;
 }
 
 .last-round-player-score{
-  
+  font-size:21px !important;
 }
 
 /* Lower dock remains compact */
@@ -1878,22 +1908,22 @@ justify-content:center !important;
 }
 
 .round-input{
-  
+  font-size:42px !important;
 }
 
 .quick{
   height:42px !important;
-  
+  font-size:18px !important;
 }
 
 .penalty{
   height:54px !important;
-  
+  font-size:24px !important;
 }
 
 .add-round{
   height:72px !important;
-  
+  font-size:28px !important;
 }
 
 .last-round-top.centered{
@@ -1906,7 +1936,7 @@ justify-content:center !important;
 .last-round-top.centered .last-round-label{
  text-align:center !important;
  width:100% !important;
- 
+ font-size:18px !important;
  letter-spacing:.12em !important;
 }
 
@@ -1925,16 +1955,16 @@ justify-content:center !important;
 
 /* Last round title like scoreboard */
 .last-round-top.centered .last-round-label{
-  
+  font-size:12px !important;
   letter-spacing:.28em !important;
   opacity:.8 !important;
-  
+  font-weight:700 !important;
 }
 
 /* Scores become primary */
 .last-round-player-score{
-  
-  
+  font-size:clamp(28px,4.5vh,42px) !important;
+  font-weight:900 !important;
 }
 
 /* Adaptive screen-height dock */
@@ -1952,22 +1982,22 @@ justify-content:center !important;
 }
 
 .round-input{
-  
+  font-size:clamp(32px,5vh,52px) !important;
 }
 
 .quick{
   height:clamp(30px,4.5vh,46px) !important;
-  
+  font-size:clamp(13px,2vh,18px) !important;
 }
 
 .penalty{
   height:clamp(42px,6vh,58px) !important;
-  
+  font-size:clamp(16px,2.8vh,24px) !important;
 }
 
 .add-round{
   height:clamp(56px,8vh,76px) !important;
-  
+  font-size:clamp(20px,3vh,30px) !important;
 }
 
 /* Popup overlay */
@@ -1992,109 +2022,54 @@ justify-content:center !important;
 
 
 /* V64 Apple typography pass */
-.player-name{}
-.total{letter-spacing:-0.03em !important;}
-.ring{}
-.pill{}
+.player-name{font-size:13px !important;font-weight:600 !important;}
+.total{font-size:27px !important;letter-spacing:-0.03em !important;}
+.ring{font-size:6px !important;}
+.pill{font-size:12px !important;font-weight:600 !important;}
 
 .last-round-top.centered .last-round-label{
- 
+ font-size:10px !important;
  letter-spacing:.24em !important;
 }
 
 .last-round-player-name{
- 
- 
+ font-size:11px !important;
+ font-weight:600 !important;
 }
 
 .last-round-player-score{
- 
+ font-size:clamp(22px,3.6vh,34px) !important;
  letter-spacing:-0.04em !important;
 }
 
 .round-input{
- 
+ font-size:clamp(24px,4vh,38px) !important;
  line-height:1.15 !important;
  padding-top:4px !important;
 }
 
 .quick{
- 
- 
+ font-size:14px !important;
+ font-weight:600 !important;
 }
 
 .penalty{
- 
- 
+ font-size:18px !important;
+ font-weight:700 !important;
 }
 
 .add-round{
- 
- 
+ font-size:22px !important;
+ font-weight:700 !important;
 }
 
 .label{
- 
+ font-size:8px !important;
  letter-spacing:.28em !important;
 }
 
 
-/* ===== V65 DESIGN SYSTEM TOKENS ===== */
-:root{
-  --fs-caption: clamp(10px,1.2vh,12px);
-  --fs-small: clamp(12px,1.6vh,14px);
-  --fs-body: clamp(14px,1.9vh,17px);
-  --fs-title: clamp(18px,2.5vh,24px);
-  --fs-display: clamp(28px,4vh,42px);
-  --fs-score: clamp(36px,5vh,60px);
-
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 12px;
-  --space-lg: 16px;
-  --space-xl: 24px;
-
-  --radius-sm: 12px;
-  --radius-md: 18px;
-  --radius-lg: 24px;
-  --radius-pill: 999px;
-}
-
-/* Typography control points */
-.label,
-.last-round-label{
-  
-}
-
-.quick,
-.penalty{
-  
-}
-
-.pill,
-.last-round-player-name,
-.input-name{
-  
-}
-
-.player-name,
-.add-round{
-  
-}
-
-.last-round-player-score{
-  
-}
-
-.total,
-.round-input{
-  
-}
-
-
-
-
-/* ===== V68 SINGLE SOURCE OF TRUTH TYPOGRAPHY ===== */
+/* ===== V70 TYPOGRAPHY SOURCE OF TRUTH ===== */
 :root{
   --f01:10px;
   --f02:12px;
@@ -2117,32 +2092,136 @@ justify-content:center !important;
   --w06:900;
 }
 
+/* Major UI mapped to tokens WITHOUT removing existing rules */
+.label,.last-round-label{
+  font-size:var(--f01) !important;
+  font-weight:var(--w04) !important;
+}
 
-/* ===== TYPOGRAPHY MAP ===== */
+.quick{
+  font-size:var(--f02) !important;
+  font-weight:var(--w05) !important;
+}
+
+.penalty,.pill,.input-name,.last-round-player-name{
+  font-size:var(--f03) !important;
+  font-weight:var(--w05) !important;
+}
+
+.player-name,.add-round{
+  font-size:var(--f05) !important;
+  font-weight:var(--w06) !important;
+}
+
+.last-round-player-score{
+  font-size:var(--f08) !important;
+  font-weight:var(--w06) !important;
+}
+
+.round-input{
+  font-size:var(--f11) !important;
+  font-weight:var(--w06) !important;
+}
+
+.total{
+  font-size:var(--f12) !important;
+  font-weight:var(--w06) !important;
+}
+
+
+/* ===== V72 SAFE GLOBAL TYPOGRAPHY CONTROLS =====
+   Edit typography here. This pass preserves all layout/spacing/margins. */
+
+:root{
+  /* Font sizes */
+  --type-caption: 10px;
+  --type-micro: 11px;
+  --type-small: 12px;
+  --type-body: 13px;
+  --type-body-lg: 14px;
+  --type-title: 16px;
+  --type-title-lg: 18px;
+  --type-display-sm: 22px;
+  --type-display: 28px;
+  --type-input: 34px;
+  --type-score: 42px;
+
+  /* Font weights */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-heavy: 800;
+  --weight-black: 900;
+}
+
+/* Component typography map: all important visible text maps to global controls */
 .label,
-.last-round-label{font-size:var(--f01)!important;font-weight:var(--w04)!important;}
+.modal-title,
+.last-round-label{
+  font-size: var(--type-caption) !important;
+  font-weight: var(--weight-bold) !important;
+}
 
-.quick{font-size:var(--f02)!important;font-weight:var(--w05)!important;}
+.empty-sub,
+.last-round-hint,
+.sync-line,
+.analytics-grid span{
+  font-size: var(--type-micro) !important;
+  font-weight: var(--weight-semibold) !important;
+}
 
-.penalty,
+.quick{
+  font-size: var(--type-small) !important;
+  font-weight: var(--weight-heavy) !important;
+}
+
 .pill,
 .input-name,
-.last-round-player-name{font-size:var(--f03)!important;font-weight:var(--w05)!important;}
+.last-round-player-name,
+.modal-btn,
+.segment button,
+.history-item{
+  font-size: var(--type-body) !important;
+  font-weight: var(--weight-heavy) !important;
+}
+
+.penalty{
+  font-size: var(--type-body-lg) !important;
+  font-weight: var(--weight-heavy) !important;
+}
 
 .player-name,
-.add-round{font-size:var(--f05)!important;font-weight:var(--w06)!important;}
+.empty-title,
+.primary{
+  font-size: var(--type-title) !important;
+  font-weight: var(--weight-black) !important;
+}
 
-.last-round-player-score{font-size:var(--f08)!important;font-weight:var(--w06)!important;}
+.add-round{
+  font-size: var(--type-title-lg) !important;
+  font-weight: var(--weight-black) !important;
+}
 
-.round-input{font-size:var(--f11)!important;font-weight:var(--w06)!important;}
+.last-round-number,
+.analytics-grid strong{
+  font-size: var(--type-display-sm) !important;
+  font-weight: var(--weight-black) !important;
+}
 
-.total{font-size:var(--f12)!important;font-weight:var(--w06)!important;}
+.last-round-player-score{
+  font-size: var(--type-display) !important;
+  font-weight: var(--weight-black) !important;
+}
 
+.round-input{
+  font-size: var(--type-input) !important;
+  font-weight: var(--weight-black) !important;
+  line-height: 1.08 !important;
+  padding-top: 2px !important;
+}
 
-/* ===== V69 TYPOGRAPHY TOKEN HELPERS ===== */
-.t-caption{font-size:var(--f01)!important;font-weight:var(--w04)!important;}
-.t-small{font-size:var(--f02)!important;font-weight:var(--w05)!important;}
-.t-body{font-size:var(--f03)!important;font-weight:var(--w05)!important;}
-.t-title{font-size:var(--f05)!important;font-weight:var(--w06)!important;}
-.t-display{font-size:var(--f08)!important;font-weight:var(--w06)!important;}
-.t-score{font-size:var(--f12)!important;font-weight:var(--w06)!important;}
+.total{
+  font-size: var(--type-score) !important;
+  font-weight: var(--weight-black) !important;
+}

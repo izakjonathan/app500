@@ -1,0 +1,41 @@
+V72 SAFE TYPOGRAPHY RECOVERY
+
+Base used:
+- rummy500-v70-proper-token-migration.zip
+
+Reason:
+- Uploaded v69 had destructive inline inherit typography.
+- v71 CSS was malformed from regex boundary crossing.
+- This build avoids destructive deletion and preserves layout.
+
+What changed:
+- Added one safe global typography control block at bottom of app/globals.css.
+- Mapped visible UI typography to named global controls.
+- Did not remove layout/spacing/margin/radius/height rules.
+- Removed destructive inline fontSize/fontWeight inherit if present.
+
+Changed source files for inherit cleanup:
+- None
+
+Malformed CSS patterns found:
+['font-size:25px!important}\n']
+
+Main controls:
+--type-caption
+--type-micro
+--type-small
+--type-body
+--type-body-lg
+--type-title
+--type-title-lg
+--type-display-sm
+--type-display
+--type-input
+--type-score
+
+--weight-regular
+--weight-medium
+--weight-semibold
+--weight-bold
+--weight-heavy
+--weight-black

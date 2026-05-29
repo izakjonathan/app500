@@ -608,7 +608,7 @@ export default function RummyApp() {
           <div className="modal-shade" />
           <section className="glass modal">
             <div className="modal-title">Winner</div>
-            <div style={{ textAlign: "center", fontSize: "inherit", fontWeight: "inherit", letterSpacing: "-.08em" }}>{winner.name}</div>
+            <div style={{ textAlign: "center", fontSize: 42, fontWeight: 900, letterSpacing: "-.08em" }}>{winner.name}</div>
             <div className="modal-grid" style={{ marginTop: 16 }}>
               <button type="button" onClick={rematch} className="glass-soft modal-btn">Rematch</button>
               <button type="button" onClick={newSetup} className="glass-soft modal-btn">New game</button>
