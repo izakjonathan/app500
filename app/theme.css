@@ -223,3 +223,13 @@ transform:translateY(-50%) !important;
   font-size: var(--type-body) !important;
   font-weight: var(--weight-heavy) !important;
 }
+
+/* ===== V86 SPACING FOUNDATION ===== */
+:root{
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+}
