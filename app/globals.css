@@ -72,3 +72,162 @@
 .dock{
   z-index:30 !important;
 }
+
+
+/* ===== V114 OVERALL UI ADJUSTMENT PASS =====
+   Final overrides live here so UI Studio variables reliably win over older legacy CSS.
+*/
+
+/* Make the UI Studio score control definitely affect the scoreboard totals. */
+.scoreboard .total,
+.player-card .total,
+.total.score-transition{
+  font-size:var(--font-size-score, 42px) !important;
+  font-weight:var(--font-weight-score, 900) !important;
+  line-height:.84 !important;
+  letter-spacing:-0.075em !important;
+  transform:translateY(-1px) !important;
+}
+
+/* Keep score numbers powerful, but less oversized on small screens. */
+@media (max-height: 760px){
+  .scoreboard .total,
+  .player-card .total,
+  .total.score-transition{
+    font-size:calc(var(--font-size-score, 42px) * .88) !important;
+  }
+}
+
+/* Bottom controls: restore a cleaner control geometry after broad V113 wiring. */
+.dock-panel{
+  padding:16px !important;
+  border-radius:30px !important;
+}
+
+.input-row{
+  padding:10px 12px 12px !important;
+  margin-bottom:12px !important;
+  border-radius:26px !important;
+}
+
+.input-main{
+  display:grid !important;
+  grid-template-columns:minmax(48px, 66px) 46px minmax(0, 1fr) 46px !important;
+  gap:10px !important;
+  align-items:center !important;
+  min-height:54px !important;
+}
+
+.input-name{
+  align-self:center !important;
+  line-height:1 !important;
+}
+
+.round-input{
+  height:46px !important;
+  min-height:46px !important;
+  line-height:1.05 !important;
+  padding:2px 0 0 !important;
+  display:block !important;
+}
+
+/* Fix closed tick box: same footprint as minus button, centered, no stretched card feel. */
+.icon-btn,
+.closed-toggle{
+  width:46px !important;
+  height:46px !important;
+  min-width:46px !important;
+  min-height:46px !important;
+  max-width:46px !important;
+  max-height:46px !important;
+  border-radius:16px !important;
+  display:grid !important;
+  place-items:center !important;
+  padding:0 !important;
+  margin:0 !important;
+  line-height:1 !important;
+  font-size:27px !important;
+  font-weight:800 !important;
+  justify-self:center !important;
+  align-self:center !important;
+  flex:0 0 auto !important;
+}
+
+.closed-toggle{
+  color:rgba(255,255,255,.92) !important;
+  background:rgba(255,255,255,.065) !important;
+}
+
+.closed-toggle.active{
+  color:#061108 !important;
+  background:rgba(130,239,170,.92) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    0 8px 24px rgba(130,239,170,.20) !important;
+}
+
+/* Quick buttons: slightly clearer and more tappable without bloating the panel. */
+.quick-grid{
+  margin-top:10px !important;
+  gap:8px !important;
+}
+
+.quick{
+  height:36px !important;
+  min-height:36px !important;
+  font-size:var(--font-size-body, 14px) !important;
+}
+
+/* Penalties and Add round: better lower-area balance. */
+.penalties{
+  gap:12px !important;
+  margin:12px 0 12px !important;
+}
+
+.penalty{
+  height:48px !important;
+  min-height:48px !important;
+}
+
+.add-round{
+  height:62px !important;
+  min-height:62px !important;
+  font-size:var(--font-size-title, 16px) !important;
+}
+
+.add-round-plus{
+  width:34px !important;
+  height:34px !important;
+  right:16px !important;
+  font-size:25px !important;
+}
+
+/* UI Studio controls should not accidentally make all app glass too shadowy. */
+.glass,
+.glass-soft{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    0 14px 34px rgba(0,0,0,var(--glass-shadow-strength, .36)) !important;
+}
+
+/* Slightly calmer score cards after the broad variable wiring pass. */
+.player-card{
+  padding:10px 14px !important;
+}
+
+.progress{
+  max-width:180px !important;
+}
+
+/* Keep the last-round card readable and not oversized. */
+.rounds-card{
+  padding:16px 18px !important;
+}
+
+.last-round-label{
+  letter-spacing:.24em !important;
+}
+
+.last-round-player-score{
+  line-height:.95 !important;
+}

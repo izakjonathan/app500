@@ -1,0 +1,20 @@
+V114 OVERALL UI ADJUSTMENT PASS
+
+Built from V113.
+
+Fixes:
+- The UI Studio "Score" control is now explicitly wired to `.scoreboard .total`, `.player-card .total`, and `.total.score-transition`.
+- Renamed the control label from "Score" to "Total score" in UI Studio.
+- Added a dedicated `.closed-toggle` class to the closed tick buttons.
+- Fixed the closed tick box footprint and alignment in the bottom controls.
+- Rebalanced bottom control sizing:
+  - input rows
+  - minus/tick controls
+  - quick buttons
+  - penalty buttons
+  - Add round button
+- Reduced broad glass shadow intensity from V113 so the UI feels cleaner.
+- Kept all game/sync/scoring logic unchanged.
+
+Notes:
+- Final overrides are intentionally placed in `app/globals.css`, after the imports, so they reliably beat older legacy CSS.

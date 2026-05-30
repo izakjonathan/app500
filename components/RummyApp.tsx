@@ -743,7 +743,7 @@ export default function RummyApp() {
                 <div className="input-name" style={{ color: player.color }}>{player.name}</div>
                 <button type="button" disabled={isCommitting} onClick={() => negative(player.id)} className="icon-btn">−</button>
                 <input disabled={isCommitting} value={inputs[player.id] || ""} onChange={(event) => setInputs((previous: Record<string, string>) => ({ ...previous, [player.id]: event.target.value }))} inputMode="decimal" placeholder="0" className="round-input" />
-                <button type="button" disabled={isCommitting} onClick={() => setClosedBy(closedBy === player.id ? null : player.id)} className={`icon-btn ${closedBy === player.id ? "active" : ""}`}>✓</button>
+                <button type="button" disabled={isCommitting} onClick={() => setClosedBy(closedBy === player.id ? null : player.id)} className={`icon-btn closed-toggle ${closedBy === player.id ? "active" : ""}`} aria-label={`Mark ${player.name} closed`}>✓</button>
               </div>
               <div className="quick-grid">{[5, 10, 25, 50].map((amount) => <button key={amount} disabled={isCommitting} type="button" onClick={() => quick(player.id, amount)} className="quick">+{amount}</button>)}</div>
             </div>
@@ -841,7 +841,7 @@ export default function RummyApp() {
                   ["Title", "--font-size-title", 1, 16, "px", 10, 32],
                   ["Display", "--font-size-display", 1, 28, "px", 14, 54],
                   ["Input", "--font-size-input", 1, 34, "px", 20, 70],
-                  ["Score", "--font-size-score", 1, 42, "px", 24, 82]
+                  ["Total score", "--font-size-score", 1, 42, "px", 24, 82]
                 ].map(([label, name, step, fallback, unit, min, max]) => (
                   <div key={String(name)} className="ui-control-row">
                     <span>{label}</span>
