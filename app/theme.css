@@ -2,3 +2,11 @@
 :root{
   --glass-line: rgba(255,255,255,.12);
 }
+
+/* V74 theme controls */
+:root{
+  --radius-sm:12px;
+  --radius-md:18px;
+  --radius-lg:24px;
+  --radius-pill:999px;
+}
