@@ -699,3 +699,26 @@ position:relative !important;
   max-height:85dvh;
   overflow:auto;
 }
+
+
+/* ===== V96 FORCE TYPOGRAPHY MODAL VISIBLE ===== */
+
+.typography-panel{
+  display:block !important;
+  position:fixed !important;
+  inset:10vh 5vw auto 5vw !important;
+  width:90vw !important;
+  height:auto !important;
+  min-height:320px !important;
+  background:rgba(20,20,20,.98) !important;
+  border:2px solid #82efaa !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  z-index:2147483647 !important;
+}
+
+.typography-panel .modal-title{
+  display:block !important;
+  color:#fff !important;
+  margin-bottom:16px !important;
+}
