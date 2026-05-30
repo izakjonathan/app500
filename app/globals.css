@@ -1,3 +1,28 @@
 @import "./globals-base.css";
 @import "./theme.css";
 @import "./typography.css";
+
+
+/* ===== V95 MODAL LAYER FIX ===== */
+
+.modal-shade{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:99990 !important;
+}
+
+.typography-panel{
+  position:fixed !important;
+  left:50% !important;
+  top:50% !important;
+  transform:translate(-50%,-50%) !important;
+  width:min(92vw,560px) !important;
+  max-height:85dvh !important;
+  overflow:auto !important;
+  z-index:99999 !important;
+}
+
+.sheet{
+  max-height:85dvh;
+  overflow:auto;
+}

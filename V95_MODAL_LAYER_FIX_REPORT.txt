@@ -1,0 +1,10 @@
+V95 MODAL LAYER FIX
+
+Changes:
+- Typography panel forced above app layers (z-index 99999)
+- Modal shade fixed layer (z-index 99990)
+- Typography panel centered with fixed positioning
+- Sheet max-height 85dvh and internal scrolling
+
+Goal:
+Fix typography modal opening behind score-entry controls.
