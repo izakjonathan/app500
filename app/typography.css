@@ -434,3 +434,67 @@ position:relative !important;
   font-size: var(--type-display) !important;
   font-weight: var(--weight-black) !important;
 }
+
+
+/* ===== V88 TYPOGRAPHY MASTER CONTROLS ===== */
+
+:root{
+
+  /* Semantic font sizes */
+  --font-size-label: 10px;
+  --font-size-pill: 13px;
+  --font-size-body: 14px;
+  --font-size-name: 16px;
+  --font-size-button: 18px;
+  --font-size-display: 28px;
+  --font-size-input: 34px;
+  --font-size-score: 42px;
+
+  /* Semantic font weights */
+  --font-weight-label: 700;
+  --font-weight-body: 600;
+  --font-weight-title: 800;
+  --font-weight-score: 900;
+}
+
+/* Typography ownership map */
+
+.player-name{
+  font-size:var(--font-size-name)!important;
+  font-weight:var(--font-weight-title)!important;
+}
+
+.total{
+  font-size:var(--font-size-score)!important;
+  font-weight:var(--font-weight-score)!important;
+}
+
+.round-input{
+  font-size:var(--font-size-input)!important;
+  font-weight:var(--font-weight-score)!important;
+}
+
+.quick,
+.penalty,
+.pill,
+.input-name,
+.last-round-player-name{
+  font-size:var(--font-size-pill)!important;
+  font-weight:var(--font-weight-body)!important;
+}
+
+.add-round{
+  font-size:var(--font-size-button)!important;
+  font-weight:var(--font-weight-title)!important;
+}
+
+.label,
+.last-round-label{
+  font-size:var(--font-size-label)!important;
+  font-weight:var(--font-weight-label)!important;
+}
+
+.last-round-player-score{
+  font-size:var(--font-size-display)!important;
+  font-weight:var(--font-weight-score)!important;
+}

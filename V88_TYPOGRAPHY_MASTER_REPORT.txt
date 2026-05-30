@@ -1,0 +1,37 @@
+V88 TYPOGRAPHY MASTER CONTROLS
+
+Goal:
+One place to control app typography.
+
+Main controls:
+
+--font-size-label
+--font-size-pill
+--font-size-body
+--font-size-name
+--font-size-button
+--font-size-display
+--font-size-input
+--font-size-score
+
+--font-weight-label
+--font-weight-body
+--font-weight-title
+--font-weight-score
+
+Mapped selectors:
+.player-name
+.total
+.round-input
+.quick
+.penalty
+.pill
+.input-name
+.last-round-player-name
+.add-round
+.label
+.last-round-label
+.last-round-player-score
+
+No layout changes.
+No selector removals.
