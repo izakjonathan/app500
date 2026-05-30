@@ -1,0 +1,19 @@
+V90 TYPOGRAPHY COMPRESSION
+
+New primary typography roles:
+
+--font-size-caption
+--font-size-body
+--font-size-title
+--font-size-display
+--font-size-input
+--font-size-score
+
+Compatibility:
+Existing variables remain unchanged.
+No selectors modified.
+No layout changes.
+No visual changes.
+
+Next step:
+Migrate selectors from old variables to compressed roles.

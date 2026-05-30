@@ -1,0 +1,15 @@
+V93 TYPOGRAPHY DEV PANEL
+
+Added a typography panel inside Settings.
+
+Controls:
+- Caption
+- Body
+- Title
+- Display
+- Input
+- Score
+
+Changes are applied as CSS variables on :root and saved to localStorage.
+
+No layout changes outside the settings/modal UI.

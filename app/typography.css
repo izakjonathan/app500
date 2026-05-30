@@ -1,3 +1,63 @@
+
+
+/* ==========================================================
+   V92 TYPOGRAPHY FINALIZATION
+
+   CANONICAL TYPOGRAPHY CONTROLS
+
+   Sizes:
+   --font-size-caption
+   --font-size-body
+   --font-size-title
+   --font-size-display
+   --font-size-input
+   --font-size-score
+
+   Weights:
+   --font-weight-label
+   --font-weight-body
+   --font-weight-title
+   --font-weight-score
+
+   Future typography changes should be made here.
+========================================================== */
+
+
+/* ==========================================================
+   V89 TYPOGRAPHY OWNERSHIP CLEANUP
+
+   ===== EDIT THESE ONLY =====
+
+   PLAYER NAME
+     size   -> --font-size-name
+     weight -> --font-weight-title
+
+   TOTAL SCORE
+     size   -> --font-size-score
+     weight -> --font-weight-score
+
+   ROUND INPUT
+     size   -> --font-size-input
+     weight -> --font-weight-score
+
+   PILLS / QUICK / PENALTY
+     size   -> --font-size-pill
+     weight -> --font-weight-body
+
+   BUTTONS
+     size   -> --font-size-button
+     weight -> --font-weight-title
+
+   LABELS
+     size   -> --font-size-label
+     weight -> --font-weight-label
+
+   DISPLAY SCORES
+     size   -> --font-size-display
+     weight -> --font-weight-score
+========================================================== */
+
+
 /* Typography controls */
 :root{
   --type-caption:10px;
@@ -497,4 +557,105 @@ position:relative !important;
 .last-round-player-score{
   font-size:var(--font-size-display)!important;
   font-weight:var(--font-weight-score)!important;
+}
+
+
+/* ==========================================================
+   V90 TYPOGRAPHY COMPRESSION
+
+   PRIMARY ROLES
+
+   --font-size-caption
+   --font-size-body
+   --font-size-title
+   --font-size-display
+   --font-size-input
+   --font-size-score
+
+   Existing variables remain as aliases for compatibility.
+========================================================== */
+
+:root{
+  --font-size-caption: var(--font-size-label);
+  --font-size-body: var(--font-size-body);
+  --font-size-title: var(--font-size-name);
+  --font-size-display: var(--font-size-display);
+  --font-size-input: var(--font-size-input);
+  --font-size-score: var(--font-size-score);
+}
+
+
+/* ==========================================================
+   V91 TYPOGRAPHY ROLE MIGRATION
+
+   Canonical Roles:
+   caption -> labels
+   body    -> pills/body text
+   title   -> names/buttons
+   display -> display values
+   input   -> numeric inputs
+   score   -> scoreboard totals
+========================================================== */
+
+/* Canonical role groups */
+
+.label,
+.last-round-label{
+  font-size:var(--font-size-caption)!important;
+}
+
+.quick,
+.penalty,
+.pill,
+.input-name,
+.last-round-player-name{
+  font-size:var(--font-size-body)!important;
+}
+
+.player-name,
+.add-round{
+  font-size:var(--font-size-title)!important;
+}
+
+.last-round-player-score{
+  font-size:var(--font-size-display)!important;
+}
+
+.round-input{
+  font-size:var(--font-size-input)!important;
+}
+
+.total{
+  font-size:var(--font-size-score)!important;
+}
+
+
+/* ===== V93 TYPOGRAPHY DEV PANEL ===== */
+
+.typography-panel{
+  display:grid;
+  gap:12px;
+}
+
+.type-control{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:82px 1fr;
+  align-items:center;
+  gap:12px;
+  padding:10px 12px;
+  border-radius:16px;
+  background:rgba(255,255,255,.055);
+}
+
+.type-control span{
+  font-size:var(--font-size-body);
+  font-weight:var(--font-weight-body);
+  color:rgba(255,255,255,.78);
+}
+
+.type-control input[type="range"]{
+  width:100%;
+  accent-color:#82efaa;
 }

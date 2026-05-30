@@ -1,0 +1,14 @@
+V91 TYPOGRAPHY ROLE MIGRATION
+
+Migrated major typography selectors to canonical roles:
+
+caption
+body
+title
+display
+input
+score
+
+Legacy variables retained for compatibility.
+No layout changes.
+No selector removals.

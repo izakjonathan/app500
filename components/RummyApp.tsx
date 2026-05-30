@@ -116,6 +116,7 @@ export default function RummyApp() {
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [closedBy, setClosedBy] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [typographyOpen, setTypographyOpen] = useState(false);
   const [showRoundsPopup, setShowRoundsPopup] = useState(false);
   const [gameOpen, setGameOpen] = useState(false);
   const [playerCount, setPlayerCount] = useState(2);
@@ -440,6 +441,33 @@ export default function RummyApp() {
   function resetGame() { setGame((previous: Game) => ({ ...previous, rounds: [], status: "active", winnerId: null })); setInputs({}); setClosedBy(null); setSettingsOpen(false); }
   function rematch() { setGame((previous: Game) => ({ ...previous, gameId: crypto.randomUUID(), rounds: [], status: "active", winnerId: null })); setInputs({}); setClosedBy(null); }
   function newSetup() { setGame(createDefaultGame()); setInputs({}); setClosedBy(null); setGameOpen(true); }
+
+  function updateTypeVar(name: string, value: string) {
+    if (typeof document === "undefined") return;
+    document.documentElement.style.setProperty(name, value);
+    try {
+      localStorage.setItem(`rummy-type-${name}`, value);
+    } catch {}
+  }
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    [
+      "--font-size-caption",
+      "--font-size-body",
+      "--font-size-title",
+      "--font-size-display",
+      "--font-size-input",
+      "--font-size-score"
+    ].forEach((name) => {
+      try {
+        const saved = localStorage.getItem(`rummy-type-${name}`);
+        if (saved) document.documentElement.style.setProperty(name, saved);
+      } catch {}
+    });
+  }, []);
+
+
   function saveGame() { queueCloudSave(game); setSettingsOpen(false); }
 
   async function shareGame() {
@@ -582,6 +610,47 @@ export default function RummyApp() {
               ))}
             </div>
           </div>
+        </>
+      )}
+
+
+      {typographyOpen && (
+        <>
+          <div className="modal-shade" onClick={() => setTypographyOpen(false)} />
+          <section className="glass sheet typography-panel">
+            <div className="modal-title">Typography</div>
+
+            {[
+              ["Caption", "--font-size-caption", 8, 16, "10px"],
+              ["Body", "--font-size-body", 10, 20, "14px"],
+              ["Title", "--font-size-title", 12, 26, "16px"],
+              ["Display", "--font-size-display", 18, 42, "28px"],
+              ["Input", "--font-size-input", 24, 56, "34px"],
+              ["Score", "--font-size-score", 28, 70, "42px"]
+            ].map(([label, variable, min, max, fallback]) => (
+              <label key={variable} className="type-control">
+                <span>{label}</span>
+                <input
+                  type="range"
+                  min={Number(min)}
+                  max={Number(max)}
+                  defaultValue={Number(String(fallback).replace("px", ""))}
+                  onChange={(event) => updateTypeVar(String(variable), `${event.target.value}px`)}
+                />
+              </label>
+            ))}
+
+            <button type="button" className="primary" onClick={() => {
+              [
+                ["--font-size-caption", "10px"],
+                ["--font-size-body", "14px"],
+                ["--font-size-title", "16px"],
+                ["--font-size-display", "28px"],
+                ["--font-size-input", "34px"],
+                ["--font-size-score", "42px"]
+              ].forEach(([name, value]) => updateTypeVar(name, value));
+            }}>Reset typography</button>
+          </section>
         </>
       )}
 
