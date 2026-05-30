@@ -1,0 +1,16 @@
+V115 FULLSCREEN + FLOATING BOTTOM CONTROLS
+
+Built from V114.
+
+Changes:
+- Fixed fullscreen background coverage to avoid the black bottom block.
+- Removed the large dock-panel/card behind the bottom controls.
+- Bottom controls are now floating elements:
+  - each player input row has its own glass surface
+  - penalty buttons float independently
+  - Add round floats independently
+- Made -50 penalty buttons shorter.
+- Kept closed tick sizing/alignment from V114.
+- Added compact safeguards for shorter iPhone viewports.
+
+No scoring/sync/game logic changed.
