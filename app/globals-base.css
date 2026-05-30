@@ -103,23 +103,60 @@ input {
   padding: var(--gap) var(--pad-x) calc(var(--safe-bottom) + 10px);
 }
 
+.glass {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.052), rgba(255,255,255,.012));
+  border: 1px solid rgba(255,255,255,.11);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 14px 34px rgba(0,0,0,.38);
+  backdrop-filter: blur(20px) saturate(165%) brightness(.92) contrast(1.08);
+  -webkit-backdrop-filter: blur(20px) saturate(165%) brightness(.92) contrast(1.08);
+}
 
-/* moved-to-theme */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.012) 30%, transparent 60%),
+    radial-gradient(circle at top left, rgba(255,255,255,.075), transparent 40%);
+}
 
-
-
-/* moved-to-theme */
-
-
-
-/* moved-to-theme */
-
+.glass-soft {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.035), rgba(255,255,255,.008));
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+  backdrop-filter: blur(15px) saturate(155%) brightness(.94) contrast(1.06);
+  -webkit-backdrop-filter: blur(15px) saturate(155%) brightness(.94) contrast(1.06);
+}
 
 .header {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   min-height: 0;
+}
+
+.pill {
+  height: 42px;
+  border-radius: 999px;
+  padding: 0 14px;
+  font-size: 15px;
+  font-weight: 760;
+  letter-spacing: -0.02em;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .scoreboard {
@@ -169,6 +206,13 @@ input {
   font-weight: 820;
 }
 
+.player-name {
+  font-size: 17px;
+  font-weight: 760;
+  letter-spacing: -0.04em;
+  color: rgba(255,255,255,.88);
+}
+
 .progress {
   margin-top: 8px;
   height: 4px;
@@ -181,6 +225,14 @@ input {
 .progress-fill {
   height: 100%;
   border-radius: inherit;
+}
+
+.total {
+  font-size: 40px;
+  line-height: .85;
+  font-weight: 900;
+  letter-spacing: -0.085em;
+  color: white;
 }
 
 .rounds {
@@ -276,6 +328,17 @@ input {
   letter-spacing: -0.03em;
 }
 
+.round-input {
+  width: 100%;
+  background: transparent;
+  outline: none;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 860;
+  letter-spacing: -0.06em;
+  color: #d3d8e9;
+}
+
 .icon-btn {
   width: 38px;
   height: 38px;
@@ -299,6 +362,15 @@ input {
   gap: 7px;
 }
 
+.quick {
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.035);
+  font-size: 13px;
+  font-weight: 720;
+  color: rgba(255,255,255,.76);
+}
+
 .penalties {
   position: relative;
   z-index: 1;
@@ -307,13 +379,43 @@ input {
   margin: 10px 0 10px;
 }
 
+.penalty {
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(255, 90, 90, .14);
+  color: rgba(255,235,235,.84);
+  font-size: 15px;
+  font-weight: 760;
+}
 
-/* moved-to-theme */
+.add-round {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 52px;
+  border-radius: 999px;
+  font-size: 20px;
+  font-weight: 820;
+  letter-spacing: -0.045em;
+  color: rgba(255,255,255,.94);
+}
 
+.modal-shade {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgba(0,0,0,.42);
+}
 
-
-/* moved-to-theme */
-
+.modal {
+  position: fixed;
+  z-index: 11;
+  left: 14px;
+  right: 14px;
+  top: calc(var(--safe-top) + 58px);
+  border-radius: 28px;
+  padding: 16px;
+}
 
 .sheet {
   position: fixed;
@@ -327,17 +429,28 @@ input {
   padding: 16px;
 }
 
+.modal-title {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: rgba(255,255,255,.55);
+  margin-bottom: 14px;
+}
 
-/* moved-to-theme */
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
 
-
-
-/* moved-to-theme */
-
-
-
-/* moved-to-theme */
-
+.modal-btn {
+  height: 50px;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 760;
+}
 
 .form-grid {
   display: grid;
@@ -404,17 +517,19 @@ input {
   :root {
     --gap: 8px;
   }
-  
-.scoreboard { padding: 10px; border-radius: 24px; }
+  .pill { height: 38px; font-size: 14px; }
+  .scoreboard { padding: 10px; border-radius: 24px; }
   .player-card { min-height: 52px; padding: 8px 11px; }
   .ring { width: 32px; height: 32px; border-width: 3px; }
-  
-.empty-title { font-size: 20px; }
+  .player-name { font-size: 16px; }
+  .total { font-size: 34px; }
+  .empty-title { font-size: 20px; }
   .empty-sub { font-size: 14px; }
   .dock-panel { padding: 10px; border-radius: 26px; }
   .input-row { padding: 8px; }
   .icon-btn { width: 36px; height: 36px; }
-  
+  .round-input { font-size: 24px; }
+  .add-round { height: 48px; }
 }
 
 @supports (-webkit-touch-callout: none) {
@@ -436,6 +551,13 @@ input {
 .header{
   gap: 9px !important;
   margin-bottom: 9px !important;
+}
+
+.pill{
+  height: 40px !important;
+  font-size: 14px !important;
+  font-weight: 740 !important;
+  padding-inline: 12px !important;
 }
 
 /* scoreboard: slightly tighter and more consistent */
@@ -465,9 +587,17 @@ input {
   font-size: 9px !important;
 }
 
+.player-name{
+  font-size: 16px !important;
+}
+
 .progress{
   margin-top: 7px !important;
   height: 4px !important;
+}
+
+.total{
+  font-size: 36px !important;
 }
 
 /* rounds indicator: more compact, less empty */
@@ -511,9 +641,18 @@ input {
   border-radius: 13px !important;
 }
 
+.round-input{
+  font-size: 25px !important;
+}
+
 .quick-grid{
   margin-top: 8px !important;
   gap: 7px !important;
+}
+
+.quick{
+  height: 28px !important;
+  font-size: 12.5px !important;
 }
 
 .penalties{
@@ -521,19 +660,43 @@ input {
   gap: 8px !important;
 }
 
+.penalty{
+  height: 38px !important;
+  font-size: 14px !important;
+}
+
+.add-round{
+  height: 52px !important;
+  font-size: 20px !important;
+}
+
 /* Glass consistency: clearer than milky, but readable */
+.glass{
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.048), rgba(255,255,255,.010)) !important;
+  border-color: rgba(255,255,255,.105) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.17),
+    0 13px 34px rgba(0,0,0,.38) !important;
+  backdrop-filter: blur(20px) saturate(165%) brightness(.92) contrast(1.08) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(165%) brightness(.92) contrast(1.08) !important;
+}
 
-/* moved-to-theme */
-
-
-
-/* moved-to-theme */
-
+.glass-soft{
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.032), rgba(255,255,255,.007)) !important;
+  border-color: rgba(255,255,255,.075) !important;
+  backdrop-filter: blur(15px) saturate(155%) brightness(.94) contrast(1.06) !important;
+  -webkit-backdrop-filter: blur(15px) saturate(155%) brightness(.94) contrast(1.06) !important;
+}
 
 /* Popup polish */
-
-/* moved-to-theme */
-
+.modal,
+.sheet{
+  box-shadow:
+    0 22px 70px rgba(0,0,0,.48),
+    inset 0 1px 0 rgba(255,255,255,.13) !important;
+}
 
 .sheet{
   max-height: 82svh !important;
@@ -543,9 +706,10 @@ input {
   top: calc(var(--safe-top) + 62px) !important;
 }
 
-
-/* moved-to-theme */
-
+.modal-title{
+  position: relative !important;
+  min-height: 22px !important;
+}
 
 .rounds-popup-title{
   display: flex !important;
@@ -566,15 +730,17 @@ input {
 
 /* small height safety */
 @media (max-height: 740px){
-  
-.scoreboard{ padding: 10px !important; }
+  .pill{ height: 38px !important; }
+  .scoreboard{ padding: 10px !important; }
   .player-card{ min-height: 50px !important; }
-  
-.last-round{ min-height: 112px !important; }
-  
-.dock-panel{ padding: 9px !important; }
+  .total{ font-size: 32px !important; }
+  .last-round{ min-height: 112px !important; }
+  .last-round-player-score{ font-size: 24px !important; }
+  .dock-panel{ padding: 9px !important; }
   .input-row{ padding: 7px !important; margin-bottom: 7px !important; }
-  
+  .quick{ height: 26px !important; }
+  .penalty{ height: 36px !important; }
+  .add-round{ height: 48px !important; }
 }
 
 
@@ -632,16 +798,20 @@ input:disabled{
   --native-spring: cubic-bezier(.2,.9,.2,1);
 }
 
-
-/* moved-to-theme */
-
+.glass{
+  background:
+    linear-gradient(135deg, var(--glass-fill-a), var(--glass-fill-b)) !important;
+  border-color: var(--glass-line) !important;
+}
 
 .player-card,
 .rounds-card,
 .dock-panel,
-
-/* moved-to-theme */
-
+.modal,
+.sheet{
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
 
 .score-transition,
 .round-transition,
@@ -781,6 +951,21 @@ input:disabled{
   margin: 0 !important;
 }
 
+.last-round-label {
+  min-width: 0 !important;
+  max-width: calc(100% - 72px) !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+  font-size: 15px !important;
+  line-height: 1.1 !important;
+  letter-spacing: .20em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,.62) !important;
+  font-weight: 850 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 .last-round-number {
   flex: 0 0 auto !important;
   overflow: visible !important;
@@ -821,6 +1006,15 @@ input:disabled{
   font-size: 16px !important;
   line-height: 1 !important;
   font-weight: 820 !important;
+  margin: 0 !important;
+}
+
+.last-round-player-score {
+  font-size: 32px !important;
+  line-height: 1 !important;
+  font-weight: 920 !important;
+  letter-spacing: -.07em !important;
+  color: white !important;
   margin: 0 !important;
 }
 
@@ -869,8 +1063,11 @@ input:disabled{
     gap: 14px !important;
   }
 
-  
-.last-round-number {
+  .last-round-label {
+    font-size: 13px !important;
+  }
+
+  .last-round-number {
     font-size: 24px !important;
   }
 
@@ -878,7 +1075,9 @@ input:disabled{
     min-height: 58px !important;
   }
 
-  
+  .last-round-player-score {
+    font-size: 28px !important;
+  }
 }
 
 
@@ -970,13 +1169,45 @@ body {
   margin: 0 0 18px !important;
 }
 
+.pill {
+  height: 49px !important;
+  border-radius: 999px !important;
+  font-size: 17px !important;
+  font-weight: 850 !important;
+  letter-spacing: -.035em !important;
+  color: rgba(255,255,255,.96) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.012)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 10px 24px rgba(0,0,0,.34) !important;
+  backdrop-filter: blur(20px) saturate(150%) brightness(.82) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(150%) brightness(.82) !important;
+}
 
-/* moved-to-theme */
+.glass,
+.glass-soft {
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.018) 48%, rgba(0,0,0,.2)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(255,255,255,.055),
+    0 18px 42px rgba(0,0,0,.44) !important;
+  backdrop-filter: blur(18px) saturate(160%) brightness(.86) contrast(1.12) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(160%) brightness(.86) contrast(1.12) !important;
+}
 
-
-
-/* moved-to-theme */
-
+.glass::before,
+.glass-soft::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  border-radius: inherit !important;
+  background:
+    radial-gradient(circle at 8% 16%, rgba(255,255,255,.18), transparent 16%),
+    radial-gradient(circle at 92% 55%, rgba(255,255,255,.10), transparent 18%),
+    linear-gradient(180deg, rgba(255,255,255,.10), transparent 38%) !important;
+}
 
 .scoreboard {
   position: relative !important;
@@ -1012,11 +1243,23 @@ body {
   font-weight: 900 !important;
 }
 
+.player-name {
+  font-size: 23px !important;
+  font-weight: 900 !important;
+  letter-spacing: -.055em !important;
+}
+
 .progress {
   margin-top: 13px !important;
   max-width: 230px !important;
   height: 6px !important;
   background: rgba(255,255,255,.15) !important;
+}
+
+.total {
+  font-size: 56px !important;
+  font-weight: 950 !important;
+  letter-spacing: -.095em !important;
 }
 
 .rounds {
@@ -1068,6 +1311,21 @@ body {
   gap: 16px !important;
 }
 
+.last-round-label {
+  display: block !important;
+  min-width: 0 !important;
+  overflow: visible !important;
+  white-space: nowrap !important;
+  font-size: 17px !important;
+  line-height: 1.1 !important;
+  letter-spacing: .28em !important;
+  text-transform: uppercase !important;
+  font-weight: 900 !important;
+  color: rgba(255,255,255,.72) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .last-round-number {
   flex: 0 0 auto !important;
   display: block !important;
@@ -1113,6 +1371,15 @@ body {
   font-size: 18px !important;
   line-height: 1 !important;
   font-weight: 900 !important;
+  margin: 0 !important;
+}
+
+.last-round-player-score {
+  font-size: 38px !important;
+  line-height: 1 !important;
+  font-weight: 950 !important;
+  letter-spacing: -.075em !important;
+  color: #fff !important;
   margin: 0 !important;
 }
 
@@ -1186,14 +1453,47 @@ body {
   background: rgba(255,255,255,.075) !important;
 }
 
+.round-input {
+  font-size: 38px !important;
+  font-weight: 950 !important;
+}
+
 .quick-grid {
   margin-top: 18px !important;
   gap: 12px !important;
 }
 
+.quick {
+  height: 41px !important;
+  border-radius: 999px !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  background: rgba(255,255,255,.07) !important;
+}
+
 .penalties {
   gap: 16px !important;
   margin: 0 0 16px !important;
+}
+
+.penalty {
+  height: 54px !important;
+  border-radius: 999px !important;
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  color: rgba(255,235,235,.95) !important;
+  background: linear-gradient(180deg, rgba(177,31,31,.72), rgba(118,20,24,.72)) !important;
+}
+
+.add-round {
+  height: 70px !important;
+  border-radius: 999px !important;
+  display: grid !important;
+  grid-template-columns: 1fr 44px !important;
+  align-items: center !important;
+  padding: 0 22px 0 64px !important;
+  font-size: 28px !important;
+  font-weight: 950 !important;
 }
 
 .add-round span:first-child {
@@ -1217,19 +1517,22 @@ body {
 @media (max-height: 760px) {
   .ui { padding-top: calc(var(--safe-top) + 12px) !important; }
   .header { margin-bottom: 12px !important; }
-  
-.scoreboard { padding: 18px 18px 15px !important; margin-bottom: 14px !important; }
+  .pill { height: 44px !important; font-size: 15px !important; }
+  .scoreboard { padding: 18px 18px 15px !important; margin-bottom: 14px !important; }
   .player-card { min-height: 72px !important; }
-  
-.rounds-card { min-height: 145px !important; padding: 22px 20px 19px !important; border-radius: 30px !important; }
-  
-.last-round-number { font-size: 25px !important; }
+  .total { font-size: 45px !important; }
+  .rounds-card { min-height: 145px !important; padding: 22px 20px 19px !important; border-radius: 30px !important; }
+  .last-round-label { font-size: 14px !important; }
+  .last-round-number { font-size: 25px !important; }
   .last-round-player { min-height: 60px !important; }
-  
-.dock-panel { padding: 15px !important; }
+  .last-round-player-score { font-size: 32px !important; }
+  .dock-panel { padding: 15px !important; }
   .input-main { grid-template-columns: 62px 42px 1fr 42px !important; }
   .icon-btn { width: 42px !important; height: 42px !important; }
-  
+  .round-input { font-size: 32px !important; }
+  .quick { height: 35px !important; font-size: 16px !important; }
+  .penalty { height: 48px !important; font-size: 19px !important; }
+  .add-round { height: 60px !important; font-size: 24px !important; }
 }
 
 
@@ -1237,18 +1540,25 @@ body {
 
 .ui{padding:calc(var(--safe-top) + 4px) 14px 0!important}
 .header{gap:8px!important;margin:0 0 6px!important}
+.pill{height:30px!important;min-height:30px!important;max-height:30px!important;padding:0 9px!important;font-size:11px!important;line-height:1!important;font-weight:800!important}
+
 .scoreboard{border-radius:19px!important;padding:7px 10px 7px!important;margin:0 0 6px!important}
 .label{font-size:7px!important;line-height:1!important;letter-spacing:.22em!important;margin:0 0 5px!important}
 .player-card{min-height:36px!important;height:36px!important;max-height:36px!important;border-radius:14px!important;grid-template-columns:27px 1fr auto!important;gap:7px!important;padding:4px 8px!important;margin-bottom:4px!important}
 .ring{width:24px!important;height:24px!important;min-width:24px!important;border-width:2px!important;font-size:6px!important;line-height:1!important}
+.player-name{font-size:12px!important;line-height:1!important;font-weight:850!important}
 .progress{margin-top:3px!important;height:2px!important;max-width:125px!important}
+.total{font-size:23px!important;line-height:.85!important;font-weight:950!important}
+
 .rounds{margin:0 0 6px!important}
 .rounds-card{min-height:70px!important;height:70px!important;max-height:70px!important;border-radius:18px!important;padding:9px 12px 8px!important;gap:4px!important;display:grid!important;grid-template-rows:12px 1fr!important;overflow:hidden!important}
 .last-round-top{min-height:12px!important;height:12px!important;line-height:1!important}
+.last-round-label{font-size:7px!important;line-height:1!important;letter-spacing:.18em!important}
 .last-round-number{font-size:14px!important;line-height:1!important}
 .last-round-grid{min-height:0!important;height:37px!important;align-items:center!important}
 .last-round-player{min-height:33px!important;height:33px!important;gap:2px!important}
 .last-round-player-name{font-size:9px!important;line-height:1!important}
+.last-round-player-score{font-size:18px!important;line-height:.9!important}
 .empty-title{font-size:17px!important;line-height:1!important}
 .empty-sub{font-size:10px!important;line-height:1.1!important}
 
@@ -1258,19 +1568,17 @@ body {
 .input-main{grid-template-columns:38px 25px 1fr 25px!important;gap:6px!important}
 .input-name{font-size:12px!important;line-height:1!important;font-weight:850!important}
 .icon-btn{width:25px!important;height:25px!important;min-height:25px!important;border-radius:9px!important;font-size:16px!important;line-height:1!important}
+.round-input{height:25px!important;min-height:25px!important;font-size:18px!important;line-height:1!important}
 .quick-grid{margin-top:5px!important;gap:5px!important}
+.quick{height:19px!important;min-height:19px!important;border-radius:999px!important;font-size:9px!important;line-height:1!important;font-weight:850!important}
 .penalties{gap:6px!important;margin:0 0 6px!important}
+.penalty{height:26px!important;min-height:26px!important;border-radius:999px!important;font-size:11px!important;line-height:1!important;font-weight:850!important}
+.add-round{height:34px!important;min-height:34px!important;border-radius:999px!important;font-size:15px!important;line-height:1!important;padding:0 11px 0 34px!important;grid-template-columns:1fr 20px!important}
 .add-round-plus{width:19px!important;height:19px!important;font-size:15px!important;border-width:2px!important}
 
-
-/* moved-to-theme */
-
-
-/* moved-to-theme */
-
-
-/* moved-to-theme */
-
+.modal,.sheet{border-radius:20px!important;padding:10px!important}
+.modal-title{font-size:8px!important;margin-bottom:8px!important}
+.modal-btn{height:36px!important;border-radius:12px!important;font-size:11px!important}
 .analytics-grid{gap:5px!important;margin-bottom:7px!important}
 .analytics-grid div{min-height:38px!important;border-radius:11px!important}
 .analytics-grid span{font-size:7px!important}
@@ -1278,17 +1586,21 @@ body {
 
 @media (min-height: 761px){
   .ui{padding-top:calc(var(--safe-top) + 6px)!important}
-  
-.scoreboard{padding:8px 11px 8px!important;border-radius:21px!important}
+  .pill{height:32px!important;min-height:32px!important;max-height:32px!important;font-size:12px!important}
+  .scoreboard{padding:8px 11px 8px!important;border-radius:21px!important}
   .player-card{min-height:39px!important;height:39px!important;max-height:39px!important;border-radius:15px!important}
   .ring{width:26px!important;height:26px!important}
-  
-.rounds-card{min-height:78px!important;height:78px!important;max-height:78px!important;border-radius:20px!important}
-  
-.dock-panel{border-radius:21px!important;padding:8px 10px 9px!important}
+  .player-name{font-size:13px!important}
+  .total{font-size:25px!important}
+  .rounds-card{min-height:78px!important;height:78px!important;max-height:78px!important;border-radius:20px!important}
+  .last-round-player-score{font-size:20px!important}
+  .dock-panel{border-radius:21px!important;padding:8px 10px 9px!important}
   .input-main{grid-template-columns:42px 28px 1fr 28px!important}
   .icon-btn{width:28px!important;height:28px!important;min-height:28px!important}
-  
+  .round-input{height:28px!important;min-height:28px!important;font-size:20px!important}
+  .quick{height:21px!important;min-height:21px!important;font-size:10px!important}
+  .penalty{height:29px!important;min-height:29px!important;font-size:12px!important}
+  .add-round{height:37px!important;min-height:37px!important;font-size:16px!important}
 }
 
 
@@ -1357,11 +1669,24 @@ body{
 }
 
 /* 5. reduce blur behind controls */
+.glass,
+.glass-soft{
+  backdrop-filter:
+    blur(12px)
+    saturate(135%)
+    brightness(.88) !important;
 
-/* moved-to-theme */
-
+  -webkit-backdrop-filter:
+    blur(12px)
+    saturate(135%)
+    brightness(.88) !important;
+}
 
 /* cleaner controls */
+.quick{
+  background:rgba(255,255,255,.045) !important;
+}
+
 .icon-btn{
   background:rgba(255,255,255,.05) !important;
 }
@@ -1382,6 +1707,10 @@ body{
 
 .penalties{
   margin-bottom:5px !important;
+}
+
+.add-round{
+  margin-top:1px !important;
 }
 
 /* rounds card more balanced */
@@ -1425,6 +1754,15 @@ body{
   margin-bottom:9px !important;
 }
 
+.pill{
+  height:38px !important;
+  min-height:38px !important;
+  max-height:38px !important;
+  padding:0 14px !important;
+  font-size:13px !important;
+  border-radius:999px !important;
+}
+
 /* Scoreboard relaxed again */
 .scoreboard{
   padding:11px 13px 11px !important;
@@ -1456,7 +1794,16 @@ body{
   font-size:7px !important;
 }
 
+.player-name{
+  font-size:15px !important;
+}
+
 /* Bigger totals again */
+.total{
+  font-size:31px !important;
+  line-height:.9 !important;
+}
+
 /* Slightly more visible progress */
 .progress{
   height:3px !important;
@@ -1477,12 +1824,20 @@ body{
   padding:11px 14px 10px !important;
 }
 
+.last-round-label{
+  font-size:8px !important;
+}
+
 .last-round-number{
   font-size:16px !important;
 }
 
 .last-round-player-name{
   font-size:10px !important;
+}
+
+.last-round-player-score{
+  font-size:21px !important;
 }
 
 /* Lower dock remains compact */
@@ -1497,9 +1852,26 @@ body{
 
 
 /* v61 alignment fixes */
+.pill{
+display:flex !important;
+align-items:center !important;
+justify-content:center !important;
+position:relative !important;
+}
 
-/* moved-to-theme */
+.pill .sync-dot{
+position:absolute !important;
+right:12px !important;
+top:50% !important;
+transform:translateY(-50%) !important;
+}
 
+.add-round{
+display:flex !important;
+align-items:center !important;
+justify-content:center !important;
+position:relative !important;
+}
 
 .add-round-plus{
 position:absolute !important;
@@ -1535,6 +1907,25 @@ justify-content:center !important;
   height:44px !important;
 }
 
+.round-input{
+  font-size:42px !important;
+}
+
+.quick{
+  height:42px !important;
+  font-size:18px !important;
+}
+
+.penalty{
+  height:54px !important;
+  font-size:24px !important;
+}
+
+.add-round{
+  height:72px !important;
+  font-size:28px !important;
+}
+
 .last-round-top.centered{
  display:flex !important;
  justify-content:center !important;
@@ -1542,7 +1933,13 @@ justify-content:center !important;
  width:100% !important;
 }
 
-.last-round-top.centered 
+.last-round-top.centered .last-round-label{
+ text-align:center !important;
+ width:100% !important;
+ font-size:18px !important;
+ letter-spacing:.12em !important;
+}
+
 .rounds-popup-overlay{
  position:fixed;
  inset:0;
@@ -1557,8 +1954,19 @@ justify-content:center !important;
 /* ===== V63 Adaptive Layout ===== */
 
 /* Last round title like scoreboard */
-.last-round-top.centered 
+.last-round-top.centered .last-round-label{
+  font-size:12px !important;
+  letter-spacing:.28em !important;
+  opacity:.8 !important;
+  font-weight:700 !important;
+}
+
 /* Scores become primary */
+.last-round-player-score{
+  font-size:clamp(28px,4.5vh,42px) !important;
+  font-weight:900 !important;
+}
+
 /* Adaptive screen-height dock */
 .dock{
   margin-top:auto !important;
@@ -1571,6 +1979,25 @@ justify-content:center !important;
 
 .input-main{
   min-height:clamp(52px,7vh,72px) !important;
+}
+
+.round-input{
+  font-size:clamp(32px,5vh,52px) !important;
+}
+
+.quick{
+  height:clamp(30px,4.5vh,46px) !important;
+  font-size:clamp(13px,2vh,18px) !important;
+}
+
+.penalty{
+  height:clamp(42px,6vh,58px) !important;
+  font-size:clamp(16px,2.8vh,24px) !important;
+}
+
+.add-round{
+  height:clamp(56px,8vh,76px) !important;
+  font-size:clamp(20px,3vh,30px) !important;
 }
 
 /* Popup overlay */
@@ -1595,11 +2022,45 @@ justify-content:center !important;
 
 
 /* V64 Apple typography pass */
+.player-name{font-size:13px !important;font-weight:600 !important;}
+.total{font-size:27px !important;letter-spacing:-0.03em !important;}
 .ring{font-size:6px !important;}
-.last-round-top.centered 
+.pill{font-size:12px !important;font-weight:600 !important;}
+
+.last-round-top.centered .last-round-label{
+ font-size:10px !important;
+ letter-spacing:.24em !important;
+}
+
 .last-round-player-name{
  font-size:11px !important;
  font-weight:600 !important;
+}
+
+.last-round-player-score{
+ font-size:clamp(22px,3.6vh,34px) !important;
+ letter-spacing:-0.04em !important;
+}
+
+.round-input{
+ font-size:clamp(24px,4vh,38px) !important;
+ line-height:1.15 !important;
+ padding-top:4px !important;
+}
+
+.quick{
+ font-size:14px !important;
+ font-weight:600 !important;
+}
+
+.penalty{
+ font-size:18px !important;
+ font-weight:700 !important;
+}
+
+.add-round{
+ font-size:22px !important;
+ font-weight:700 !important;
 }
 
 .label{
@@ -1632,12 +2093,42 @@ justify-content:center !important;
 }
 
 /* Major UI mapped to tokens WITHOUT removing existing rules */
-.label,
-.penalty,
-/* moved-to-theme */
+.label,.last-round-label{
+  font-size:var(--f01) !important;
+  font-weight:var(--w04) !important;
+}
+
+.quick{
+  font-size:var(--f02) !important;
+  font-weight:var(--w05) !important;
+}
+
+.penalty,.pill,.input-name,.last-round-player-name{
+  font-size:var(--f03) !important;
+  font-weight:var(--w05) !important;
+}
+
+.player-name,.add-round{
+  font-size:var(--f05) !important;
+  font-weight:var(--w06) !important;
+}
+
+.last-round-player-score{
+  font-size:var(--f08) !important;
+  font-weight:var(--w06) !important;
+}
+
+.round-input{
+  font-size:var(--f11) !important;
+  font-weight:var(--w06) !important;
+}
+
+.total{
+  font-size:var(--f12) !important;
+  font-weight:var(--w06) !important;
+}
 
 
-.player-name,
 /* ===== V72 SAFE GLOBAL TYPOGRAPHY CONTROLS =====
    Edit typography here. This pass preserves all layout/spacing/margins. */
 
@@ -1666,18 +2157,49 @@ justify-content:center !important;
 
 /* Component typography map: all important visible text maps to global controls */
 .label,
+.modal-title,
+.last-round-label{
+  font-size: var(--type-caption) !important;
+  font-weight: var(--weight-bold) !important;
+}
 
-/* moved-to-theme */
+.empty-sub,
+.last-round-hint,
+.sync-line,
+.analytics-grid span{
+  font-size: var(--type-micro) !important;
+  font-weight: var(--weight-semibold) !important;
+}
 
+.quick{
+  font-size: var(--type-small) !important;
+  font-weight: var(--weight-heavy) !important;
+}
 
+.pill,
+.input-name,
+.last-round-player-name,
+.modal-btn,
+.segment button,
+.history-item{
+  font-size: var(--type-body) !important;
+  font-weight: var(--weight-heavy) !important;
+}
 
-/* moved-to-theme */
-
+.penalty{
+  font-size: var(--type-body-lg) !important;
+  font-weight: var(--weight-heavy) !important;
+}
 
 .player-name,
 .empty-title,
 .primary{
   font-size: var(--type-title) !important;
+  font-weight: var(--weight-black) !important;
+}
+
+.add-round{
+  font-size: var(--type-title-lg) !important;
   font-weight: var(--weight-black) !important;
 }
 
@@ -1687,3 +2209,19 @@ justify-content:center !important;
   font-weight: var(--weight-black) !important;
 }
 
+.last-round-player-score{
+  font-size: var(--type-display) !important;
+  font-weight: var(--weight-black) !important;
+}
+
+.round-input{
+  font-size: var(--type-input) !important;
+  font-weight: var(--weight-black) !important;
+  line-height: 1.08 !important;
+  padding-top: 2px !important;
+}
+
+.total{
+  font-size: var(--type-score) !important;
+  font-weight: var(--weight-black) !important;
+}
