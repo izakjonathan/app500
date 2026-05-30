@@ -745,3 +745,58 @@ position:relative !important;
 .dock{
   z-index:30 !important;
 }
+
+
+/* V100 UI STUDIO */
+.typography-panel .type-control button{
+  border:none;
+  min-width:42px;
+  height:36px;
+  border-radius:12px;
+  background:rgba(255,255,255,.08);
+  color:white;
+}
+.typography-panel .type-control{
+  grid-template-columns:1fr auto auto !important;
+}
+
+
+/* ===== V101 UI STUDIO FULLER MODULE ===== */
+
+.ui-studio-section{
+  position:relative;
+  z-index:1;
+  margin:14px 0 6px;
+  font-size:var(--font-size-caption);
+  font-weight:var(--font-weight-label);
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.52);
+}
+
+.ui-preset-grid{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+
+.ui-preset-grid button{
+  height:40px;
+  border-radius:14px;
+  border:0;
+  background:rgba(255,255,255,.08);
+  color:rgba(255,255,255,.9);
+  font-size:var(--font-size-body);
+  font-weight:var(--font-weight-title);
+}
+
+.typography-panel .type-control{
+  margin-bottom:7px;
+}
+
+.typography-panel .type-control button{
+  font-size:18px;
+  font-weight:900;
+}

@@ -442,6 +442,17 @@ export default function RummyApp() {
   function rematch() { setGame((previous: Game) => ({ ...previous, gameId: crypto.randomUUID(), rounds: [], status: "active", winnerId: null })); setInputs({}); setClosedBy(null); }
   function newSetup() { setGame(createDefaultGame()); setInputs({}); setClosedBy(null); setGameOpen(true); }
 
+  
+  function adjustUiVar(name: string, step: number, fallback: number) {
+    if (typeof document === "undefined") return;
+    const current = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const num = parseFloat(current || String(fallback));
+    const next = Math.max(0, num + step);
+    const value = name.includes("weight") ? `${Math.min(950, Math.max(100, next))}` : (name.includes("opacity") ? `${next}` : `${next}px`);
+    document.documentElement.style.setProperty(name, value);
+    try { localStorage.setItem(`rummy-type-${name}`, value); } catch {}
+  }
+
   function updateTypeVar(name: string, value: string) {
     if (typeof document === "undefined") return;
     document.documentElement.style.setProperty(name, value);
@@ -453,12 +464,10 @@ export default function RummyApp() {
   useEffect(() => {
     if (typeof document === "undefined") return;
     [
-      "--font-size-caption",
-      "--font-size-body",
-      "--font-size-title",
-      "--font-size-display",
-      "--font-size-input",
-      "--font-size-score"
+      "--font-size-caption","--font-size-body","--font-size-title","--font-size-display","--font-size-input","--font-size-score",
+      "--font-weight-body","--font-weight-title","--font-weight-score",
+      "--space-sm","--space-md","--space-lg",
+      "--radius-sm","--radius-lg","--radius-xl"
     ].forEach((name) => {
       try {
         const saved = localStorage.getItem(`rummy-type-${name}`);
@@ -581,8 +590,8 @@ export default function RummyApp() {
             <button type="button" onClick={shareGame} className="glass-soft modal-btn share-game-btn">
               {shareStatus === "copied" ? "Copied link" : shareStatus === "shared" ? "Shared" : "Share current game"}
             </button>
-            <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn">Typography</button>
-            <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn typography-settings-button">Typography</button>
+            <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn">UI Studio</button>
+            <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn typography-settings-button">UI Studio</button>
             <div className="modal-grid">
               <button type="button" onClick={undo} className="glass-soft modal-btn">Undo</button>
               <button type="button" onClick={() => { setSettingsOpen(false); setGameOpen(true); }} className="glass-soft modal-btn">Game</button>
@@ -621,27 +630,54 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setTypographyOpen(false)} />
           <section className="glass sheet typography-panel">
-            <div className="modal-title">Typography</div>
+            <div className="modal-title">UI Studio</div>
+            <div className="ui-studio-section">Typography</div>
+            <div className="type-control"><span>Caption</span><button type="button" onClick={() => adjustUiVar("--font-size-caption",-1,10)}>-</button><button type="button" onClick={() => adjustUiVar("--font-size-caption",1,10)}>+</button></div>
+            <div className="type-control"><span>Body</span><button type="button" onClick={() => adjustUiVar("--font-size-body",-1,14)}>-</button><button type="button" onClick={() => adjustUiVar("--font-size-body",1,14)}>+</button></div>
+            <div className="type-control"><span>Title</span><button type="button" onClick={() => adjustUiVar("--font-size-title",-1,16)}>-</button><button type="button" onClick={() => adjustUiVar("--font-size-title",1,16)}>+</button></div>
+            <div className="type-control"><span>Display</span><button type="button" onClick={() => adjustUiVar("--font-size-display",-1,28)}>-</button><button type="button" onClick={() => adjustUiVar("--font-size-display",1,28)}>+</button></div>
+            <div className="type-control"><span>Input</span><button type="button" onClick={() => adjustUiVar("--font-size-input",-1,34)}>-</button><button type="button" onClick={() => adjustUiVar("--font-size-input",1,34)}>+</button></div>
+            <div className="type-control"><span>Score</span><button type="button" onClick={() => adjustUiVar("--font-size-score",-1,42)}>-</button><button type="button" onClick={() => adjustUiVar("--font-size-score",1,42)}>+</button></div>
 
-            {[
-              ["Caption", "--font-size-caption", 8, 16, "10px"],
-              ["Body", "--font-size-body", 10, 20, "14px"],
-              ["Title", "--font-size-title", 12, 26, "16px"],
-              ["Display", "--font-size-display", 18, 42, "28px"],
-              ["Input", "--font-size-input", 24, 56, "34px"],
-              ["Score", "--font-size-score", 28, 70, "42px"]
-            ].map(([label, variable, min, max, fallback]) => (
-              <label key={variable} className="type-control">
-                <span>{label}</span>
-                <input
-                  type="range"
-                  min={Number(min)}
-                  max={Number(max)}
-                  defaultValue={Number(String(fallback).replace("px", ""))}
-                  onChange={(event) => updateTypeVar(String(variable), `${event.target.value}px`)}
-                />
-              </label>
-            ))}
+            <div className="ui-studio-section">Weights</div>
+            <div className="type-control"><span>Body Wt</span><button type="button" onClick={() => adjustUiVar("--font-weight-body",-100,600)}>-</button><button type="button" onClick={() => adjustUiVar("--font-weight-body",100,600)}>+</button></div>
+            <div className="type-control"><span>Title Wt</span><button type="button" onClick={() => adjustUiVar("--font-weight-title",-100,800)}>-</button><button type="button" onClick={() => adjustUiVar("--font-weight-title",100,800)}>+</button></div>
+            <div className="type-control"><span>Score Wt</span><button type="button" onClick={() => adjustUiVar("--font-weight-score",-100,900)}>-</button><button type="button" onClick={() => adjustUiVar("--font-weight-score",100,900)}>+</button></div>
+
+            <div className="ui-studio-section">Spacing</div>
+            <div className="type-control"><span>Small</span><button type="button" onClick={() => adjustUiVar("--space-sm",-1,8)}>-</button><button type="button" onClick={() => adjustUiVar("--space-sm",1,8)}>+</button></div>
+            <div className="type-control"><span>Medium</span><button type="button" onClick={() => adjustUiVar("--space-md",-1,12)}>-</button><button type="button" onClick={() => adjustUiVar("--space-md",1,12)}>+</button></div>
+            <div className="type-control"><span>Large</span><button type="button" onClick={() => adjustUiVar("--space-lg",-1,16)}>-</button><button type="button" onClick={() => adjustUiVar("--space-lg",1,16)}>+</button></div>
+
+            <div className="ui-studio-section">Radius</div>
+            <div className="type-control"><span>Small</span><button type="button" onClick={() => adjustUiVar("--radius-sm",-1,12)}>-</button><button type="button" onClick={() => adjustUiVar("--radius-sm",1,12)}>+</button></div>
+            <div className="type-control"><span>Large</span><button type="button" onClick={() => adjustUiVar("--radius-lg",-1,24)}>-</button><button type="button" onClick={() => adjustUiVar("--radius-lg",1,24)}>+</button></div>
+            <div className="type-control"><span>XL</span><button type="button" onClick={() => adjustUiVar("--radius-xl",-1,32)}>-</button><button type="button" onClick={() => adjustUiVar("--radius-xl",1,32)}>+</button></div>
+
+            <div className="ui-studio-section">Presets</div>
+            <div className="ui-preset-grid">
+              <button type="button" onClick={() => {
+                [
+                  ["--font-size-caption","10px"],["--font-size-body","14px"],["--font-size-title","16px"],["--font-size-display","28px"],["--font-size-input","34px"],["--font-size-score","42px"],
+                  ["--font-weight-body","600"],["--font-weight-title","800"],["--font-weight-score","900"],
+                  ["--space-sm","8px"],["--space-md","12px"],["--space-lg","16px"],["--radius-sm","12px"],["--radius-lg","24px"],["--radius-xl","32px"]
+                ].forEach(([name,value]) => updateTypeVar(name,value));
+              }}>Default</button>
+              <button type="button" onClick={() => {
+                [
+                  ["--font-size-caption","9px"],["--font-size-body","12px"],["--font-size-title","15px"],["--font-size-display","24px"],["--font-size-input","30px"],["--font-size-score","38px"],
+                  ["--space-sm","6px"],["--space-md","10px"],["--space-lg","13px"]
+                ].forEach(([name,value]) => updateTypeVar(name,value));
+              }}>Compact</button>
+              <button type="button" onClick={() => {
+                [
+                  ["--font-size-caption","11px"],["--font-size-body","15px"],["--font-size-title","18px"],["--font-size-display","32px"],["--font-size-input","40px"],["--font-size-score","50px"],
+                  ["--space-sm","10px"],["--space-md","14px"],["--space-lg","20px"]
+                ].forEach(([name,value]) => updateTypeVar(name,value));
+              }}>Large</button>
+            </div>
+
+
 
             <button type="button" className="primary" onClick={() => {
               [
