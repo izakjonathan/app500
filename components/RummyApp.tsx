@@ -13,10 +13,10 @@ type SyncStatus = "loading" | "synced" | "syncing" | "offline";
 type CloudGame = Game & { __sync?: { clientId: string; version: number } };
 
 const DEFAULT_PLAYERS: Player[] = [
-  { id: "p1", name: "You", color: "#050506" },
-  { id: "p2", name: "GF", color: "#5f5b68" },
-  { id: "p3", name: "Player 3", color: "#7b8580" },
-  { id: "p4", name: "Player 4", color: "#2f4239" }
+  { id: "p1", name: "You", color: "#ffd36b" },
+  { id: "p2", name: "GF", color: "#82efaa" },
+  { id: "p3", name: "Player 3", color: "#93c5fd" },
+  { id: "p4", name: "Player 4", color: "#f0abfc" }
 ];
 
 const STORAGE_KEY = "rummy500_clean_v51";
@@ -154,23 +154,13 @@ function getShareUrl(game: Game) {
 type ScoreboardProps = { game: Game; scoreTotals: Record<string, number> };
 const Scoreboard = memo(function Scoreboard({ game, scoreTotals }: ScoreboardProps) {
   return (
-    <section
-      className="glass scoreboard scoreboard-stable"
-      style={{ "--player-count": game.players.length } as React.CSSProperties}
-    >
+    <section className="glass scoreboard scoreboard-stable">
       <div className="label">Scoreboard</div>
       {game.players.map((player) => {
         const total = scoreTotals[player.id] || 0;
         const progress = Math.max(0, Math.min(100, Math.round((total / game.targetScore) * 100)));
         return (
-          <div
-            key={player.id}
-            className="glass-soft player-card score-transition"
-            style={{
-              "--player-color": player.color,
-              "--player-progress": `${progress}%`
-            } as React.CSSProperties}
-          >
+          <div key={player.id} className="glass-soft player-card score-transition">
             <div className="ring" style={{ color: player.color }}>{progress}%</div>
             <div>
               <div className="player-name">{player.name}</div>
@@ -695,18 +685,12 @@ export default function RummyApp() {
   }
 
   return (
-    <motion.main className="app" initial={{ opacity: 0.98 }} animate={{ opacity: 1 }} transition={{ duration: 0.18 }}>
+    <motion.main className={`app players-${game.players.length}`} initial={{ opacity: 0.98 }} animate={{ opacity: 1 }} transition={{ duration: 0.18 }}>
       <div className="bg" aria-hidden="true" />
       <div className="ui">
-        <header className="header app-hero">
-          <button type="button" onClick={toggleStarter} className="glass-soft pill hero-title-button">
-            <span className="app-title">Rummy<br />500</span>
-            <span className="hero-meta">Starter: {game.players.find((player) => player.id === game.starterId)?.name || "You"}</span>
-          </button>
-          <button type="button" onClick={() => setSettingsOpen(true)} className="glass-soft pill menu-pill">
-            <span>{game.gameId ? `${game.gameName} · ${game.targetScore}` : "No game"}</span>
-            <span className={`sync-dot sync-${syncStatus}`} />
-          </button>
+        <header className="header">
+          <button type="button" onClick={toggleStarter} className="glass-soft pill">Starter: {game.players.find((player) => player.id === game.starterId)?.name || "You"}</button>
+          <button type="button" onClick={() => setSettingsOpen(true)} className="glass-soft pill">{game.gameId ? `${game.gameName} · ${game.targetScore}` : "No game"}<span className={`sync-dot sync-${syncStatus}`} /></button>
         </header>
 
         <Scoreboard game={game} scoreTotals={scoreTotals} />
