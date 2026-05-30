@@ -659,3 +659,18 @@ position:relative !important;
   width:100%;
   accent-color:#82efaa;
 }
+
+
+/* ===== V94 TYPOGRAPHY PANEL VISIBILITY FIX ===== */
+
+.typography-settings-button{
+  grid-column:1 / -1 !important;
+}
+
+.typography-panel{
+  z-index:10050 !important;
+}
+
+.typography-panel .primary{
+  margin-top:6px !important;
+}

@@ -586,6 +586,7 @@ export default function RummyApp() {
               <button type="button" onClick={() => { setSettingsOpen(false); setGameOpen(true); }} className="glass-soft modal-btn">Game</button>
               <button type="button" onClick={saveGame} className="glass-soft modal-btn">Save</button>
               <button type="button" onClick={resetGame} className="glass-soft modal-btn danger">Reset</button>
+              <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn typography-settings-button">Typography</button>
             </div>
           </section>
         </>
