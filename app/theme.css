@@ -235,26 +235,72 @@ transform:translateY(-50%) !important;
 }
 
 
-/* ===== V95 MODAL LAYER FIX ===== */
+
+
+/* ===== V98 MODAL CLICK LAYER FIX =====
+   The previous modal shade sat above the Settings modal and intercepted taps.
+   Correct order:
+   app/dock < shade < modal/sheet < typography panel
+*/
 
 .modal-shade{
   position:fixed !important;
   inset:0 !important;
-  z-index:99990 !important;
+  z-index:9000 !important;
+  pointer-events:auto !important;
+  background:rgba(0,0,0,.42) !important;
+}
+
+.modal,
+.sheet{
+  position:fixed !important;
+  z-index:9100 !important;
+  pointer-events:auto !important;
+}
+
+.settings-modal{
+  z-index:9200 !important;
+  max-height:72dvh !important;
+  overflow:auto !important;
 }
 
 .typography-panel{
-  position:fixed !important;
-  left:50% !important;
-  top:50% !important;
-  transform:translate(-50%,-50%) !important;
-  width:min(92vw,560px) !important;
-  max-height:85dvh !important;
+  z-index:12000 !important;
+  left:14px !important;
+  right:14px !important;
+  top:calc(var(--safe-top) + 64px) !important;
+  bottom:calc(var(--safe-bottom) + 18px) !important;
+  max-height:none !important;
   overflow:auto !important;
-  z-index:99999 !important;
+  border:1px solid rgba(255,255,255,.16) !important;
 }
 
-.sheet{
-  max-height:85dvh;
-  overflow:auto;
+.typography-settings-button{
+  width:100% !important;
+  margin-bottom:10px !important;
+}
+
+.type-control{
+  position:relative !important;
+  z-index:1 !important;
+  display:grid !important;
+  grid-template-columns:82px minmax(0,1fr) !important;
+  align-items:center !important;
+  gap:12px !important;
+  padding:10px 12px !important;
+  border-radius:16px !important;
+  background:rgba(255,255,255,.055) !important;
+}
+
+.type-control span{
+  color:rgba(255,255,255,.78) !important;
+}
+
+.type-control input[type="range"]{
+  width:100% !important;
+  accent-color:#82efaa !important;
+}
+
+.dock{
+  z-index:30 !important;
 }

@@ -582,6 +582,7 @@ export default function RummyApp() {
               {shareStatus === "copied" ? "Copied link" : shareStatus === "shared" ? "Shared" : "Share current game"}
             </button>
             <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn">Typography</button>
+            <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn typography-settings-button">Typography</button>
             <div className="modal-grid">
               <button type="button" onClick={undo} className="glass-soft modal-btn">Undo</button>
               <button type="button" onClick={() => { setSettingsOpen(false); setGameOpen(true); }} className="glass-soft modal-btn">Game</button>

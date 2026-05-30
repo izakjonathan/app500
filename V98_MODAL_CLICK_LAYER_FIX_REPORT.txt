@@ -1,0 +1,14 @@
+V98 MODAL CLICK LAYER FIX
+
+Cause found:
+- V95 set .modal-shade to z-index:99990.
+- Settings modal still had normal modal z-index.
+- The shade was visually dimming the screen and intercepting taps above the Settings panel.
+- The Typography button was visible through the shade but not clickable.
+
+Fix:
+- Removed V95/V96 diagnostic modal z-index blocks.
+- Corrected layer order:
+  app/dock < modal shade < settings/game/rounds sheets < typography panel
+- Kept Typography button high in Settings.
+- Removed green diagnostic panel styling.
