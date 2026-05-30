@@ -525,6 +525,14 @@ export default function RummyApp() {
     } catch {}
   }
 
+  function editUiVar(name: string, fallback: string) {
+    const current = uiValue(name) || fallback;
+    const value = typeof window !== "undefined" ? window.prompt(`Set ${name}`, current) : null;
+    if (!value) return;
+
+    setUiVar(name, value.trim());
+  }
+
   function adjustUiVar(
     name: string,
     step: number,
@@ -550,17 +558,70 @@ export default function RummyApp() {
     Object.entries(values).forEach(([name, value]) => setUiVar(name, value));
   }
 
-  function saveCustomUiPreset() {
+  function getStoredUiPresets(): Record<string, Record<string, string>> {
     try {
-      localStorage.setItem("rummy-ui-custom-preset", JSON.stringify(uiValues));
+      const raw = localStorage.getItem("rummy-ui-custom-presets");
+      return raw ? JSON.parse(raw) as Record<string, Record<string, string>> : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function setStoredUiPresets(presets: Record<string, Record<string, string>>) {
+    try {
+      localStorage.setItem("rummy-ui-custom-presets", JSON.stringify(presets));
     } catch {}
   }
 
+  function saveCustomUiPreset() {
+    if (typeof window === "undefined") return;
+    const name = window.prompt("Preset name", "My UI");
+    if (!name) return;
+
+    const presets = getStoredUiPresets();
+    presets[name] = uiValues;
+    setStoredUiPresets(presets);
+  }
+
   function loadCustomUiPreset() {
-    try {
-      const saved = localStorage.getItem("rummy-ui-custom-preset");
-      if (saved) applyUiPreset(JSON.parse(saved) as Record<string, string>);
-    } catch {}
+    if (typeof window === "undefined") return;
+    const presets = getStoredUiPresets();
+    const names = Object.keys(presets);
+
+    if (!names.length) return;
+    const name = window.prompt(`Load preset:\n${names.join("\n")}`, names[0]);
+    if (!name || !presets[name]) return;
+
+    applyUiPreset(presets[name]);
+  }
+
+  function renameCustomUiPreset() {
+    if (typeof window === "undefined") return;
+    const presets = getStoredUiPresets();
+    const names = Object.keys(presets);
+
+    if (!names.length) return;
+    const oldName = window.prompt(`Rename preset:\n${names.join("\n")}`, names[0]);
+    if (!oldName || !presets[oldName]) return;
+    const newName = window.prompt("New preset name", oldName);
+    if (!newName || newName === oldName) return;
+
+    presets[newName] = presets[oldName];
+    delete presets[oldName];
+    setStoredUiPresets(presets);
+  }
+
+  function deleteCustomUiPreset() {
+    if (typeof window === "undefined") return;
+    const presets = getStoredUiPresets();
+    const names = Object.keys(presets);
+
+    if (!names.length) return;
+    const name = window.prompt(`Delete preset:\n${names.join("\n")}`, names[0]);
+    if (!name || !presets[name]) return;
+
+    delete presets[name];
+    setStoredUiPresets(presets);
   }
 
   function exportUiPreset() {
@@ -785,7 +846,7 @@ export default function RummyApp() {
                   <div key={String(name)} className="ui-control-row">
                     <span>{label}</span>
                     <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), unit as "px", Number(min), Number(max))}>−</button>
-                    <strong>{uiValue(String(name))}</strong>
+                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || String(fallback))}>{uiValue(String(name))}</button>
                     <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), unit as "px", Number(min), Number(max))}>+</button>
                     <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
                   </div>
@@ -801,7 +862,7 @@ export default function RummyApp() {
                   <div key={String(name)} className="ui-control-row">
                     <span>{label}</span>
                     <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), "number", 100, 950)}>−</button>
-                    <strong>{uiValue(String(name))}</strong>
+                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || String(fallback))}>{uiValue(String(name))}</button>
                     <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), "number", 100, 950)}>+</button>
                     <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
                   </div>
@@ -820,7 +881,7 @@ export default function RummyApp() {
                   <div key={String(name)} className="ui-control-row">
                     <span>{label}</span>
                     <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), "px", Number(min), Number(max))}>−</button>
-                    <strong>{uiValue(String(name))}</strong>
+                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || String(fallback))}>{uiValue(String(name))}</button>
                     <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), "px", Number(min), Number(max))}>+</button>
                     <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
                   </div>
@@ -839,7 +900,7 @@ export default function RummyApp() {
                   <div key={String(name)} className="ui-control-row">
                     <span>{label}</span>
                     <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), "px", Number(min), Number(max))}>−</button>
-                    <strong>{uiValue(String(name))}</strong>
+                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || String(fallback))}>{uiValue(String(name))}</button>
                     <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), "px", Number(min), Number(max))}>+</button>
                     <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
                   </div>
@@ -859,7 +920,7 @@ export default function RummyApp() {
                   <div key={String(name)} className="ui-control-row">
                     <span>{label}</span>
                     <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), unit as "px" | "opacity", Number(min), Number(max))}>−</button>
-                    <strong>{uiValue(String(name))}</strong>
+                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || String(fallback))}>{uiValue(String(name))}</button>
                     <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), unit as "px" | "opacity", Number(min), Number(max))}>+</button>
                     <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
                   </div>
@@ -896,6 +957,8 @@ export default function RummyApp() {
                 <div className="ui-preset-grid">
                   <button type="button" onClick={saveCustomUiPreset}>Save</button>
                   <button type="button" onClick={loadCustomUiPreset}>Load</button>
+                  <button type="button" onClick={renameCustomUiPreset}>Rename</button>
+                  <button type="button" onClick={deleteCustomUiPreset}>Delete</button>
                   <button type="button" onClick={exportUiPreset}>Copy JSON</button>
                   <button type="button" onClick={importUiPreset}>Paste JSON</button>
                   <button type="button" onClick={() => applyUiPreset(UI_STUDIO_DEFAULTS)}>Reset all</button>
