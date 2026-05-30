@@ -1,0 +1,17 @@
+type="button" onClick={undo} className="glass-soft modal-btn">Undo</button>
+              <button type="button" onClick={() => { setSettingsOpen(false); setGameOpen(true); }} className="glass-soft modal-btn">Game</button>
+              <button type="button" onClick={saveGame} className="glass-soft modal-btn">Save</button>
+              <button type="button" onClick={resetGame} className="glass-soft modal-btn danger">Reset</button>
+              <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn typography-settings-button">Typography</button>
+            </div>
+          </section>
+        </>
+      )}
+
+      {showRoundsPopup && (
+        <>
+          <div className="modal-shade" onClick={() => setShowRoundsPopup(false)} />
+          <div className="sheet glass">
+            <div className="modal-title rounds-popup-title">Rounds Overview</div>
+            <div className="history">
+              {rounds.length === 0 
