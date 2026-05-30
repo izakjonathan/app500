@@ -26,6 +26,70 @@ const CLIENT_ID_KEY = "rummy500_clean_v51_client_id";
 const SAVE_DEBOUNCE_MS = 700;
 const PENDING_SYNC_KEY = "rummy500_clean_v52_pending_sync";
 
+type UiStudioTab = "type" | "space" | "radius" | "glass" | "layout" | "presets";
+
+const UI_STUDIO_DEFAULTS: Record<string, string> = {
+  "--font-size-caption": "10px",
+  "--font-size-body": "14px",
+  "--font-size-title": "16px",
+  "--font-size-display": "28px",
+  "--font-size-input": "34px",
+  "--font-size-score": "42px",
+  "--font-weight-label": "700",
+  "--font-weight-body": "600",
+  "--font-weight-title": "800",
+  "--font-weight-score": "900",
+  "--space-sm": "8px",
+  "--space-md": "12px",
+  "--space-lg": "16px",
+  "--radius-sm": "12px",
+  "--radius-lg": "24px",
+  "--radius-xl": "32px",
+  "--glass-blur": "12px",
+  "--glass-opacity": "0.06",
+  "--glass-border-strength": "0.16",
+  "--glass-shadow-strength": "0.44",
+  "--ui-density-scale": "1"
+};
+
+const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
+  Default: UI_STUDIO_DEFAULTS,
+  Compact: {
+    ...UI_STUDIO_DEFAULTS,
+    "--font-size-caption": "9px",
+    "--font-size-body": "12px",
+    "--font-size-title": "15px",
+    "--font-size-display": "24px",
+    "--font-size-input": "30px",
+    "--font-size-score": "38px",
+    "--space-sm": "6px",
+    "--space-md": "10px",
+    "--space-lg": "13px",
+    "--ui-density-scale": "0.9"
+  },
+  Large: {
+    ...UI_STUDIO_DEFAULTS,
+    "--font-size-caption": "11px",
+    "--font-size-body": "15px",
+    "--font-size-title": "18px",
+    "--font-size-display": "32px",
+    "--font-size-input": "40px",
+    "--font-size-score": "50px",
+    "--space-sm": "10px",
+    "--space-md": "14px",
+    "--space-lg": "20px",
+    "--ui-density-scale": "1.12"
+  },
+  Glassy: {
+    ...UI_STUDIO_DEFAULTS,
+    "--glass-blur": "22px",
+    "--glass-opacity": "0.09",
+    "--glass-border-strength": "0.22",
+    "--glass-shadow-strength": "0.55"
+  }
+};
+
+
 function createDefaultGame(): Game {
   return { gameId: null, gameName: "No game", players: DEFAULT_PLAYERS.slice(0, 2), targetScore: 1500, starterId: "p1", rounds: [], status: "active", winnerId: null };
 }
@@ -117,6 +181,8 @@ export default function RummyApp() {
   const [closedBy, setClosedBy] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [typographyOpen, setTypographyOpen] = useState(false);
+  const [uiStudioTab, setUiStudioTab] = useState<UiStudioTab>("type");
+  const [uiValues, setUiValues] = useState<Record<string, string>>(() => ({ ...UI_STUDIO_DEFAULTS }));
   const [showRoundsPopup, setShowRoundsPopup] = useState(false);
   const [gameOpen, setGameOpen] = useState(false);
   const [playerCount, setPlayerCount] = useState(2);
@@ -443,37 +509,90 @@ export default function RummyApp() {
   function newSetup() { setGame(createDefaultGame()); setInputs({}); setClosedBy(null); setGameOpen(true); }
 
   
-  function adjustUiVar(name: string, step: number, fallback: number) {
-    if (typeof document === "undefined") return;
-    const current = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-    const num = parseFloat(current || String(fallback));
-    const next = Math.max(0, num + step);
-    const value = name.includes("weight") ? `${Math.min(950, Math.max(100, next))}` : (name.includes("opacity") ? `${next}` : `${next}px`);
-    document.documentElement.style.setProperty(name, value);
-    try { localStorage.setItem(`rummy-type-${name}`, value); } catch {}
+  function uiValue(name: string) {
+    return uiValues[name] || UI_STUDIO_DEFAULTS[name] || "0";
   }
 
-  function updateTypeVar(name: string, value: string) {
-    if (typeof document === "undefined") return;
-    document.documentElement.style.setProperty(name, value);
+  function setUiVar(name: string, value: string) {
+    if (typeof document !== "undefined") {
+      document.documentElement.style.setProperty(name, value);
+    }
+
+    setUiValues((previous) => ({ ...previous, [name]: value }));
+
     try {
       localStorage.setItem(`rummy-type-${name}`, value);
     } catch {}
   }
 
+  function adjustUiVar(
+    name: string,
+    step: number,
+    fallback: number,
+    unit: "px" | "number" | "opacity" = "px",
+    min = 0,
+    max = 999
+  ) {
+    const current = uiValue(name);
+    const parsed = parseFloat(current || String(fallback));
+    const nextNumber = Math.min(max, Math.max(min, parsed + step));
+    const rounded = unit === "opacity" ? Math.round(nextNumber * 100) / 100 : Math.round(nextNumber);
+    const value = unit === "px" ? `${rounded}px` : `${rounded}`;
+
+    setUiVar(name, value);
+  }
+
+  function updateTypeVar(name: string, value: string) {
+    setUiVar(name, value);
+  }
+
+  function applyUiPreset(values: Record<string, string>) {
+    Object.entries(values).forEach(([name, value]) => setUiVar(name, value));
+  }
+
+  function saveCustomUiPreset() {
+    try {
+      localStorage.setItem("rummy-ui-custom-preset", JSON.stringify(uiValues));
+    } catch {}
+  }
+
+  function loadCustomUiPreset() {
+    try {
+      const saved = localStorage.getItem("rummy-ui-custom-preset");
+      if (saved) applyUiPreset(JSON.parse(saved) as Record<string, string>);
+    } catch {}
+  }
+
+  function exportUiPreset() {
+    try {
+      navigator.clipboard?.writeText(JSON.stringify(uiValues, null, 2));
+    } catch {}
+  }
+
+  function importUiPreset() {
+    const value = typeof window !== "undefined" ? window.prompt("Paste UI preset JSON") : null;
+    if (!value) return;
+
+    try {
+      applyUiPreset(JSON.parse(value) as Record<string, string>);
+    } catch {}
+  }
+
   useEffect(() => {
     if (typeof document === "undefined") return;
-    [
-      "--font-size-caption","--font-size-body","--font-size-title","--font-size-display","--font-size-input","--font-size-score",
-      "--font-weight-body","--font-weight-title","--font-weight-score",
-      "--space-sm","--space-md","--space-lg",
-      "--radius-sm","--radius-lg","--radius-xl"
-    ].forEach((name) => {
+
+    const nextValues: Record<string, string> = { ...UI_STUDIO_DEFAULTS };
+
+    Object.keys(UI_STUDIO_DEFAULTS).forEach((name) => {
       try {
         const saved = localStorage.getItem(`rummy-type-${name}`);
-        if (saved) document.documentElement.style.setProperty(name, saved);
+        const value = saved || UI_STUDIO_DEFAULTS[name];
+        nextValues[name] = value;
+        document.documentElement.style.setProperty(name, value);
       } catch {}
     });
+
+    setUiValues(nextValues);
   }, []);
 
 
@@ -629,66 +748,160 @@ export default function RummyApp() {
       {typographyOpen && (
         <>
           <div className="modal-shade" onClick={() => setTypographyOpen(false)} />
-          <section className="glass sheet typography-panel">
+          <section className="glass sheet typography-panel ui-studio-panel">
             <div className="modal-title">UI Studio</div>
-            <div className="ui-studio-section">Typography</div>
-            <div className="type-control"><span>Caption</span><button type="button" onClick={() => adjustUiVar("--font-size-caption",-1,10)}>-</button><button type="button" onClick={() => adjustUiVar("--font-size-caption",1,10)}>+</button></div>
-            <div className="type-control"><span>Body</span><button type="button" onClick={() => adjustUiVar("--font-size-body",-1,14)}>-</button><button type="button" onClick={() => adjustUiVar("--font-size-body",1,14)}>+</button></div>
-            <div className="type-control"><span>Title</span><button type="button" onClick={() => adjustUiVar("--font-size-title",-1,16)}>-</button><button type="button" onClick={() => adjustUiVar("--font-size-title",1,16)}>+</button></div>
-            <div className="type-control"><span>Display</span><button type="button" onClick={() => adjustUiVar("--font-size-display",-1,28)}>-</button><button type="button" onClick={() => adjustUiVar("--font-size-display",1,28)}>+</button></div>
-            <div className="type-control"><span>Input</span><button type="button" onClick={() => adjustUiVar("--font-size-input",-1,34)}>-</button><button type="button" onClick={() => adjustUiVar("--font-size-input",1,34)}>+</button></div>
-            <div className="type-control"><span>Score</span><button type="button" onClick={() => adjustUiVar("--font-size-score",-1,42)}>-</button><button type="button" onClick={() => adjustUiVar("--font-size-score",1,42)}>+</button></div>
 
-            <div className="ui-studio-section">Weights</div>
-            <div className="type-control"><span>Body Wt</span><button type="button" onClick={() => adjustUiVar("--font-weight-body",-100,600)}>-</button><button type="button" onClick={() => adjustUiVar("--font-weight-body",100,600)}>+</button></div>
-            <div className="type-control"><span>Title Wt</span><button type="button" onClick={() => adjustUiVar("--font-weight-title",-100,800)}>-</button><button type="button" onClick={() => adjustUiVar("--font-weight-title",100,800)}>+</button></div>
-            <div className="type-control"><span>Score Wt</span><button type="button" onClick={() => adjustUiVar("--font-weight-score",-100,900)}>-</button><button type="button" onClick={() => adjustUiVar("--font-weight-score",100,900)}>+</button></div>
-
-            <div className="ui-studio-section">Spacing</div>
-            <div className="type-control"><span>Small</span><button type="button" onClick={() => adjustUiVar("--space-sm",-1,8)}>-</button><button type="button" onClick={() => adjustUiVar("--space-sm",1,8)}>+</button></div>
-            <div className="type-control"><span>Medium</span><button type="button" onClick={() => adjustUiVar("--space-md",-1,12)}>-</button><button type="button" onClick={() => adjustUiVar("--space-md",1,12)}>+</button></div>
-            <div className="type-control"><span>Large</span><button type="button" onClick={() => adjustUiVar("--space-lg",-1,16)}>-</button><button type="button" onClick={() => adjustUiVar("--space-lg",1,16)}>+</button></div>
-
-            <div className="ui-studio-section">Radius</div>
-            <div className="type-control"><span>Small</span><button type="button" onClick={() => adjustUiVar("--radius-sm",-1,12)}>-</button><button type="button" onClick={() => adjustUiVar("--radius-sm",1,12)}>+</button></div>
-            <div className="type-control"><span>Large</span><button type="button" onClick={() => adjustUiVar("--radius-lg",-1,24)}>-</button><button type="button" onClick={() => adjustUiVar("--radius-lg",1,24)}>+</button></div>
-            <div className="type-control"><span>XL</span><button type="button" onClick={() => adjustUiVar("--radius-xl",-1,32)}>-</button><button type="button" onClick={() => adjustUiVar("--radius-xl",1,32)}>+</button></div>
-
-            <div className="ui-studio-section">Presets</div>
-            <div className="ui-preset-grid">
-              <button type="button" onClick={() => {
-                [
-                  ["--font-size-caption","10px"],["--font-size-body","14px"],["--font-size-title","16px"],["--font-size-display","28px"],["--font-size-input","34px"],["--font-size-score","42px"],
-                  ["--font-weight-body","600"],["--font-weight-title","800"],["--font-weight-score","900"],
-                  ["--space-sm","8px"],["--space-md","12px"],["--space-lg","16px"],["--radius-sm","12px"],["--radius-lg","24px"],["--radius-xl","32px"]
-                ].forEach(([name,value]) => updateTypeVar(name,value));
-              }}>Default</button>
-              <button type="button" onClick={() => {
-                [
-                  ["--font-size-caption","9px"],["--font-size-body","12px"],["--font-size-title","15px"],["--font-size-display","24px"],["--font-size-input","30px"],["--font-size-score","38px"],
-                  ["--space-sm","6px"],["--space-md","10px"],["--space-lg","13px"]
-                ].forEach(([name,value]) => updateTypeVar(name,value));
-              }}>Compact</button>
-              <button type="button" onClick={() => {
-                [
-                  ["--font-size-caption","11px"],["--font-size-body","15px"],["--font-size-title","18px"],["--font-size-display","32px"],["--font-size-input","40px"],["--font-size-score","50px"],
-                  ["--space-sm","10px"],["--space-md","14px"],["--space-lg","20px"]
-                ].forEach(([name,value]) => updateTypeVar(name,value));
-              }}>Large</button>
+            <div className="ui-studio-tabs">
+              {[
+                ["type", "Type"],
+                ["space", "Space"],
+                ["radius", "Radius"],
+                ["glass", "Glass"],
+                ["layout", "Layout"],
+                ["presets", "Presets"]
+              ].map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  className={uiStudioTab === id ? "active" : ""}
+                  onClick={() => setUiStudioTab(id as UiStudioTab)}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
 
+            {uiStudioTab === "type" && (
+              <div className="ui-studio-page">
+                <div className="ui-studio-section">Font sizes</div>
+                {[
+                  ["Caption", "--font-size-caption", 1, 10, "px", 6, 20],
+                  ["Body", "--font-size-body", 1, 14, "px", 8, 26],
+                  ["Title", "--font-size-title", 1, 16, "px", 10, 32],
+                  ["Display", "--font-size-display", 1, 28, "px", 14, 54],
+                  ["Input", "--font-size-input", 1, 34, "px", 20, 70],
+                  ["Score", "--font-size-score", 1, 42, "px", 24, 82]
+                ].map(([label, name, step, fallback, unit, min, max]) => (
+                  <div key={String(name)} className="ui-control-row">
+                    <span>{label}</span>
+                    <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), unit as "px", Number(min), Number(max))}>−</button>
+                    <strong>{uiValue(String(name))}</strong>
+                    <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), unit as "px", Number(min), Number(max))}>+</button>
+                    <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
+                  </div>
+                ))}
 
+                <div className="ui-studio-section">Weights</div>
+                {[
+                  ["Label", "--font-weight-label", 100, 700],
+                  ["Body", "--font-weight-body", 100, 600],
+                  ["Title", "--font-weight-title", 100, 800],
+                  ["Score", "--font-weight-score", 100, 900]
+                ].map(([label, name, step, fallback]) => (
+                  <div key={String(name)} className="ui-control-row">
+                    <span>{label}</span>
+                    <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), "number", 100, 950)}>−</button>
+                    <strong>{uiValue(String(name))}</strong>
+                    <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), "number", 100, 950)}>+</button>
+                    <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
+                  </div>
+                ))}
+              </div>
+            )}
 
-            <button type="button" className="primary" onClick={() => {
-              [
-                ["--font-size-caption", "10px"],
-                ["--font-size-body", "14px"],
-                ["--font-size-title", "16px"],
-                ["--font-size-display", "28px"],
-                ["--font-size-input", "34px"],
-                ["--font-size-score", "42px"]
-              ].forEach(([name, value]) => updateTypeVar(name, value));
-            }}>Reset typography</button>
+            {uiStudioTab === "space" && (
+              <div className="ui-studio-page">
+                <div className="ui-studio-section">Spacing scale</div>
+                {[
+                  ["Small", "--space-sm", 1, 8, 0, 24],
+                  ["Medium", "--space-md", 1, 12, 0, 32],
+                  ["Large", "--space-lg", 1, 16, 0, 44]
+                ].map(([label, name, step, fallback, min, max]) => (
+                  <div key={String(name)} className="ui-control-row">
+                    <span>{label}</span>
+                    <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), "px", Number(min), Number(max))}>−</button>
+                    <strong>{uiValue(String(name))}</strong>
+                    <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), "px", Number(min), Number(max))}>+</button>
+                    <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {uiStudioTab === "radius" && (
+              <div className="ui-studio-page">
+                <div className="ui-studio-section">Corner radius</div>
+                {[
+                  ["Small", "--radius-sm", 1, 12, 0, 30],
+                  ["Large", "--radius-lg", 1, 24, 0, 48],
+                  ["XL", "--radius-xl", 1, 32, 0, 60]
+                ].map(([label, name, step, fallback, min, max]) => (
+                  <div key={String(name)} className="ui-control-row">
+                    <span>{label}</span>
+                    <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), "px", Number(min), Number(max))}>−</button>
+                    <strong>{uiValue(String(name))}</strong>
+                    <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), "px", Number(min), Number(max))}>+</button>
+                    <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {uiStudioTab === "glass" && (
+              <div className="ui-studio-page">
+                <div className="ui-studio-section">Glass material</div>
+                {[
+                  ["Blur", "--glass-blur", 1, 12, "px", 0, 40],
+                  ["Opacity", "--glass-opacity", 0.01, 0.06, "opacity", 0, 0.3],
+                  ["Border", "--glass-border-strength", 0.01, 0.16, "opacity", 0, 0.5],
+                  ["Shadow", "--glass-shadow-strength", 0.01, 0.44, "opacity", 0, 0.9]
+                ].map(([label, name, step, fallback, unit, min, max]) => (
+                  <div key={String(name)} className="ui-control-row">
+                    <span>{label}</span>
+                    <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), unit as "px" | "opacity", Number(min), Number(max))}>−</button>
+                    <strong>{uiValue(String(name))}</strong>
+                    <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), unit as "px" | "opacity", Number(min), Number(max))}>+</button>
+                    <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {uiStudioTab === "layout" && (
+              <div className="ui-studio-page">
+                <div className="ui-studio-section">Density</div>
+                {[
+                  ["Compact", "0.9"],
+                  ["Balanced", "1"],
+                  ["Comfortable", "1.08"],
+                  ["Large", "1.16"]
+                ].map(([label, value]) => (
+                  <button key={label} type="button" className="ui-studio-wide-btn" onClick={() => setUiVar("--ui-density-scale", value)}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {uiStudioTab === "presets" && (
+              <div className="ui-studio-page">
+                <div className="ui-studio-section">Presets</div>
+                <div className="ui-preset-grid">
+                  {Object.entries(UI_STUDIO_PRESETS).map(([name, values]) => (
+                    <button key={name} type="button" onClick={() => applyUiPreset(values)}>{name}</button>
+                  ))}
+                </div>
+
+                <div className="ui-studio-section">Custom</div>
+                <div className="ui-preset-grid">
+                  <button type="button" onClick={saveCustomUiPreset}>Save</button>
+                  <button type="button" onClick={loadCustomUiPreset}>Load</button>
+                  <button type="button" onClick={exportUiPreset}>Copy JSON</button>
+                  <button type="button" onClick={importUiPreset}>Paste JSON</button>
+                  <button type="button" onClick={() => applyUiPreset(UI_STUDIO_DEFAULTS)}>Reset all</button>
+                </div>
+              </div>
+            )}
           </section>
         </>
       )}

@@ -800,3 +800,153 @@ position:relative !important;
   font-size:18px;
   font-weight:900;
 }
+
+
+/* ===== V107 UI STUDIO COMPLETE ===== */
+
+:root{
+  --glass-opacity:0.06;
+  --glass-border-strength:0.16;
+  --glass-shadow-strength:0.44;
+  --ui-density-scale:1;
+}
+
+.glass,
+.glass-soft{
+  backdrop-filter:blur(var(--glass-blur, 12px)) saturate(135%) brightness(.88) !important;
+  -webkit-backdrop-filter:blur(var(--glass-blur, 12px)) saturate(135%) brightness(.88) !important;
+}
+
+.glass{
+  border-color:rgba(255,255,255,var(--glass-border-strength, .16)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 18px 42px rgba(0,0,0,var(--glass-shadow-strength, .44)) !important;
+}
+
+.ui-studio-panel{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+  padding:16px !important;
+}
+
+.ui-studio-tabs{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;
+  margin-bottom:6px;
+}
+
+.ui-studio-tabs button,
+.ui-studio-wide-btn,
+.ui-preset-grid button,
+.ui-control-row button{
+  border:0;
+  color:rgba(255,255,255,.9);
+  background:rgba(255,255,255,.075);
+  border-radius:13px;
+}
+
+.ui-studio-tabs button{
+  height:34px;
+  font-size:var(--font-size-caption);
+  font-weight:var(--font-weight-title);
+}
+
+.ui-studio-tabs button.active{
+  background:rgba(255,255,255,.9);
+  color:#050506;
+}
+
+.ui-studio-page{
+  position:relative;
+  z-index:1;
+  display:grid;
+  gap:7px;
+}
+
+.ui-studio-section{
+  position:relative;
+  z-index:1;
+  margin:12px 0 2px;
+  font-size:var(--font-size-caption);
+  font-weight:var(--font-weight-label);
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.52);
+}
+
+.ui-control-row{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:1fr 38px 64px 38px 54px;
+  align-items:center;
+  gap:7px;
+  min-height:44px;
+  padding:7px 9px;
+  border-radius:16px;
+  background:rgba(255,255,255,.05);
+}
+
+.ui-control-row span{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:var(--font-size-body);
+  font-weight:var(--font-weight-body);
+  color:rgba(255,255,255,.76);
+}
+
+.ui-control-row strong{
+  text-align:center;
+  font-size:var(--font-size-body);
+  font-weight:var(--font-weight-title);
+  color:rgba(255,255,255,.95);
+}
+
+.ui-control-row button{
+  height:32px;
+  font-size:18px;
+  font-weight:900;
+}
+
+.ui-control-row .mini-reset{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.02em;
+}
+
+.ui-preset-grid{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+
+.ui-preset-grid button,
+.ui-studio-wide-btn{
+  min-height:42px;
+  font-size:var(--font-size-body);
+  font-weight:var(--font-weight-title);
+}
+
+.ui-studio-wide-btn{
+  width:100%;
+}
+
+/* Density hooks: affects only controls wired to spacing vars */
+.dock-panel,
+.scoreboard,
+.rounds-card{
+  transform-origin:center;
+}
+
+.typography-panel{
+  z-index:12000 !important;
+}

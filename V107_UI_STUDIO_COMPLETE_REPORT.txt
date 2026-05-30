@@ -1,0 +1,16 @@
+V107 UI STUDIO COMPLETE
+
+Built from v101.
+
+Included V102-V107:
+- V102 value display beside every +/- control
+- V103 reset per control
+- V104 tabs/sections: Type, Space, Radius, Glass, Layout, Presets
+- V105 preset system: default/compact/large/glassy + save/load/copy/paste custom preset
+- V106 glass controls: blur, opacity, border strength, shadow strength
+- V107 expanded variable persistence and mapped controls
+
+Notes:
+- UI values are stored in localStorage using the rummy-type-* keys.
+- Controls apply CSS variables to :root live.
+- Existing game sync and scoring logic preserved.
