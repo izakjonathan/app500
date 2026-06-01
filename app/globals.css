@@ -959,3 +959,92 @@ body{
    --penalty-gap
    --bottom-gap
 */
+
+
+/* ===== V127 BLUEPRINT CARD FILL READABILITY =====
+   Gives cards/modules the same beige fill as the page background.
+   This keeps the blueprint design flat/no-glass, but makes popups and cards readable
+   when they overlap other bordered UI elements.
+*/
+
+:root{
+  --passport-blue:#244cdd;
+  --passport-bg:#efe9dc;
+}
+
+/* Filled structural surfaces */
+.scoreboard,
+.player-card,
+.rounds-card,
+.input-row,
+.modal,
+.sheet,
+.settings-modal,
+.typography-panel,
+.history-item,
+.analytics-grid > div,
+.ui-control-row,
+.type-control{
+  background:var(--passport-bg) !important;
+  background-color:var(--passport-bg) !important;
+  background-image:none !important;
+}
+
+/* Modal/readability surfaces must fully cover content behind them */
+.modal,
+.sheet,
+.settings-modal,
+.typography-panel{
+  opacity:1 !important;
+  isolation:isolate !important;
+}
+
+/* Keep buttons/control pills unfilled unless they are card-like containers */
+.pill,
+.quick,
+.penalty,
+.icon-btn,
+.closed-toggle,
+.add-round,
+.modal-btn,
+.share-game-btn,
+.typography-settings-button,
+.primary,
+.segment button,
+.ui-studio-tabs button,
+.ui-studio-wide-btn,
+.ui-preset-grid button,
+.ui-value-button,
+.mini-reset,
+.form-input{
+  background:transparent !important;
+  background-color:transparent !important;
+  background-image:none !important;
+}
+
+/* Keep active states flat but readable */
+.closed-toggle.active,
+.segment button.selected,
+.ui-studio-tabs button.active{
+  background:var(--passport-bg) !important;
+}
+
+/* Popup content rows should not be see-through */
+.history{
+  background:transparent !important;
+}
+
+.history-item{
+  background:var(--passport-bg) !important;
+}
+
+/* The modal shade stays beige-tinted but modules are now opaque on top */
+.modal-shade{
+  background:rgba(239,233,220,.74) !important;
+}
+
+/* Make UI Studio controls readable without introducing a different fill color */
+.ui-control-row,
+.type-control{
+  background:var(--passport-bg) !important;
+}
