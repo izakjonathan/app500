@@ -26,7 +26,7 @@ const CLIENT_ID_KEY = "rummy500_clean_v51_client_id";
 const SAVE_DEBOUNCE_MS = 700;
 const PENDING_SYNC_KEY = "rummy500_clean_v52_pending_sync";
 
-type UiStudioTab = "type" | "space" | "radius" | "glass" | "layout" | "presets";
+type UiStudioTab = "type" | "space" | "radius" | "glass" | "color" | "layout" | "presets";
 
 const UI_STUDIO_DEFAULTS: Record<string, string> = {
   "--font-size-caption": "10px",
@@ -49,7 +49,10 @@ const UI_STUDIO_DEFAULTS: Record<string, string> = {
   "--glass-opacity": "0.06",
   "--glass-border-strength": "0.16",
   "--glass-shadow-strength": "0.44",
-  "--ui-density-scale": "1"
+  "--ui-density-scale": "1",
+  "--passport-blue": "#244cdd",
+  "--passport-bg": "#efe9dc",
+  "--passport-muted": "rgba(36,76,221,.38)"
 };
 
 const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
@@ -818,6 +821,7 @@ export default function RummyApp() {
                 ["space", "Space"],
                 ["radius", "Radius"],
                 ["glass", "Glass"],
+                ["color", "Color"],
                 ["layout", "Layout"],
                 ["presets", "Presets"]
               ].map(([id, label]) => (
@@ -922,6 +926,25 @@ export default function RummyApp() {
                     <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), unit as "px" | "opacity", Number(min), Number(max))}>−</button>
                     <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || String(fallback))}>{uiValue(String(name))}</button>
                     <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), unit as "px" | "opacity", Number(min), Number(max))}>+</button>
+                    <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+
+            {uiStudioTab === "color" && (
+              <div className="ui-studio-page">
+                <div className="ui-studio-section">Blueprint colors</div>
+                {[
+                  ["Text / Border Blue", "--passport-blue", "#244cdd"],
+                  ["Background Beige", "--passport-bg", "#efe9dc"],
+                  ["Soft Line", "--passport-muted", "rgba(36,76,221,.38)"]
+                ].map(([label, name, fallback]) => (
+                  <div key={String(name)} className="ui-control-row color-control-row">
+                    <span>{label}</span>
+                    <button type="button" className="ui-color-swatch" style={{ background: uiValue(String(name)) }} onClick={() => editUiVar(String(name), String(fallback))} />
+                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), String(fallback))}>{uiValue(String(name))}</button>
                     <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
                   </div>
                 ))}

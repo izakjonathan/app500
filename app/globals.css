@@ -631,3 +631,258 @@ body{
     min-height:50px !important;
   }
 }
+
+
+/* ===== V118 DESIGN-ONLY BLUEPRINT THEME + COLOR CONTROLS =====
+   Requirements:
+   - functionality/layout unchanged
+   - remove glass effect
+   - blue borders/text
+   - beige background
+   - no fills on cards/buttons
+   - add color controls to UI Studio
+*/
+
+:root{
+  --passport-blue:#244cdd;
+  --passport-bg:#efe9dc;
+  --passport-muted:rgba(36,76,221,.38);
+  --passport-faint:rgba(36,76,221,.18);
+}
+
+/* Page/background */
+html,
+body,
+.app{
+  background:var(--passport-bg) !important;
+  color:var(--passport-blue) !important;
+}
+
+.bg{
+  display:none !important;
+}
+
+/* Remove glass material everywhere without changing layout/sizes/radii. */
+.glass,
+.glass-soft,
+.scoreboard,
+.player-card,
+.rounds-card,
+.dock-panel,
+.input-row,
+.pill,
+.quick,
+.penalty,
+.icon-btn,
+.closed-toggle,
+.add-round,
+.modal,
+.sheet,
+.modal-btn,
+.share-game-btn,
+.typography-settings-button,
+.primary,
+.form-input,
+.segment,
+.segment button,
+.history-item,
+.analytics-grid > div,
+.ui-studio-tabs button,
+.ui-control-row,
+.ui-value-button,
+.ui-studio-wide-btn,
+.ui-preset-grid button,
+.type-control,
+.mini-reset{
+  background:transparent !important;
+  background-color:transparent !important;
+  background-image:none !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  border-color:var(--passport-blue) !important;
+  color:var(--passport-blue) !important;
+}
+
+.glass::before,
+.glass-soft::before,
+.scoreboard::before,
+.player-card::before,
+.rounds-card::before,
+.dock-panel::before,
+.input-row::before,
+.pill::before,
+.quick::before,
+.penalty::before,
+.icon-btn::before,
+.add-round::before,
+.modal::before,
+.sheet::before{
+  content:none !important;
+  display:none !important;
+}
+
+/* Ensure all card/button surfaces have blue outline and no fill. */
+.scoreboard,
+.player-card,
+.rounds-card,
+.dock-panel,
+.input-row,
+.pill,
+.quick,
+.penalty,
+.icon-btn,
+.closed-toggle,
+.add-round,
+.modal,
+.sheet,
+.modal-btn,
+.share-game-btn,
+.typography-settings-button,
+.primary,
+.form-input,
+.segment,
+.segment button,
+.history-item,
+.analytics-grid > div,
+.ui-studio-tabs button,
+.ui-control-row,
+.ui-value-button,
+.ui-studio-wide-btn,
+.ui-preset-grid button,
+.type-control,
+.mini-reset{
+  border-style:solid !important;
+  border-width:1.5px !important;
+}
+
+/* Typography, icons and UI text */
+.label,
+.modal-title,
+.empty-title,
+.empty-sub,
+.player-name,
+.input-name,
+.total,
+.round-input,
+.quick,
+.penalty,
+.last-round-label,
+.last-round-player-name,
+.last-round-player-score,
+.last-round-hint,
+.history-item,
+.sync-line,
+.analytics-grid span,
+.analytics-grid strong,
+.pill,
+.modal-btn,
+.add-round,
+.add-round-plus,
+.icon-btn,
+.closed-toggle,
+.round-head,
+.round-cell,
+.ui-studio-section,
+.ui-control-row span,
+.ui-studio-tabs button,
+.ui-studio-wide-btn,
+.ui-value-button,
+.mini-reset,
+button,
+input{
+  color:var(--passport-blue) !important;
+  text-shadow:none !important;
+}
+
+input::placeholder{
+  color:rgba(36,76,221,.42) !important;
+}
+
+/* Override inline player colors for this design-only color system. */
+.ring,
+.input-name,
+.last-round-player-name,
+.history-item span{
+  color:var(--passport-blue) !important;
+}
+
+.ring{
+  background:transparent !important;
+  border-color:var(--passport-blue) !important;
+}
+
+.progress{
+  background:var(--passport-faint) !important;
+  border:1px solid var(--passport-muted) !important;
+}
+
+.progress-fill{
+  background:var(--passport-blue) !important;
+}
+
+/* Divider/line styling */
+.round-col:not(:last-child)::after,
+.last-round-grid > *:not(:last-child){
+  border-color:var(--passport-muted) !important;
+}
+
+.last-round-grid > *:not(:last-child){
+  border-right:1px solid var(--passport-muted) !important;
+}
+
+/* Active states still outline-only. */
+.closed-toggle.active,
+.segment button.selected,
+.ui-studio-tabs button.active{
+  background:transparent !important;
+  color:var(--passport-blue) !important;
+  border-color:var(--passport-blue) !important;
+  box-shadow:inset 0 0 0 1px var(--passport-blue) !important;
+}
+
+.sync-dot{
+  background:var(--passport-blue) !important;
+}
+
+/* Modals keep the same geometry, only color treatment changes. */
+.modal-shade{
+  background:rgba(239,233,220,.78) !important;
+}
+
+/* UI Studio color controls */
+.color-control-row{
+  grid-template-columns:1fr 34px minmax(92px, auto) 54px !important;
+}
+
+.ui-color-swatch{
+  width:30px !important;
+  height:30px !important;
+  border:1.5px solid var(--passport-blue) !important;
+  border-radius:999px !important;
+  padding:0 !important;
+}
+
+.ui-studio-tabs{
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+}
+
+.ui-studio-tabs button.active{
+  background:transparent !important;
+}
+
+/* Keep Add Round plus readable but unfilled. */
+.add-round-plus{
+  background:transparent !important;
+  border-color:var(--passport-blue) !important;
+  color:var(--passport-blue) !important;
+}
+
+/* Safari bottom area should remain beige if the app scrolls. */
+@supports (-webkit-touch-callout: none){
+  html,
+  body,
+  .app{
+    background:var(--passport-bg) !important;
+  }
+}
