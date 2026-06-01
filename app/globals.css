@@ -957,3 +957,127 @@ input::placeholder{
 .app.players-4 .dock{
   padding-top:12px !important;
 }
+
+
+/* ===== V120 BLUEPRINT VERTICAL SPACING PASS =====
+   Focus:
+   - cleaner vertical rhythm between main cards/sections
+   - less dead space between Last Round and first input card
+   - more consistent player input card gaps
+   - keep blueprint design, layout structure, typography and functionality intact
+*/
+
+:root{
+  --blueprint-section-gap: 16px;
+  --blueprint-section-gap-tight: 12px;
+  --blueprint-input-gap: 15px;
+}
+
+/* Overall page rhythm */
+.ui{
+  gap: var(--blueprint-section-gap) !important;
+  padding-bottom: var(--blueprint-section-gap-tight) !important;
+}
+
+.header{
+  margin-bottom: 0 !important;
+}
+
+.scoreboard{
+  margin-bottom: 0 !important;
+}
+
+.rounds{
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.rounds-card{
+  margin-bottom: 0 !important;
+}
+
+/* Dock should start closer to the Last Round card */
+.dock{
+  padding-top: var(--blueprint-section-gap-tight) !important;
+}
+
+/* Remove excess dead air above first input card, keep border fully visible */
+.dock-panel > .input-row:first-child{
+  margin-top: 0 !important;
+}
+
+/* Consistent vertical spacing between point control cards */
+.input-row{
+  margin-top: 0 !important;
+  margin-bottom: var(--blueprint-input-gap) !important;
+}
+
+/* Last input card should not create too much blank space before penalties */
+.dock-panel > .input-row:last-of-type{
+  margin-bottom: var(--blueprint-section-gap-tight) !important;
+}
+
+/* Penalties should feel like the next section, not glued to player rows */
+.penalties{
+  margin-top: 2px !important;
+  margin-bottom: var(--blueprint-section-gap-tight) !important;
+}
+
+/* Add round should breathe below the penalties but not feel detached */
+.add-round{
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Four player mode gets slightly tighter spacing while staying scrollable */
+.app.players-4 .ui{
+  gap: 13px !important;
+  padding-bottom: 10px !important;
+}
+
+.app.players-4 .dock{
+  padding-top: 10px !important;
+}
+
+.app.players-4 .input-row{
+  margin-bottom: 13px !important;
+}
+
+.app.players-4 .dock-panel > .input-row:last-of-type{
+  margin-bottom: 10px !important;
+}
+
+.app.players-4 .penalties{
+  margin-top: 0 !important;
+  margin-bottom: 10px !important;
+}
+
+/* Short viewport: compact vertical rhythm without hiding borders */
+@media (max-height: 760px){
+  :root{
+    --blueprint-section-gap: 12px;
+    --blueprint-section-gap-tight: 9px;
+    --blueprint-input-gap: 11px;
+  }
+
+  .ui{
+    gap: var(--blueprint-section-gap) !important;
+  }
+
+  .dock{
+    padding-top: var(--blueprint-section-gap-tight) !important;
+  }
+
+  .input-row{
+    margin-bottom: var(--blueprint-input-gap) !important;
+  }
+
+  .penalties{
+    margin-bottom: var(--blueprint-section-gap-tight) !important;
+  }
+
+  .app.players-4 .input-row{
+    margin-bottom: 10px !important;
+  }
+}
