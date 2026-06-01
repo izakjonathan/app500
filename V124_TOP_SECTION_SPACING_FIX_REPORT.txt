@@ -1,0 +1,14 @@
+V124 Top Section Spacing Fix
+
+Built from V123.
+
+Fix:
+- Added reliable explicit spacing between top pills and scoreboard.
+- Added reliable explicit spacing between scoreboard and Last Round.
+- Kept the dock close to Last Round without touching.
+- Added separate spacing values for 2-player, 3-player and 4-player modes.
+- Added compact spacing for short iPhone viewports.
+
+No scoring/sync/game logic changed.
+No typography scale changed.
+No button/card sizes changed.

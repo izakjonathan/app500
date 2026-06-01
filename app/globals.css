@@ -733,3 +733,88 @@ body{
 
    Removed legacy UI Studio spacing controls from the active system.
 */
+
+
+/* ===== V124 TOP SECTION SPACING FIX =====
+   Fixes missing space between:
+   - top pills and scoreboard
+   - scoreboard and Last Round
+
+   Uses direct section margins so the spacing is reliable even after the
+   spacing-control consolidation.
+*/
+
+/* The header was visually touching the scoreboard. Add explicit bottom air. */
+.header{
+  margin-bottom:14px !important;
+}
+
+/* The scoreboard was visually touching the Last Round card. Add explicit bottom air. */
+.scoreboard{
+  margin-bottom:14px !important;
+}
+
+/* Keep the Last Round card from collapsing upward into the scoreboard. */
+.rounds{
+  margin-top:0 !important;
+}
+
+/* The dock still starts close to Last Round, but not glued. */
+.dock{
+  padding-top:10px !important;
+}
+
+/* 2-player mode needs a little more top-section rhythm because the screen has more vertical room. */
+.app.players-2 .header{
+  margin-bottom:16px !important;
+}
+
+.app.players-2 .scoreboard{
+  margin-bottom:16px !important;
+}
+
+.app.players-2 .dock{
+  padding-top:8px !important;
+}
+
+/* 3-player mode: balanced spacing. */
+.app.players-3 .header{
+  margin-bottom:14px !important;
+}
+
+.app.players-3 .scoreboard{
+  margin-bottom:14px !important;
+}
+
+/* 4-player mode: keep it tighter so it remains usable. */
+.app.players-4 .header{
+  margin-bottom:10px !important;
+}
+
+.app.players-4 .scoreboard{
+  margin-bottom:10px !important;
+}
+
+.app.players-4 .dock{
+  padding-top:8px !important;
+}
+
+/* Short viewport: still preserve visible separation without wasting space. */
+@media (max-height:760px){
+  .header{
+    margin-bottom:10px !important;
+  }
+
+  .scoreboard{
+    margin-bottom:10px !important;
+  }
+
+  .app.players-2 .header,
+  .app.players-2 .scoreboard{
+    margin-bottom:12px !important;
+  }
+
+  .dock{
+    padding-top:7px !important;
+  }
+}
