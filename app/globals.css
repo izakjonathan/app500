@@ -886,3 +886,74 @@ input::placeholder{
     background:var(--passport-bg) !important;
   }
 }
+
+
+/* ===== V119 BLUEPRINT CONTROL CARD BORDER FIX =====
+   Fixes the top player point-control card bottom border being clipped.
+   Design only: no game logic or layout structure changed.
+*/
+
+:root{
+  --passport-blue:#244cdd;
+  --passport-bg:#efe9dc;
+  --passport-muted:rgba(36,76,221,.38);
+  --passport-faint:rgba(36,76,221,.18);
+}
+
+/* The clipped line came from input rows touching/bleeding into the scroll edge.
+   Give every floating row a tiny internal bottom breathing room and prevent clipping. */
+.input-row{
+  overflow:visible !important;
+  box-sizing:border-box !important;
+  margin-bottom:18px !important;
+  padding-bottom:14px !important;
+  border-bottom:1.5px solid var(--passport-blue) !important;
+  background:transparent !important;
+  outline:1.5px solid var(--passport-blue) !important;
+  outline-offset:-1.5px !important;
+  border-color:var(--passport-blue) !important;
+}
+
+/* Keep the first row's full outline visible even when it starts directly below last-round. */
+.dock-panel > .input-row:first-child{
+  margin-top:2px !important;
+}
+
+/* Prevent child controls from visually covering the row border. */
+.input-main,
+.quick-grid{
+  position:relative !important;
+  z-index:1 !important;
+}
+
+.quick-grid{
+  padding-bottom:1px !important;
+  margin-bottom:1px !important;
+}
+
+/* Remove accidental masking/overlap from old separators or pseudo layers. */
+.input-row::before,
+.input-row::after{
+  display:none !important;
+  content:none !important;
+}
+
+/* The scroll viewport should not cut the top/bottom of the floating controls. */
+.dock{
+  overflow:visible !important;
+  padding-top:14px !important;
+}
+
+.dock-panel{
+  overflow:visible !important;
+}
+
+/* Four-player scroll mode: keep row outlines visible without making controls much taller. */
+.app.players-4 .input-row{
+  margin-bottom:16px !important;
+  padding-bottom:12px !important;
+}
+
+.app.players-4 .dock{
+  padding-top:12px !important;
+}
