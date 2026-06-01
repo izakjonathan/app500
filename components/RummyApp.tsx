@@ -26,31 +26,68 @@ const CLIENT_ID_KEY = "rummy500_clean_v51_client_id";
 const SAVE_DEBOUNCE_MS = 700;
 const PENDING_SYNC_KEY = "rummy500_clean_v52_pending_sync";
 
-type UiStudioTab = "type" | "space" | "radius" | "glass" | "layout" | "presets";
+type UiStudioTab = "type" | "colors" | "space" | "radius" | "glass" | "layout" | "presets";
 
 const UI_STUDIO_DEFAULTS: Record<string, string> = {
   "--font-size-caption": "10px",
-  "--font-size-body": "14px",
-  "--font-size-title": "16px",
-  "--font-size-display": "28px",
-  "--font-size-input": "34px",
-  "--font-size-score": "42px",
-  "--font-weight-label": "700",
-  "--font-weight-body": "600",
-  "--font-weight-title": "800",
-  "--font-weight-score": "900",
+  "--font-size-body": "13px",
+  "--font-size-title": "18px",
+  "--font-size-display": "68px",
+  "--font-size-modal-title": "46px",
+  "--font-size-player-name": "13px",
+  "--font-size-input-name": "13px",
+  "--font-size-input": "32px",
+  "--font-size-score": "56px",
+  "--font-size-button": "18px",
+  "--font-weight-label": "800",
+  "--font-weight-body": "700",
+  "--font-weight-title": "900",
+  "--font-weight-score": "950",
   "--space-sm": "8px",
   "--space-md": "12px",
   "--space-lg": "16px",
-  "--radius-sm": "12px",
-  "--radius-lg": "24px",
-  "--radius-xl": "32px",
-  "--glass-blur": "12px",
+  "--radius-sm": "0px",
+  "--radius-lg": "0px",
+  "--radius-xl": "0px",
+  "--glass-blur": "0px",
   "--glass-opacity": "0.06",
   "--glass-border-strength": "0.16",
   "--glass-shadow-strength": "0.44",
-  "--ui-density-scale": "1"
+  "--ui-density-scale": "1",
+  "--ui-bg": "#050006",
+  "--ui-bg-a": "#e884c9",
+  "--ui-bg-b": "#ff4b4f",
+  "--ui-bg-c": "#eaff1a",
+  "--ui-bg-d": "#315cff",
+  "--ui-grid": "#050006",
+  "--ui-panel-bg": "#050006",
+  "--ui-panel-line": "#eaff1a",
+  "--ui-text": "#050006",
+  "--ui-muted": "#4c1b3e",
+  "--ui-on-dark-primary": "#eaff1a",
+  "--ui-on-dark-secondary": "#e884c9",
+  "--ui-button-bg": "#eaff1a",
+  "--ui-button-text": "#050006",
+  "--ui-input-bg": "#eaff1a",
+  "--ui-input-text": "#050006",
+  "--ui-rounds-bg": "#ffb000",
+  "--ui-card-1": "#eaff1a",
+  "--ui-card-2": "#e884c9",
+  "--ui-card-3": "#ff4b4f",
+  "--ui-card-4": "#aa8cff"
 };
+
+const UI_STUDIO_PLAYER_COLOR_VARS: Record<string, number> = {
+  "--ui-card-1": 0,
+  "--ui-card-2": 1,
+  "--ui-card-3": 2,
+  "--ui-card-4": 3
+};
+
+function isHexColor(value: string) {
+  return /^#[0-9a-fA-F]{6}$/.test(value);
+}
+
 
 const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
   Default: UI_STUDIO_DEFAULTS,
@@ -59,9 +96,9 @@ const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
     "--font-size-caption": "9px",
     "--font-size-body": "12px",
     "--font-size-title": "15px",
-    "--font-size-display": "24px",
-    "--font-size-input": "30px",
-    "--font-size-score": "38px",
+    "--font-size-display": "58px",
+    "--font-size-input": "29px",
+    "--font-size-score": "48px",
     "--space-sm": "6px",
     "--space-md": "10px",
     "--space-lg": "13px",
@@ -72,9 +109,9 @@ const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
     "--font-size-caption": "11px",
     "--font-size-body": "15px",
     "--font-size-title": "18px",
-    "--font-size-display": "32px",
-    "--font-size-input": "40px",
-    "--font-size-score": "50px",
+    "--font-size-display": "76px",
+    "--font-size-input": "38px",
+    "--font-size-score": "66px",
     "--space-sm": "10px",
     "--space-md": "14px",
     "--space-lg": "20px",
@@ -525,12 +562,34 @@ export default function RummyApp() {
     } catch {}
   }
 
+  function colorValue(name: string, fallback = "#000000") {
+    const value = uiValue(name);
+    return isHexColor(value) ? value : fallback;
+  }
+
+  function setUiColor(name: string, value: string) {
+    const nextValue = value.trim();
+    setUiVar(name, nextValue);
+
+    const playerIndex = UI_STUDIO_PLAYER_COLOR_VARS[name];
+    if (typeof playerIndex === "number") {
+      setGame((previous) => ({
+        ...previous,
+        players: previous.players.map((player, index) => index === playerIndex ? { ...player, color: nextValue } : player)
+      }));
+    }
+  }
+
   function editUiVar(name: string, fallback: string) {
     const current = uiValue(name) || fallback;
     const value = typeof window !== "undefined" ? window.prompt(`Set ${name}`, current) : null;
     if (!value) return;
 
-    setUiVar(name, value.trim());
+    if (name.startsWith("--ui-")) {
+      setUiColor(name, value.trim());
+    } else {
+      setUiVar(name, value.trim());
+    }
   }
 
   function adjustUiVar(
@@ -555,7 +614,10 @@ export default function RummyApp() {
   }
 
   function applyUiPreset(values: Record<string, string>) {
-    Object.entries(values).forEach(([name, value]) => setUiVar(name, value));
+    Object.entries(values).forEach(([name, value]) => {
+      if (name.startsWith("--ui-")) setUiColor(name, value);
+      else setUiVar(name, value);
+    });
   }
 
   function getStoredUiPresets(): Record<string, Record<string, string>> {
@@ -770,7 +832,6 @@ export default function RummyApp() {
             <button type="button" onClick={shareGame} className="glass-soft modal-btn share-game-btn">
               {shareStatus === "copied" ? "Copied link" : shareStatus === "shared" ? "Shared" : "Share current game"}
             </button>
-            <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn">UI Studio</button>
             <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn typography-settings-button">UI Studio</button>
             <div className="modal-grid">
               <button type="button" onClick={undo} className="glass-soft modal-btn">Undo</button>
@@ -815,6 +876,7 @@ export default function RummyApp() {
             <div className="ui-studio-tabs">
               {[
                 ["type", "Type"],
+                ["colors", "Colors"],
                 ["space", "Space"],
                 ["radius", "Radius"],
                 ["glass", "Glass"],
@@ -836,12 +898,15 @@ export default function RummyApp() {
               <div className="ui-studio-page">
                 <div className="ui-studio-section">Font sizes</div>
                 {[
-                  ["Caption", "--font-size-caption", 1, 10, "px", 6, 20],
-                  ["Body", "--font-size-body", 1, 14, "px", 8, 26],
-                  ["Title", "--font-size-title", 1, 16, "px", 10, 32],
-                  ["Display", "--font-size-display", 1, 28, "px", 14, 54],
-                  ["Input", "--font-size-input", 1, 34, "px", 20, 70],
-                  ["Total score", "--font-size-score", 1, 42, "px", 24, 82]
+                  ["Tiny labels", "--font-size-caption", 1, 10, "px", 6, 22],
+                  ["Body text", "--font-size-body", 1, 13, "px", 8, 28],
+                  ["Player names", "--font-size-player-name", 1, 13, "px", 8, 30],
+                  ["Dock names", "--font-size-input-name", 1, 13, "px", 8, 26],
+                  ["Buttons", "--font-size-button", 1, 18, "px", 10, 36],
+                  ["App title", "--font-size-display", 1, 68, "px", 28, 104],
+                  ["Modal title", "--font-size-modal-title", 1, 46, "px", 24, 86],
+                  ["Round input", "--font-size-input", 1, 32, "px", 18, 70],
+                  ["Total score", "--font-size-score", 1, 56, "px", 24, 96]
                 ].map(([label, name, step, fallback, unit, min, max]) => (
                   <div key={String(name)} className="ui-control-row">
                     <span>{label}</span>
@@ -865,6 +930,79 @@ export default function RummyApp() {
                     <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || String(fallback))}>{uiValue(String(name))}</button>
                     <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), "number", 100, 950)}>+</button>
                     <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {uiStudioTab === "colors" && (
+              <div className="ui-studio-page">
+                <div className="ui-studio-section">Background</div>
+                {[
+                  ["App black", "--ui-bg", "#050006"],
+                  ["BG color 1", "--ui-bg-a", "#e884c9"],
+                  ["BG color 2", "--ui-bg-b", "#ff4b4f"],
+                  ["BG glow", "--ui-bg-c", "#eaff1a"],
+                  ["BG accent", "--ui-bg-d", "#315cff"],
+                  ["Grid lines", "--ui-grid", "#050006"]
+                ].map(([label, name, fallback]) => (
+                  <div key={String(name)} className="ui-control-row ui-color-row">
+                    <span>{label}</span>
+                    <input
+                      type="color"
+                      value={colorValue(String(name), String(fallback))}
+                      onChange={(event) => setUiColor(String(name), event.target.value)}
+                      aria-label={`${label} color`}
+                    />
+                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), String(fallback))}>{uiValue(String(name))}</button>
+                    <button type="button" className="mini-reset" onClick={() => setUiColor(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
+                  </div>
+                ))}
+
+                <div className="ui-studio-section">Main UI</div>
+                {[
+                  ["Panel bg", "--ui-panel-bg", "#050006"],
+                  ["Panel line", "--ui-panel-line", "#eaff1a"],
+                  ["Dark text", "--ui-text", "#050006"],
+                  ["Muted text", "--ui-muted", "#4c1b3e"],
+                  ["On dark primary", "--ui-on-dark-primary", "#eaff1a"],
+                  ["On dark secondary", "--ui-on-dark-secondary", "#e884c9"],
+                  ["Button bg", "--ui-button-bg", "#eaff1a"],
+                  ["Button text", "--ui-button-text", "#050006"],
+                  ["Input bg", "--ui-input-bg", "#eaff1a"],
+                  ["Input text", "--ui-input-text", "#050006"],
+                  ["Rounds card", "--ui-rounds-bg", "#ffb000"]
+                ].map(([label, name, fallback]) => (
+                  <div key={String(name)} className="ui-control-row ui-color-row">
+                    <span>{label}</span>
+                    <input
+                      type="color"
+                      value={colorValue(String(name), String(fallback))}
+                      onChange={(event) => setUiColor(String(name), event.target.value)}
+                      aria-label={`${label} color`}
+                    />
+                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), String(fallback))}>{uiValue(String(name))}</button>
+                    <button type="button" className="mini-reset" onClick={() => setUiColor(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
+                  </div>
+                ))}
+
+                <div className="ui-studio-section">Player cards</div>
+                {[
+                  ["Player 1", "--ui-card-1", "#eaff1a"],
+                  ["Player 2", "--ui-card-2", "#e884c9"],
+                  ["Player 3", "--ui-card-3", "#ff4b4f"],
+                  ["Player 4", "--ui-card-4", "#aa8cff"]
+                ].map(([label, name, fallback]) => (
+                  <div key={String(name)} className="ui-control-row ui-color-row">
+                    <span>{label}</span>
+                    <input
+                      type="color"
+                      value={colorValue(String(name), String(fallback))}
+                      onChange={(event) => setUiColor(String(name), event.target.value)}
+                      aria-label={`${label} color`}
+                    />
+                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), String(fallback))}>{uiValue(String(name))}</button>
+                    <button type="button" className="mini-reset" onClick={() => setUiColor(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
                   </div>
                 ))}
               </div>

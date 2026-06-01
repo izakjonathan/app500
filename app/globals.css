@@ -1790,3 +1790,421 @@ body{
     max-height:74px !important;
   }
 }
+
+/* ===== V120 UI STUDIO COLORS + TYPOGRAPHY WIRING =====
+   This layer sits last so the studio can override the ShareOS/Product-Passport skin
+   without touching game logic.
+*/
+:root{
+  --ui-bg:#050006;
+  --ui-bg-a:#e884c9;
+  --ui-bg-b:#ff4b4f;
+  --ui-bg-c:#eaff1a;
+  --ui-bg-d:#315cff;
+  --ui-grid:#050006;
+  --ui-panel-bg:#050006;
+  --ui-panel-line:#eaff1a;
+  --ui-text:#050006;
+  --ui-muted:#4c1b3e;
+  --ui-on-dark-primary:#eaff1a;
+  --ui-on-dark-secondary:#e884c9;
+  --ui-button-bg:#eaff1a;
+  --ui-button-text:#050006;
+  --ui-input-bg:#eaff1a;
+  --ui-input-text:#050006;
+  --ui-rounds-bg:#ffb000;
+  --ui-card-1:#eaff1a;
+  --ui-card-2:#e884c9;
+  --ui-card-3:#ff4b4f;
+  --ui-card-4:#aa8cff;
+
+  --v119-black:var(--ui-bg);
+  --v119-black-2:var(--ui-panel-bg);
+  --v119-pink:var(--ui-on-dark-secondary);
+  --v119-hot:var(--ui-card-3);
+  --v119-yellow:var(--ui-on-dark-primary);
+  --v119-orange:var(--ui-rounds-bg);
+  --v119-lilac:var(--ui-card-4);
+  --v119-blue:var(--ui-bg-d);
+}
+
+html,
+body{
+  background:
+    radial-gradient(circle at 72% 6%, var(--ui-bg-c) 0 8%, transparent 20%),
+    radial-gradient(circle at 12% 72%, var(--ui-bg-b) 0 18%, transparent 42%),
+    radial-gradient(circle at 86% 78%, var(--ui-bg-d) 0 14%, transparent 38%),
+    linear-gradient(146deg, var(--ui-bg-a) 0%, var(--ui-bg-b) 72%, var(--ui-bg) 100%) !important;
+  color:var(--ui-text) !important;
+}
+
+.app{
+  color:var(--ui-text) !important;
+  background:var(--ui-bg) !important;
+}
+
+.bg{
+  background:
+    radial-gradient(circle at 79% 8%, var(--ui-bg-c) 0 8%, transparent 23%),
+    radial-gradient(circle at 4% 58%, var(--ui-rounds-bg) 0 12%, transparent 35%),
+    radial-gradient(circle at 90% 86%, var(--ui-bg-d) 0 14%, transparent 36%),
+    linear-gradient(150deg, var(--ui-bg-a) 0%, var(--ui-bg-b) 56%, var(--ui-bg) 100%) !important;
+  background-color:var(--ui-bg-a) !important;
+}
+
+.bg::before{
+  background:
+    linear-gradient(color-mix(in srgb, var(--ui-grid) 18%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ui-grid) 18%, transparent) 1px, transparent 1px),
+    repeating-linear-gradient(135deg, color-mix(in srgb, var(--ui-grid) 20%, transparent) 0 5px, transparent 5px 16px) !important;
+}
+
+.bg::after{
+  color:var(--ui-grid) !important;
+  font-size:clamp(180px, calc(var(--font-size-display, 68px) * 6), 470px) !important;
+}
+
+.pill{
+  background:var(--ui-panel-bg) !important;
+  color:var(--ui-on-dark-primary) !important;
+  border-color:var(--ui-panel-line) !important;
+  border-radius:var(--radius-sm, 0px) !important;
+  font-size:var(--font-size-caption, 10px) !important;
+  font-weight:var(--font-weight-title, 900) !important;
+}
+
+.header .pill:nth-child(2){
+  color:var(--ui-on-dark-secondary) !important;
+  border-color:var(--ui-on-dark-secondary) !important;
+}
+
+.scoreboard{
+  gap:var(--space-sm, 8px) !important;
+  padding:var(--space-md, 12px) !important;
+  background:color-mix(in srgb, var(--ui-bg) 26%, transparent) !important;
+  border-color:var(--ui-text) !important;
+  border-radius:var(--radius-sm, 0px) !important;
+}
+
+.scoreboard > .label{
+  color:var(--ui-text) !important;
+  font-size:clamp(36px, var(--font-size-display, 68px), 104px) !important;
+  font-weight:var(--font-weight-score, 950) !important;
+}
+
+.player-card{
+  gap:var(--space-sm, 8px) !important;
+  padding:calc(var(--space-md, 12px) * .84) !important;
+  border-color:var(--ui-text) !important;
+  color:var(--ui-text) !important;
+  border-radius:var(--radius-lg, 0px) !important;
+}
+
+.scoreboard > .player-card:nth-child(2){background:var(--ui-card-1) !important;}
+.scoreboard > .player-card:nth-child(3){background:var(--ui-card-2) !important;}
+.scoreboard > .player-card:nth-child(4){background:var(--ui-card-3) !important;}
+.scoreboard > .player-card:nth-child(5){background:var(--ui-card-4) !important;}
+
+.player-card::after{
+  background:
+    linear-gradient(color-mix(in srgb, var(--ui-text) 18%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ui-text) 14%, transparent) 1px, transparent 1px) !important;
+}
+
+.player-name,
+.player-card .player-name{
+  color:var(--ui-text) !important;
+  font-size:var(--font-size-player-name, 13px) !important;
+  font-weight:var(--font-weight-title, 900) !important;
+}
+
+.total.score-transition,
+.scoreboard .total,
+.player-card .total{
+  color:var(--ui-text) !important;
+  font-size:clamp(24px, var(--font-size-score, 56px), 96px) !important;
+  font-weight:var(--font-weight-score, 950) !important;
+}
+
+.ring{
+  background:var(--ui-panel-bg) !important;
+  color:var(--ui-on-dark-primary) !important;
+  border-color:var(--ui-text) !important;
+  font-size:calc(var(--font-size-caption, 10px) * .72) !important;
+}
+
+.progress{
+  background:color-mix(in srgb, var(--ui-text) 26%, transparent) !important;
+  border-color:color-mix(in srgb, var(--ui-text) 28%, transparent) !important;
+}
+
+.progress-fill{
+  background:var(--ui-text) !important;
+}
+
+.rounds-card{
+  background:var(--ui-rounds-bg) !important;
+  color:var(--ui-text) !important;
+  border-color:var(--ui-text) !important;
+  border-radius:var(--radius-sm, 0px) !important;
+  padding:var(--space-md, 12px) var(--space-lg, 16px) !important;
+}
+
+.rounds-card::after{
+  background:
+    linear-gradient(color-mix(in srgb, var(--ui-text) 22%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ui-text) 16%, transparent) 1px, transparent 1px) !important;
+}
+
+.empty-title,
+.last-round-player-score,
+.last-round-grid{
+  color:var(--ui-text) !important;
+}
+
+.empty-title{
+  font-size:clamp(26px, calc(var(--font-size-display, 68px) * .58), 58px) !important;
+}
+
+.empty-sub,
+.last-round-hint,
+.last-round-label,
+.sync-line,
+.analytics-grid span{
+  color:color-mix(in srgb, var(--ui-muted) 78%, transparent) !important;
+  font-size:var(--font-size-caption, 10px) !important;
+}
+
+.dock-panel,
+.dock-panel.glass{
+  background:var(--ui-panel-bg) !important;
+  border-color:var(--ui-panel-line) !important;
+  border-radius:var(--radius-xl, 0px) !important;
+  padding:var(--space-md, 12px) !important;
+}
+
+.input-row{
+  margin-bottom:var(--space-sm, 8px) !important;
+  padding-bottom:var(--space-sm, 8px) !important;
+  border-bottom-color:color-mix(in srgb, var(--ui-on-dark-secondary) 35%, transparent) !important;
+}
+
+.input-row::before{background:var(--ui-card-1) !important;}
+.input-row:nth-child(2)::before{background:var(--ui-card-2) !important;}
+.input-row:nth-child(3)::before{background:var(--ui-card-3) !important;}
+.input-row:nth-child(4)::before{background:var(--ui-card-4) !important;}
+
+.input-name{
+  color:var(--ui-card-1) !important;
+  font-size:var(--font-size-input-name, 13px) !important;
+  font-weight:var(--font-weight-title, 900) !important;
+}
+.input-row:nth-child(2) .input-name{color:var(--ui-card-2) !important;}
+.input-row:nth-child(3) .input-name{color:var(--ui-card-3) !important;}
+.input-row:nth-child(4) .input-name{color:var(--ui-card-4) !important;}
+
+.round-input{
+  background:var(--ui-input-bg) !important;
+  color:var(--ui-input-text) !important;
+  border-color:var(--ui-text) !important;
+  border-radius:var(--radius-sm, 0px) !important;
+  font-size:clamp(18px, var(--font-size-input, 32px), 74px) !important;
+  font-weight:var(--font-weight-score, 950) !important;
+}
+
+.round-input::placeholder{
+  color:color-mix(in srgb, var(--ui-input-text) 45%, transparent) !important;
+}
+
+.icon-btn,
+.closed-toggle{
+  background:var(--ui-panel-bg) !important;
+  color:var(--ui-on-dark-primary) !important;
+  border-color:var(--ui-on-dark-primary) !important;
+  font-size:calc(var(--font-size-button, 18px) * 1.15) !important;
+}
+
+.closed-toggle{
+  color:var(--ui-on-dark-secondary) !important;
+  border-color:var(--ui-on-dark-secondary) !important;
+}
+
+.closed-toggle.active,
+.icon-btn.active{
+  background:var(--ui-button-bg) !important;
+  color:var(--ui-button-text) !important;
+  border-color:var(--ui-text) !important;
+}
+
+.quick,
+.modal-btn,
+.primary,
+.segment button,
+.ui-studio-tabs button,
+.ui-control-row button,
+.ui-preset-grid button,
+.ui-studio-wide-btn{
+  font-size:var(--font-size-body, 13px) !important;
+  font-weight:var(--font-weight-title, 900) !important;
+}
+
+.quick{
+  color:var(--ui-on-dark-secondary) !important;
+  border-color:var(--ui-on-dark-secondary) !important;
+  background:color-mix(in srgb, var(--ui-on-dark-secondary) 16%, transparent) !important;
+  border-radius:var(--radius-sm, 0px) !important;
+}
+
+.penalty{
+  background:var(--ui-card-3) !important;
+  color:var(--ui-text) !important;
+  border-color:var(--ui-text) !important;
+  border-radius:var(--radius-sm, 0px) !important;
+  font-size:var(--font-size-caption, 10px) !important;
+}
+
+.add-round,
+.add-round.glass-soft{
+  background:var(--ui-button-bg) !important;
+  color:var(--ui-button-text) !important;
+  border-color:var(--ui-text) !important;
+  border-radius:var(--radius-sm, 0px) !important;
+  font-size:var(--font-size-button, 18px) !important;
+  font-weight:var(--font-weight-score, 950) !important;
+}
+
+.add-round-plus{
+  background:var(--ui-panel-bg) !important;
+  color:var(--ui-on-dark-primary) !important;
+  border-color:var(--ui-panel-bg) !important;
+}
+
+.modal,
+.sheet,
+.typography-panel{
+  background:var(--ui-panel-bg) !important;
+  color:var(--ui-on-dark-secondary) !important;
+  border-color:var(--ui-on-dark-secondary) !important;
+  border-radius:var(--radius-lg, 0px) !important;
+}
+
+.modal-title,
+.rounds-popup-title{
+  color:var(--ui-on-dark-primary) !important;
+  font-size:clamp(24px, var(--font-size-modal-title, 46px), 92px) !important;
+  font-weight:var(--font-weight-score, 950) !important;
+}
+
+.modal-btn,
+.primary,
+.segment button,
+.ui-studio-tabs button,
+.ui-control-row button,
+.ui-preset-grid button,
+.ui-studio-wide-btn{
+  background:color-mix(in srgb, var(--ui-on-dark-secondary) 12%, transparent) !important;
+  color:var(--ui-on-dark-secondary) !important;
+  border-color:var(--ui-on-dark-secondary) !important;
+  border-radius:var(--radius-sm, 0px) !important;
+}
+
+.segment button.selected,
+.ui-studio-tabs button.active,
+.modal-btn.danger{
+  background:var(--ui-button-bg) !important;
+  color:var(--ui-button-text) !important;
+  border-color:var(--ui-button-bg) !important;
+}
+
+.form-input,
+.history-item,
+.analytics-grid div,
+.type-control,
+.ui-control-row,
+.ui-studio-section{
+  background:color-mix(in srgb, var(--ui-on-dark-primary) 11%, transparent) !important;
+  color:var(--ui-on-dark-primary) !important;
+  border-color:var(--ui-on-dark-primary) !important;
+  border-radius:var(--radius-sm, 0px) !important;
+  font-size:var(--font-size-body, 13px) !important;
+}
+
+.history-item strong,
+.analytics-grid strong{
+  color:var(--ui-on-dark-primary) !important;
+}
+
+.history-item span:nth-child(1),
+.last-round-player:nth-child(1) .last-round-player-name{color:var(--ui-card-1) !important;}
+.history-item span:nth-child(2),
+.last-round-player:nth-child(2) .last-round-player-name{color:var(--ui-card-2) !important;}
+.history-item span:nth-child(3),
+.last-round-player:nth-child(3) .last-round-player-name{color:var(--ui-card-3) !important;}
+.history-item span:nth-child(4),
+.last-round-player:nth-child(4) .last-round-player-name{color:var(--ui-card-4) !important;}
+
+.ui-studio-tabs{
+  grid-template-columns:repeat(4, minmax(0, 1fr)) !important;
+}
+
+.ui-color-row{
+  grid-template-columns:minmax(74px, .9fr) 42px minmax(92px, 1fr) 54px !important;
+}
+
+.ui-color-row input[type="color"]{
+  width:34px !important;
+  height:34px !important;
+  padding:0 !important;
+  border-radius:999px !important;
+  border:1px solid var(--ui-on-dark-secondary) !important;
+  background:transparent !important;
+  overflow:hidden !important;
+}
+
+.ui-color-row input[type="color"]::-webkit-color-swatch-wrapper{
+  padding:0 !important;
+}
+
+.ui-color-row input[type="color"]::-webkit-color-swatch{
+  border:none !important;
+  border-radius:999px !important;
+}
+
+.app.players-4 .scoreboard > .label{
+  font-size:clamp(30px, calc(var(--font-size-display, 68px) * .72), 68px) !important;
+}
+
+.app.players-4 .player-name{
+  font-size:clamp(9px, calc(var(--font-size-player-name, 13px) * .9), 18px) !important;
+}
+
+.app.players-4 .total.score-transition,
+.app.players-4 .scoreboard .total,
+.app.players-4 .player-card .total{
+  font-size:clamp(26px, calc(var(--font-size-score, 56px) * .74), 62px) !important;
+}
+
+.app.players-4 .input-name{
+  font-size:clamp(9px, calc(var(--font-size-input-name, 13px) * .86), 18px) !important;
+}
+
+.app.players-4 .round-input{
+  font-size:clamp(18px, calc(var(--font-size-input, 32px) * .82), 54px) !important;
+}
+
+.app.players-4 .quick,
+.app.players-4 .penalty{
+  font-size:clamp(8px, calc(var(--font-size-body, 13px) * .76), 16px) !important;
+}
+
+@media (max-height: 760px){
+  .scoreboard > .label{
+    font-size:clamp(32px, calc(var(--font-size-display, 68px) * .86), 84px) !important;
+  }
+
+  .total.score-transition,
+  .scoreboard .total,
+  .player-card .total{
+    font-size:clamp(24px, calc(var(--font-size-score, 56px) * .86), 78px) !important;
+  }
+}
