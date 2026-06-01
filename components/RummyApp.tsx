@@ -26,7 +26,7 @@ const CLIENT_ID_KEY = "rummy500_clean_v51_client_id";
 const SAVE_DEBOUNCE_MS = 700;
 const PENDING_SYNC_KEY = "rummy500_clean_v52_pending_sync";
 
-type UiStudioTab = "type" | "space" | "radius" | "glass" | "color" | "layout" | "presets";
+type UiStudioTab = "type" | "space" | "radius" | "color" | "layout" | "presets";
 
 const UI_STUDIO_DEFAULTS: Record<string, string> = {
   "--font-size-caption": "10px",
@@ -45,10 +45,6 @@ const UI_STUDIO_DEFAULTS: Record<string, string> = {
   "--radius-sm": "12px",
   "--radius-lg": "24px",
   "--radius-xl": "32px",
-  "--glass-blur": "12px",
-  "--glass-opacity": "0.06",
-  "--glass-border-strength": "0.16",
-  "--glass-shadow-strength": "0.44",
   "--ui-density-scale": "1",
   "--passport-blue": "#244cdd",
   "--passport-bg": "#efe9dc",
@@ -82,13 +78,6 @@ const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
     "--space-md": "14px",
     "--space-lg": "20px",
     "--ui-density-scale": "1.12"
-  },
-  Glassy: {
-    ...UI_STUDIO_DEFAULTS,
-    "--glass-blur": "22px",
-    "--glass-opacity": "0.09",
-    "--glass-border-strength": "0.22",
-    "--glass-shadow-strength": "0.55"
   }
 };
 
@@ -773,7 +762,6 @@ export default function RummyApp() {
             <button type="button" onClick={shareGame} className="glass-soft modal-btn share-game-btn">
               {shareStatus === "copied" ? "Copied link" : shareStatus === "shared" ? "Shared" : "Share current game"}
             </button>
-            <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn">UI Studio</button>
             <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn typography-settings-button">UI Studio</button>
             <div className="modal-grid">
               <button type="button" onClick={undo} className="glass-soft modal-btn">Undo</button>
@@ -820,7 +808,6 @@ export default function RummyApp() {
                 ["type", "Type"],
                 ["space", "Space"],
                 ["radius", "Radius"],
-                ["glass", "Glass"],
                 ["color", "Color"],
                 ["layout", "Layout"],
                 ["presets", "Presets"]
@@ -911,27 +898,6 @@ export default function RummyApp() {
                 ))}
               </div>
             )}
-
-            {uiStudioTab === "glass" && (
-              <div className="ui-studio-page">
-                <div className="ui-studio-section">Glass material</div>
-                {[
-                  ["Blur", "--glass-blur", 1, 12, "px", 0, 40],
-                  ["Opacity", "--glass-opacity", 0.01, 0.06, "opacity", 0, 0.3],
-                  ["Border", "--glass-border-strength", 0.01, 0.16, "opacity", 0, 0.5],
-                  ["Shadow", "--glass-shadow-strength", 0.01, 0.44, "opacity", 0, 0.9]
-                ].map(([label, name, step, fallback, unit, min, max]) => (
-                  <div key={String(name)} className="ui-control-row">
-                    <span>{label}</span>
-                    <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), unit as "px" | "opacity", Number(min), Number(max))}>−</button>
-                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || String(fallback))}>{uiValue(String(name))}</button>
-                    <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), unit as "px" | "opacity", Number(min), Number(max))}>+</button>
-                    <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
-                  </div>
-                ))}
-              </div>
-            )}
-
 
             {uiStudioTab === "color" && (
               <div className="ui-studio-page">

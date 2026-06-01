@@ -1,0 +1,33 @@
+V122 Consolidation Cleanup
+
+Built from V121.
+
+Code cleanup:
+- Removed duplicate UI Studio button from Settings.
+- Removed Glassy preset from the Blueprint branch.
+- Removed Glass tab and inactive glass controls from UI Studio.
+- Removed unused glass UI defaults from RummyApp.tsx.
+
+CSS cleanup:
+- Removed old iterative override blocks from globals.css:
+  - V98 modal patch
+  - V114 overall UI pass
+  - V115 floating bottom controls
+  - V116 four-player scroll fit
+  - V118 blueprint theme
+  - V119 border fix
+  - V120 spacing pass
+  - V121 2-player spacing pass
+- Replaced them with one consolidated V122 Blueprint Design System block.
+
+Validation:
+- typography-settings-button occurrences: 1
+- old plain UI Studio button occurrences: 0
+
+Preserved:
+- Game logic
+- Scoring
+- Supabase/local sync
+- Blueprint visual style
+- Current spacing fixes
+- UI Studio type/space/radius/color/layout/preset controls

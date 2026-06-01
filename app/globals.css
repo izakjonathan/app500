@@ -3,20 +3,30 @@
 @import "./typography.css";
 
 
-
-
-/* ===== V98 MODAL CLICK LAYER FIX =====
-   The previous modal shade sat above the Settings modal and intercepted taps.
-   Correct order:
-   app/dock < shade < modal/sheet < typography panel
+/* ===== V122 CONSOLIDATED BLUEPRINT DESIGN SYSTEM =====
+   Consolidates V98 + V114-V121 overrides into a single maintained block.
+   Removes old glass treatment and duplicate iterative controls while preserving
+   the current blueprint layout/functionality.
 */
 
+:root{
+  --passport-blue:#244cdd;
+  --passport-bg:#efe9dc;
+  --passport-muted:rgba(36,76,221,.38);
+  --passport-faint:rgba(36,76,221,.18);
+
+  --blueprint-section-gap:16px;
+  --blueprint-section-gap-tight:12px;
+  --blueprint-input-gap:15px;
+}
+
+/* Modal layer order */
 .modal-shade{
   position:fixed !important;
   inset:0 !important;
   z-index:9000 !important;
   pointer-events:auto !important;
-  background:rgba(0,0,0,.42) !important;
+  background:rgba(239,233,220,.78) !important;
 }
 
 .modal,
@@ -40,7 +50,7 @@
   bottom:calc(var(--safe-bottom) + 18px) !important;
   max-height:none !important;
   overflow:auto !important;
-  border:1px solid rgba(255,255,255,.16) !important;
+  border:1.5px solid var(--passport-blue) !important;
 }
 
 .typography-settings-button{
@@ -48,37 +58,186 @@
   margin-bottom:10px !important;
 }
 
-.type-control{
-  position:relative !important;
-  z-index:1 !important;
-  display:grid !important;
-  grid-template-columns:82px minmax(0,1fr) !important;
-  align-items:center !important;
-  gap:12px !important;
-  padding:10px 12px !important;
-  border-radius:16px !important;
-  background:rgba(255,255,255,.055) !important;
+/* Blueprint color system */
+html,
+body,
+.app{
+  background:var(--passport-bg) !important;
+  color:var(--passport-blue) !important;
 }
 
-.type-control span{
-  color:rgba(255,255,255,.78) !important;
+.bg{
+  display:none !important;
 }
 
-.type-control input[type="range"]{
-  width:100% !important;
-  accent-color:#82efaa !important;
+/* Remove glass material and fills */
+.glass,
+.glass-soft,
+.scoreboard,
+.player-card,
+.rounds-card,
+.dock-panel,
+.input-row,
+.pill,
+.quick,
+.penalty,
+.icon-btn,
+.closed-toggle,
+.add-round,
+.modal,
+.sheet,
+.modal-btn,
+.share-game-btn,
+.typography-settings-button,
+.primary,
+.form-input,
+.segment,
+.segment button,
+.history-item,
+.analytics-grid > div,
+.ui-studio-tabs button,
+.ui-control-row,
+.ui-value-button,
+.ui-studio-wide-btn,
+.ui-preset-grid button,
+.type-control,
+.mini-reset{
+  background:transparent !important;
+  background-color:transparent !important;
+  background-image:none !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  border-color:var(--passport-blue) !important;
+  color:var(--passport-blue) !important;
+  text-shadow:none !important;
 }
 
-.dock{
-  z-index:30 !important;
+.glass::before,
+.glass-soft::before,
+.scoreboard::before,
+.player-card::before,
+.rounds-card::before,
+.dock-panel::before,
+.input-row::before,
+.input-row::after,
+.pill::before,
+.quick::before,
+.penalty::before,
+.icon-btn::before,
+.add-round::before,
+.modal::before,
+.sheet::before{
+  content:none !important;
+  display:none !important;
 }
 
+.scoreboard,
+.player-card,
+.rounds-card,
+.dock-panel,
+.input-row,
+.pill,
+.quick,
+.penalty,
+.icon-btn,
+.closed-toggle,
+.add-round,
+.modal,
+.sheet,
+.modal-btn,
+.share-game-btn,
+.typography-settings-button,
+.primary,
+.form-input,
+.segment,
+.segment button,
+.history-item,
+.analytics-grid > div,
+.ui-studio-tabs button,
+.ui-control-row,
+.ui-value-button,
+.ui-studio-wide-btn,
+.ui-preset-grid button,
+.type-control,
+.mini-reset{
+  border-style:solid !important;
+  border-width:1.5px !important;
+}
 
-/* ===== V114 OVERALL UI ADJUSTMENT PASS =====
-   Final overrides live here so UI Studio variables reliably win over older legacy CSS.
-*/
+.label,
+.modal-title,
+.empty-title,
+.empty-sub,
+.player-name,
+.input-name,
+.total,
+.round-input,
+.quick,
+.penalty,
+.last-round-label,
+.last-round-player-name,
+.last-round-player-score,
+.last-round-hint,
+.history-item,
+.sync-line,
+.analytics-grid span,
+.analytics-grid strong,
+.pill,
+.modal-btn,
+.add-round,
+.add-round-plus,
+.icon-btn,
+.closed-toggle,
+.round-head,
+.round-cell,
+.ui-studio-section,
+.ui-control-row span,
+.ui-studio-tabs button,
+.ui-studio-wide-btn,
+.ui-value-button,
+.mini-reset,
+button,
+input{
+  color:var(--passport-blue) !important;
+}
 
-/* Make the UI Studio score control definitely affect the scoreboard totals. */
+input::placeholder{
+  color:rgba(36,76,221,.42) !important;
+}
+
+.ring,
+.input-name,
+.last-round-player-name,
+.history-item span{
+  color:var(--passport-blue) !important;
+}
+
+.ring{
+  background:transparent !important;
+  border-color:var(--passport-blue) !important;
+}
+
+.progress{
+  background:var(--passport-faint) !important;
+  border:1px solid var(--passport-muted) !important;
+}
+
+.progress-fill,
+.sync-dot{
+  background:var(--passport-blue) !important;
+}
+
+.closed-toggle.active,
+.segment button.selected,
+.ui-studio-tabs button.active{
+  background:transparent !important;
+  color:var(--passport-blue) !important;
+  border-color:var(--passport-blue) !important;
+  box-shadow:inset 0 0 0 1px var(--passport-blue) !important;
+}
+
+/* Score and closed control reliability */
 .scoreboard .total,
 .player-card .total,
 .total.score-transition{
@@ -87,27 +246,6 @@
   line-height:.84 !important;
   letter-spacing:-0.075em !important;
   transform:translateY(-1px) !important;
-}
-
-/* Keep score numbers powerful, but less oversized on small screens. */
-@media (max-height: 760px){
-  .scoreboard .total,
-  .player-card .total,
-  .total.score-transition{
-    font-size:calc(var(--font-size-score, 42px) * .88) !important;
-  }
-}
-
-/* Bottom controls: restore a cleaner control geometry after broad V113 wiring. */
-.dock-panel{
-  padding:16px !important;
-  border-radius:30px !important;
-}
-
-.input-row{
-  padding:10px 12px 12px !important;
-  margin-bottom:12px !important;
-  border-radius:26px !important;
 }
 
 .input-main{
@@ -129,9 +267,9 @@
   line-height:1.05 !important;
   padding:2px 0 0 !important;
   display:block !important;
+  background:transparent !important;
 }
 
-/* Fix closed tick box: same footprint as minus button, centered, no stretched card feel. */
 .icon-btn,
 .closed-toggle{
   width:46px !important;
@@ -153,94 +291,7 @@
   flex:0 0 auto !important;
 }
 
-.closed-toggle{
-  color:rgba(255,255,255,.92) !important;
-  background:rgba(255,255,255,.065) !important;
-}
-
-.closed-toggle.active{
-  color:#061108 !important;
-  background:rgba(130,239,170,.92) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.28),
-    0 8px 24px rgba(130,239,170,.20) !important;
-}
-
-/* Quick buttons: slightly clearer and more tappable without bloating the panel. */
-.quick-grid{
-  margin-top:10px !important;
-  gap:8px !important;
-}
-
-.quick{
-  height:36px !important;
-  min-height:36px !important;
-  font-size:var(--font-size-body, 14px) !important;
-}
-
-/* Penalties and Add round: better lower-area balance. */
-.penalties{
-  gap:12px !important;
-  margin:12px 0 12px !important;
-}
-
-.penalty{
-  height:48px !important;
-  min-height:48px !important;
-}
-
-.add-round{
-  height:62px !important;
-  min-height:62px !important;
-  font-size:var(--font-size-title, 16px) !important;
-}
-
-.add-round-plus{
-  width:34px !important;
-  height:34px !important;
-  right:16px !important;
-  font-size:25px !important;
-}
-
-/* UI Studio controls should not accidentally make all app glass too shadowy. */
-.glass,
-.glass-soft{
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.16),
-    0 14px 34px rgba(0,0,0,var(--glass-shadow-strength, .36)) !important;
-}
-
-/* Slightly calmer score cards after the broad variable wiring pass. */
-.player-card{
-  padding:10px 14px !important;
-}
-
-.progress{
-  max-width:180px !important;
-}
-
-/* Keep the last-round card readable and not oversized. */
-.rounds-card{
-  padding:16px 18px !important;
-}
-
-.last-round-label{
-  letter-spacing:.24em !important;
-}
-
-.last-round-player-score{
-  line-height:.95 !important;
-}
-
-
-/* ===== V115 FULLSCREEN + FLOATING BOTTOM CONTROLS =====
-   Fixes:
-   - background now covers the whole viewport/bottom safe area
-   - removes the large card behind the score-entry controls
-   - makes -50 penalty buttons shorter
-*/
-
-/* Fullscreen/background coverage. This prevents the black bottom block when the viewport/safe-area changes. */
+/* Fullscreen + scroll behavior */
 html,
 body{
   width:100% !important;
@@ -250,12 +301,6 @@ body{
   margin:0 !important;
   padding:0 !important;
   overflow:hidden !important;
-  background:
-    #050506
-    url("/bg.jpg")
-    center center / cover
-    no-repeat
-    fixed !important;
 }
 
 .app{
@@ -265,30 +310,44 @@ body{
   height:100dvh !important;
   min-height:100dvh !important;
   max-height:100dvh !important;
-  overflow:hidden !important;
-  background:transparent !important;
+  overflow-x:hidden !important;
+  overflow-y:auto !important;
+  -webkit-overflow-scrolling:touch !important;
+  overscroll-behavior-y:contain !important;
+  display:grid !important;
+  grid-template-rows:auto auto !important;
+  align-content:start !important;
 }
 
-.bg{
-  position:fixed !important;
-  inset:-2px !important;
-  width:calc(100vw + 4px) !important;
-  height:calc(100dvh + 4px) !important;
-  min-height:calc(100dvh + 4px) !important;
-  background-image:url("/bg.jpg") !important;
-  background-position:center center !important;
-  background-size:cover !important;
-  background-repeat:no-repeat !important;
-  background-color:#050506 !important;
+.ui{
+  overflow:visible !important;
+  min-height:auto !important;
+  height:auto !important;
+  grid-template-rows:auto auto auto !important;
+  gap:var(--blueprint-section-gap) !important;
+  padding-bottom:var(--blueprint-section-gap-tight) !important;
 }
 
-/* Remove the single large glass card behind the whole bottom control area. */
+.header,
+.scoreboard,
+.rounds,
+.rounds-card{
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+
+.rounds{
+  padding-bottom:0 !important;
+}
+
+/* Floating bottom controls */
 .dock{
   position:relative !important;
   z-index:30 !important;
-  margin-top:auto !important;
+  bottom:auto !important;
+  margin-top:0 !important;
   padding:
-    10px
+    var(--blueprint-section-gap-tight)
     14px
     calc(max(env(safe-area-inset-bottom, 0px), 0px) + 10px)
     !important;
@@ -296,6 +355,7 @@ body{
   box-shadow:none !important;
   backdrop-filter:none !important;
   -webkit-backdrop-filter:none !important;
+  overflow:visible !important;
 }
 
 .dock::before{
@@ -319,39 +379,44 @@ body{
   -webkit-backdrop-filter:none !important;
 }
 
-/* With the backing card removed, each control group floats independently. */
 .input-row{
-  margin-bottom:13px !important;
-  padding:11px 12px 12px !important;
+  margin-top:0 !important;
+  margin-bottom:var(--blueprint-input-gap) !important;
+  padding:11px 12px 14px !important;
   border-radius:28px !important;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.095), rgba(255,255,255,.035)) !important;
-  border:1px solid rgba(255,255,255,.10) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.14),
-    0 12px 34px rgba(0,0,0,.34) !important;
-  backdrop-filter:blur(var(--glass-blur, 12px)) saturate(135%) brightness(.88) !important;
-  -webkit-backdrop-filter:blur(var(--glass-blur, 12px)) saturate(135%) brightness(.88) !important;
+  overflow:visible !important;
+  box-sizing:border-box !important;
+  outline:1.5px solid var(--passport-blue) !important;
+  outline-offset:-1.5px !important;
+  border-color:var(--passport-blue) !important;
 }
 
-.input-main{
-  grid-template-columns:minmax(48px, 68px) 46px minmax(0,1fr) 46px !important;
-  min-height:52px !important;
+.dock-panel > .input-row:first-child{
+  margin-top:0 !important;
 }
 
-.icon-btn,
-.closed-toggle{
-  width:46px !important;
-  height:46px !important;
-  min-width:46px !important;
-  min-height:46px !important;
-  border-radius:16px !important;
+.dock-panel > .input-row:last-of-type{
+  margin-bottom:var(--blueprint-section-gap-tight) !important;
 }
 
-/* Penalty buttons should be noticeably less tall. */
+.quick-grid{
+  margin-top:10px !important;
+  margin-bottom:1px !important;
+  padding-bottom:1px !important;
+  gap:8px !important;
+  position:relative !important;
+  z-index:1 !important;
+}
+
+.quick{
+  height:36px !important;
+  min-height:36px !important;
+  font-size:var(--font-size-body, 14px) !important;
+}
+
 .penalties{
-  margin:8px 0 10px !important;
   gap:12px !important;
+  margin:2px 0 var(--blueprint-section-gap-tight) !important;
 }
 
 .penalty{
@@ -362,103 +427,77 @@ body{
   font-size:calc(var(--font-size-body, 14px) * .96) !important;
 }
 
-/* Keep Add Round floating as its own element, not part of a backing card. */
 .add-round{
   height:58px !important;
   min-height:58px !important;
   border-radius:30px !important;
-  margin-top:8px !important;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.085), rgba(255,255,255,.025)) !important;
-  border:1px solid rgba(255,255,255,.12) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.16),
-    0 14px 36px rgba(0,0,0,.36) !important;
-  backdrop-filter:blur(var(--glass-blur, 12px)) saturate(135%) brightness(.88) !important;
-  -webkit-backdrop-filter:blur(var(--glass-blur, 12px)) saturate(135%) brightness(.88) !important;
+  margin:0 !important;
+  font-size:var(--font-size-title, 16px) !important;
 }
 
 .add-round-plus{
   width:32px !important;
   height:32px !important;
   right:16px !important;
-}
-
-/* Compact safety for shorter iPhones. */
-@media (max-height:760px){
-  .dock{
-    padding-bottom:calc(max(env(safe-area-inset-bottom, 0px), 0px) + 6px) !important;
-  }
-
-  .input-row{
-    margin-bottom:10px !important;
-    padding:9px 11px 10px !important;
-  }
-
-  .quick-grid{
-    margin-top:8px !important;
-  }
-
-  .quick{
-    height:32px !important;
-    min-height:32px !important;
-  }
-
-  .penalty{
-    height:36px !important;
-    min-height:36px !important;
-  }
-
-  .add-round{
-    height:54px !important;
-    min-height:54px !important;
-  }
-}
-
-
-/* ===== V116 FOUR PLAYER SCROLL / AUTO-FIT =====
-   The app can now scroll vertically when content is taller than the viewport.
-   Four-player games get tighter scoreboard/input density automatically.
-*/
-
-/* Allow app-level vertical scrolling instead of clipping the fourth player. */
-.app{
-  overflow-x:hidden !important;
-  overflow-y:auto !important;
-  -webkit-overflow-scrolling:touch !important;
-  overscroll-behavior-y:contain !important;
   display:grid !important;
-  grid-template-rows:auto auto !important;
+  place-items:center !important;
+  border-radius:999px !important;
+  background:transparent !important;
+  color:var(--passport-blue) !important;
+  border-color:var(--passport-blue) !important;
+}
+
+/* UI Studio color controls */
+.color-control-row{
+  grid-template-columns:1fr 34px minmax(92px, auto) 54px !important;
+}
+
+.ui-color-swatch{
+  width:30px !important;
+  height:30px !important;
+  border:1.5px solid var(--passport-blue) !important;
+  border-radius:999px !important;
+  padding:0 !important;
+}
+
+.ui-studio-tabs{
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+}
+
+/* 2-player spacing */
+.app.players-2{
   align-content:start !important;
+}
+
+.app.players-2 .ui{
+  gap:18px !important;
   padding-bottom:0 !important;
 }
 
-/* Keep background locked while the UI scrolls. */
-.bg{
-  position:fixed !important;
+.app.players-2 .dock{
+  padding-top:6px !important;
+  padding-bottom:calc(max(env(safe-area-inset-bottom, 0px), 0px) + 12px) !important;
 }
 
-/* Main content must be allowed to grow instead of being clipped. */
-.ui{
-  overflow:visible !important;
-  min-height:auto !important;
-  height:auto !important;
-  grid-template-rows:auto auto auto !important;
-  padding-bottom:10px !important;
+.app.players-2 .input-row{
+  margin-bottom:18px !important;
 }
 
-/* Floating dock participates in the scroll flow, not fixed over content. */
-.dock{
-  position:relative !important;
-  bottom:auto !important;
+.app.players-2 .dock-panel > .input-row:last-of-type{
+  margin-bottom:16px !important;
+}
+
+.app.players-2 .penalties{
   margin-top:0 !important;
-  padding-top:8px !important;
+  margin-bottom:14px !important;
+  gap:14px !important;
 }
 
-/* Four-player mode: compact enough to be usable, but still scrollable if needed. */
+/* 4-player compact scroll-fit */
 .app.players-4 .ui{
-  gap:8px !important;
+  gap:13px !important;
   padding-top:calc(var(--safe-top) + 8px) !important;
+  padding-bottom:10px !important;
 }
 
 .app.players-4 .header{
@@ -509,10 +548,6 @@ body{
   line-height:.84 !important;
 }
 
-.app.players-4 .rounds{
-  margin-top:7px !important;
-}
-
 .app.players-4 .rounds-card{
   min-height:86px !important;
   padding:12px 14px !important;
@@ -531,16 +566,16 @@ body{
   font-size:calc(var(--font-size-display, 28px) * .78) !important;
 }
 
-/* Four-player input rows: tighter floating cards. */
 .app.players-4 .dock{
   padding-left:12px !important;
   padding-right:12px !important;
+  padding-top:10px !important;
   padding-bottom:calc(max(env(safe-area-inset-bottom, 0px), 0px) + 12px) !important;
 }
 
 .app.players-4 .input-row{
-  margin-bottom:10px !important;
-  padding:9px 10px 10px !important;
+  margin-bottom:13px !important;
+  padding:9px 10px 12px !important;
   border-radius:24px !important;
 }
 
@@ -586,7 +621,7 @@ body{
 .app.players-4 .penalties{
   grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
   gap:8px !important;
-  margin:8px 0 10px !important;
+  margin:0 0 10px !important;
 }
 
 .app.players-4 .penalty{
@@ -598,565 +633,37 @@ body{
 .app.players-4 .add-round{
   height:52px !important;
   min-height:52px !important;
-  margin-top:8px !important;
 }
 
-/* Very short screens: prioritize scroll + compact controls. */
+/* Viewport adjustments */
 @media (max-height:760px){
-  .app{
-    overflow-y:auto !important;
+  :root{
+    --blueprint-section-gap:12px;
+    --blueprint-section-gap-tight:9px;
+    --blueprint-input-gap:11px;
   }
 
-  .app.players-4 .player-card{
-    min-height:50px !important;
-    margin-bottom:6px !important;
+  .scoreboard .total,
+  .player-card .total,
+  .total.score-transition{
+    font-size:calc(var(--font-size-score, 42px) * .88) !important;
   }
 
-  .app.players-4 .input-row{
-    margin-bottom:8px !important;
-  }
-
-  .app.players-4 .quick{
-    height:30px !important;
-    min-height:30px !important;
-  }
-
-  .app.players-4 .penalty{
+  .quick{
     height:32px !important;
     min-height:32px !important;
   }
 
-  .app.players-4 .add-round{
-    height:50px !important;
-    min-height:50px !important;
-  }
-}
-
-
-/* ===== V118 DESIGN-ONLY BLUEPRINT THEME + COLOR CONTROLS =====
-   Requirements:
-   - functionality/layout unchanged
-   - remove glass effect
-   - blue borders/text
-   - beige background
-   - no fills on cards/buttons
-   - add color controls to UI Studio
-*/
-
-:root{
-  --passport-blue:#244cdd;
-  --passport-bg:#efe9dc;
-  --passport-muted:rgba(36,76,221,.38);
-  --passport-faint:rgba(36,76,221,.18);
-}
-
-/* Page/background */
-html,
-body,
-.app{
-  background:var(--passport-bg) !important;
-  color:var(--passport-blue) !important;
-}
-
-.bg{
-  display:none !important;
-}
-
-/* Remove glass material everywhere without changing layout/sizes/radii. */
-.glass,
-.glass-soft,
-.scoreboard,
-.player-card,
-.rounds-card,
-.dock-panel,
-.input-row,
-.pill,
-.quick,
-.penalty,
-.icon-btn,
-.closed-toggle,
-.add-round,
-.modal,
-.sheet,
-.modal-btn,
-.share-game-btn,
-.typography-settings-button,
-.primary,
-.form-input,
-.segment,
-.segment button,
-.history-item,
-.analytics-grid > div,
-.ui-studio-tabs button,
-.ui-control-row,
-.ui-value-button,
-.ui-studio-wide-btn,
-.ui-preset-grid button,
-.type-control,
-.mini-reset{
-  background:transparent !important;
-  background-color:transparent !important;
-  background-image:none !important;
-  box-shadow:none !important;
-  backdrop-filter:none !important;
-  -webkit-backdrop-filter:none !important;
-  border-color:var(--passport-blue) !important;
-  color:var(--passport-blue) !important;
-}
-
-.glass::before,
-.glass-soft::before,
-.scoreboard::before,
-.player-card::before,
-.rounds-card::before,
-.dock-panel::before,
-.input-row::before,
-.pill::before,
-.quick::before,
-.penalty::before,
-.icon-btn::before,
-.add-round::before,
-.modal::before,
-.sheet::before{
-  content:none !important;
-  display:none !important;
-}
-
-/* Ensure all card/button surfaces have blue outline and no fill. */
-.scoreboard,
-.player-card,
-.rounds-card,
-.dock-panel,
-.input-row,
-.pill,
-.quick,
-.penalty,
-.icon-btn,
-.closed-toggle,
-.add-round,
-.modal,
-.sheet,
-.modal-btn,
-.share-game-btn,
-.typography-settings-button,
-.primary,
-.form-input,
-.segment,
-.segment button,
-.history-item,
-.analytics-grid > div,
-.ui-studio-tabs button,
-.ui-control-row,
-.ui-value-button,
-.ui-studio-wide-btn,
-.ui-preset-grid button,
-.type-control,
-.mini-reset{
-  border-style:solid !important;
-  border-width:1.5px !important;
-}
-
-/* Typography, icons and UI text */
-.label,
-.modal-title,
-.empty-title,
-.empty-sub,
-.player-name,
-.input-name,
-.total,
-.round-input,
-.quick,
-.penalty,
-.last-round-label,
-.last-round-player-name,
-.last-round-player-score,
-.last-round-hint,
-.history-item,
-.sync-line,
-.analytics-grid span,
-.analytics-grid strong,
-.pill,
-.modal-btn,
-.add-round,
-.add-round-plus,
-.icon-btn,
-.closed-toggle,
-.round-head,
-.round-cell,
-.ui-studio-section,
-.ui-control-row span,
-.ui-studio-tabs button,
-.ui-studio-wide-btn,
-.ui-value-button,
-.mini-reset,
-button,
-input{
-  color:var(--passport-blue) !important;
-  text-shadow:none !important;
-}
-
-input::placeholder{
-  color:rgba(36,76,221,.42) !important;
-}
-
-/* Override inline player colors for this design-only color system. */
-.ring,
-.input-name,
-.last-round-player-name,
-.history-item span{
-  color:var(--passport-blue) !important;
-}
-
-.ring{
-  background:transparent !important;
-  border-color:var(--passport-blue) !important;
-}
-
-.progress{
-  background:var(--passport-faint) !important;
-  border:1px solid var(--passport-muted) !important;
-}
-
-.progress-fill{
-  background:var(--passport-blue) !important;
-}
-
-/* Divider/line styling */
-.round-col:not(:last-child)::after,
-.last-round-grid > *:not(:last-child){
-  border-color:var(--passport-muted) !important;
-}
-
-.last-round-grid > *:not(:last-child){
-  border-right:1px solid var(--passport-muted) !important;
-}
-
-/* Active states still outline-only. */
-.closed-toggle.active,
-.segment button.selected,
-.ui-studio-tabs button.active{
-  background:transparent !important;
-  color:var(--passport-blue) !important;
-  border-color:var(--passport-blue) !important;
-  box-shadow:inset 0 0 0 1px var(--passport-blue) !important;
-}
-
-.sync-dot{
-  background:var(--passport-blue) !important;
-}
-
-/* Modals keep the same geometry, only color treatment changes. */
-.modal-shade{
-  background:rgba(239,233,220,.78) !important;
-}
-
-/* UI Studio color controls */
-.color-control-row{
-  grid-template-columns:1fr 34px minmax(92px, auto) 54px !important;
-}
-
-.ui-color-swatch{
-  width:30px !important;
-  height:30px !important;
-  border:1.5px solid var(--passport-blue) !important;
-  border-radius:999px !important;
-  padding:0 !important;
-}
-
-.ui-studio-tabs{
-  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
-}
-
-.ui-studio-tabs button.active{
-  background:transparent !important;
-}
-
-/* Keep Add Round plus readable but unfilled. */
-.add-round-plus{
-  background:transparent !important;
-  border-color:var(--passport-blue) !important;
-  color:var(--passport-blue) !important;
-}
-
-/* Safari bottom area should remain beige if the app scrolls. */
-@supports (-webkit-touch-callout: none){
-  html,
-  body,
-  .app{
-    background:var(--passport-bg) !important;
-  }
-}
-
-
-/* ===== V119 BLUEPRINT CONTROL CARD BORDER FIX =====
-   Fixes the top player point-control card bottom border being clipped.
-   Design only: no game logic or layout structure changed.
-*/
-
-:root{
-  --passport-blue:#244cdd;
-  --passport-bg:#efe9dc;
-  --passport-muted:rgba(36,76,221,.38);
-  --passport-faint:rgba(36,76,221,.18);
-}
-
-/* The clipped line came from input rows touching/bleeding into the scroll edge.
-   Give every floating row a tiny internal bottom breathing room and prevent clipping. */
-.input-row{
-  overflow:visible !important;
-  box-sizing:border-box !important;
-  margin-bottom:18px !important;
-  padding-bottom:14px !important;
-  border-bottom:1.5px solid var(--passport-blue) !important;
-  background:transparent !important;
-  outline:1.5px solid var(--passport-blue) !important;
-  outline-offset:-1.5px !important;
-  border-color:var(--passport-blue) !important;
-}
-
-/* Keep the first row's full outline visible even when it starts directly below last-round. */
-.dock-panel > .input-row:first-child{
-  margin-top:2px !important;
-}
-
-/* Prevent child controls from visually covering the row border. */
-.input-main,
-.quick-grid{
-  position:relative !important;
-  z-index:1 !important;
-}
-
-.quick-grid{
-  padding-bottom:1px !important;
-  margin-bottom:1px !important;
-}
-
-/* Remove accidental masking/overlap from old separators or pseudo layers. */
-.input-row::before,
-.input-row::after{
-  display:none !important;
-  content:none !important;
-}
-
-/* The scroll viewport should not cut the top/bottom of the floating controls. */
-.dock{
-  overflow:visible !important;
-  padding-top:14px !important;
-}
-
-.dock-panel{
-  overflow:visible !important;
-}
-
-/* Four-player scroll mode: keep row outlines visible without making controls much taller. */
-.app.players-4 .input-row{
-  margin-bottom:16px !important;
-  padding-bottom:12px !important;
-}
-
-.app.players-4 .dock{
-  padding-top:12px !important;
-}
-
-
-/* ===== V120 BLUEPRINT VERTICAL SPACING PASS =====
-   Focus:
-   - cleaner vertical rhythm between main cards/sections
-   - less dead space between Last Round and first input card
-   - more consistent player input card gaps
-   - keep blueprint design, layout structure, typography and functionality intact
-*/
-
-:root{
-  --blueprint-section-gap: 16px;
-  --blueprint-section-gap-tight: 12px;
-  --blueprint-input-gap: 15px;
-}
-
-/* Overall page rhythm */
-.ui{
-  gap: var(--blueprint-section-gap) !important;
-  padding-bottom: var(--blueprint-section-gap-tight) !important;
-}
-
-.header{
-  margin-bottom: 0 !important;
-}
-
-.scoreboard{
-  margin-bottom: 0 !important;
-}
-
-.rounds{
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-.rounds-card{
-  margin-bottom: 0 !important;
-}
-
-/* Dock should start closer to the Last Round card */
-.dock{
-  padding-top: var(--blueprint-section-gap-tight) !important;
-}
-
-/* Remove excess dead air above first input card, keep border fully visible */
-.dock-panel > .input-row:first-child{
-  margin-top: 0 !important;
-}
-
-/* Consistent vertical spacing between point control cards */
-.input-row{
-  margin-top: 0 !important;
-  margin-bottom: var(--blueprint-input-gap) !important;
-}
-
-/* Last input card should not create too much blank space before penalties */
-.dock-panel > .input-row:last-of-type{
-  margin-bottom: var(--blueprint-section-gap-tight) !important;
-}
-
-/* Penalties should feel like the next section, not glued to player rows */
-.penalties{
-  margin-top: 2px !important;
-  margin-bottom: var(--blueprint-section-gap-tight) !important;
-}
-
-/* Add round should breathe below the penalties but not feel detached */
-.add-round{
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-/* Four player mode gets slightly tighter spacing while staying scrollable */
-.app.players-4 .ui{
-  gap: 13px !important;
-  padding-bottom: 10px !important;
-}
-
-.app.players-4 .dock{
-  padding-top: 10px !important;
-}
-
-.app.players-4 .input-row{
-  margin-bottom: 13px !important;
-}
-
-.app.players-4 .dock-panel > .input-row:last-of-type{
-  margin-bottom: 10px !important;
-}
-
-.app.players-4 .penalties{
-  margin-top: 0 !important;
-  margin-bottom: 10px !important;
-}
-
-/* Short viewport: compact vertical rhythm without hiding borders */
-@media (max-height: 760px){
-  :root{
-    --blueprint-section-gap: 12px;
-    --blueprint-section-gap-tight: 9px;
-    --blueprint-input-gap: 11px;
+  .penalty{
+    height:36px !important;
+    min-height:36px !important;
   }
 
-  .ui{
-    gap: var(--blueprint-section-gap) !important;
+  .add-round{
+    height:54px !important;
+    min-height:54px !important;
   }
 
-  .dock{
-    padding-top: var(--blueprint-section-gap-tight) !important;
-  }
-
-  .input-row{
-    margin-bottom: var(--blueprint-input-gap) !important;
-  }
-
-  .penalties{
-    margin-bottom: var(--blueprint-section-gap-tight) !important;
-  }
-
-  .app.players-4 .input-row{
-    margin-bottom: 10px !important;
-  }
-}
-
-
-/* ===== V121 BLUEPRINT 2-PLAYER SPACING PASS =====
-   Focus:
-   - improve vertical rhythm specifically for 2-player games
-   - separate the header from the scoreboard
-   - separate scoreboard from Last Round
-   - reduce the oversized gap between Last Round and the first point-control card
-   - keep 3/4-player scroll behavior from V120 intact
-*/
-
-.app.players-2{
-  align-content:start !important;
-}
-
-/* Main upper stack: cleaner gaps between header, scoreboard and Last Round. */
-.app.players-2 .ui{
-  gap:18px !important;
-  padding-bottom:0 !important;
-}
-
-.app.players-2 .header{
-  margin-bottom:0 !important;
-}
-
-.app.players-2 .scoreboard{
-  margin-top:0 !important;
-  margin-bottom:0 !important;
-}
-
-.app.players-2 .rounds{
-  margin-top:0 !important;
-  margin-bottom:0 !important;
-  padding-bottom:0 !important;
-}
-
-.app.players-2 .rounds-card{
-  margin-top:0 !important;
-  margin-bottom:0 !important;
-}
-
-/* Bottom stack: pull the first player control closer to Last Round. */
-.app.players-2 .dock{
-  padding-top:6px !important;
-  padding-bottom:calc(max(env(safe-area-inset-bottom, 0px), 0px) + 12px) !important;
-}
-
-/* Player control rows: consistent but calmer spacing. */
-.app.players-2 .input-row{
-  margin-top:0 !important;
-  margin-bottom:18px !important;
-}
-
-.app.players-2 .dock-panel > .input-row:first-child{
-  margin-top:0 !important;
-}
-
-.app.players-2 .dock-panel > .input-row:last-of-type{
-  margin-bottom:16px !important;
-}
-
-/* Penalties should sit close enough to the input cards to feel connected. */
-.app.players-2 .penalties{
-  margin-top:0 !important;
-  margin-bottom:14px !important;
-  gap:14px !important;
-}
-
-/* Add Round should feel like the final control, not a detached footer. */
-.app.players-2 .add-round{
-  margin-top:0 !important;
-  margin-bottom:0 !important;
-}
-
-/* On short iPhone viewports, tighten only the vertical rhythm. */
-@media (max-height:760px){
   .app.players-2 .ui{
     gap:14px !important;
   }
@@ -1177,10 +684,32 @@ input::placeholder{
   .app.players-2 .penalties{
     margin-bottom:10px !important;
   }
+
+  .app.players-4 .player-card{
+    min-height:50px !important;
+    margin-bottom:6px !important;
+  }
+
+  .app.players-4 .input-row{
+    margin-bottom:10px !important;
+  }
+
+  .app.players-4 .quick{
+    height:30px !important;
+    min-height:30px !important;
+  }
+
+  .app.players-4 .penalty{
+    height:32px !important;
+    min-height:32px !important;
+  }
+
+  .app.players-4 .add-round{
+    height:50px !important;
+    min-height:50px !important;
+  }
 }
 
-/* On taller screens, avoid leaving all extra space under the Add Round button by giving
-   the upper sections a slightly more relaxed rhythm. */
 @media (min-height:820px){
   .app.players-2 .ui{
     gap:20px !important;
