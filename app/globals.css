@@ -252,10 +252,7 @@ body{
   overflow:hidden !important;
   background:
     #050506
-    url("/bg.jpg")
-    center center / cover
-    no-repeat
-    fixed !important;
+    none !important;
 }
 
 .app{
@@ -275,7 +272,7 @@ body{
   width:calc(100vw + 4px) !important;
   height:calc(100dvh + 4px) !important;
   min-height:calc(100dvh + 4px) !important;
-  background-image:url("/bg.jpg") !important;
+  background-image:none !important;
   background-position:center center !important;
   background-size:cover !important;
   background-repeat:no-repeat !important;
@@ -2206,5 +2203,859 @@ body{
   .scoreboard .total,
   .player-card .total{
     font-size:clamp(24px, calc(var(--font-size-score, 56px) * .86), 78px) !important;
+  }
+}
+
+/* ===== V121 PRODUCT PASSPORT / DARK TECHNICAL SCORECARD SKIN =====
+   Final visual layer. Built on v120 so scoring/sync/UI Studio stay intact.
+   Design notes:
+   - no photos or bitmap backgrounds in the interface
+   - black/dark color fields with cobalt passport-line typography
+   - precise product-passport grids, micro labels, and thin dividers
+*/
+
+:root{
+  --v121-bg:#02030a;
+  --v121-panel:#050712;
+  --v121-panel-2:#080d1c;
+  --v121-blue:var(--ui-on-dark-primary, #2f5fff);
+  --v121-blue-soft:var(--ui-on-dark-secondary, #7e9cff);
+  --v121-ink:var(--ui-text, #2f5fff);
+  --v121-muted:var(--ui-muted, #6f84d8);
+  --v121-yellow:var(--ui-card-3, #f1b044);
+  --v121-coral:var(--ui-card-4, #ff5f64);
+  --v121-line:color-mix(in srgb, var(--ui-panel-line, #2f5fff) 74%, transparent);
+  --v121-line-soft:color-mix(in srgb, var(--ui-panel-line, #2f5fff) 28%, transparent);
+  --v121-line-faint:color-mix(in srgb, var(--ui-panel-line, #2f5fff) 13%, transparent);
+  --v121-shadow:0 18px 42px rgba(0,0,0,.42);
+}
+
+html,
+body{
+  background:
+    radial-gradient(circle at 84% 0%, color-mix(in srgb, var(--ui-bg-d, #8a5cff) 18%, transparent) 0 18%, transparent 42%),
+    radial-gradient(circle at 0% 88%, color-mix(in srgb, var(--ui-bg-c, #2f5fff) 16%, transparent) 0 18%, transparent 46%),
+    linear-gradient(150deg, var(--ui-bg, #02030a) 0%, var(--ui-bg-a, #060914) 48%, var(--ui-bg-b, #0a1228) 100%) !important;
+  background-image:
+    radial-gradient(circle at 84% 0%, color-mix(in srgb, var(--ui-bg-d, #8a5cff) 18%, transparent) 0 18%, transparent 42%),
+    radial-gradient(circle at 0% 88%, color-mix(in srgb, var(--ui-bg-c, #2f5fff) 16%, transparent) 0 18%, transparent 46%),
+    linear-gradient(150deg, var(--ui-bg, #02030a) 0%, var(--ui-bg-a, #060914) 48%, var(--ui-bg-b, #0a1228) 100%) !important;
+  color:var(--v121-blue) !important;
+}
+
+.app{
+  background:var(--ui-bg, #02030a) !important;
+  color:var(--v121-blue) !important;
+  font-family:-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, system-ui, sans-serif !important;
+}
+
+.bg{
+  background:
+    linear-gradient(var(--v121-line-faint) 1px, transparent 1px),
+    linear-gradient(90deg, var(--v121-line-faint) 1px, transparent 1px),
+    radial-gradient(circle at 82% 10%, color-mix(in srgb, var(--ui-bg-d, #8a5cff) 22%, transparent) 0 12%, transparent 35%),
+    radial-gradient(circle at 12% 88%, color-mix(in srgb, var(--ui-bg-c, #2f5fff) 18%, transparent) 0 15%, transparent 44%),
+    linear-gradient(150deg, var(--ui-bg, #02030a) 0%, var(--ui-bg-a, #060914) 46%, var(--ui-bg-b, #0a1228) 100%) !important;
+  background-image:
+    linear-gradient(var(--v121-line-faint) 1px, transparent 1px),
+    linear-gradient(90deg, var(--v121-line-faint) 1px, transparent 1px),
+    radial-gradient(circle at 82% 10%, color-mix(in srgb, var(--ui-bg-d, #8a5cff) 22%, transparent) 0 12%, transparent 35%),
+    radial-gradient(circle at 12% 88%, color-mix(in srgb, var(--ui-bg-c, #2f5fff) 18%, transparent) 0 15%, transparent 44%),
+    linear-gradient(150deg, var(--ui-bg, #02030a) 0%, var(--ui-bg-a, #060914) 46%, var(--ui-bg-b, #0a1228) 100%) !important;
+  background-size:32px 32px, 32px 32px, auto, auto, auto !important;
+  opacity:1 !important;
+  filter:none !important;
+}
+
+.bg::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 58px, var(--v121-line-faint) 58px 59px),
+    repeating-linear-gradient(90deg, transparent 0 58px, var(--v121-line-faint) 58px 59px) !important;
+  opacity:.5 !important;
+}
+
+.bg::after{
+  content:"SESSION\A PASSPORT" !important;
+  white-space:pre !important;
+  position:absolute !important;
+  left:12px !important;
+  right:auto !important;
+  top:calc(var(--safe-top) + 74px) !important;
+  width:min-content !important;
+  height:auto !important;
+  transform:none !important;
+  background:none !important;
+  border:0 !important;
+  color:color-mix(in srgb, var(--ui-grid, #2f5fff) 13%, transparent) !important;
+  font-size:clamp(74px, 28vw, 140px) !important;
+  line-height:.76 !important;
+  letter-spacing:-.1em !important;
+  font-weight:850 !important;
+  opacity:1 !important;
+  pointer-events:none !important;
+}
+
+.ui{
+  padding:calc(var(--safe-top) + 10px) 12px 0 !important;
+  gap:8px !important;
+}
+
+.header{
+  grid-template-columns:1fr 1fr !important;
+  gap:8px !important;
+  margin-bottom:2px !important;
+}
+
+.glass,
+.glass-soft{
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  box-shadow:var(--v121-shadow) !important;
+}
+
+.glass::before,
+.glass-soft::before{
+  display:none !important;
+}
+
+.pill{
+  position:relative !important;
+  height:44px !important;
+  min-height:44px !important;
+  padding:7px 10px 6px !important;
+  border-radius:var(--radius-sm, 0px) !important;
+  background:var(--ui-panel-bg, #050712) !important;
+  color:var(--v121-blue) !important;
+  border:1px solid var(--v121-line) !important;
+  box-shadow:none !important;
+  text-transform:uppercase !important;
+  font-size:var(--font-size-caption, 9px) !important;
+  line-height:1.04 !important;
+  font-weight:var(--font-weight-label, 800) !important;
+  letter-spacing:.02em !important;
+  text-align:left !important;
+  overflow:hidden !important;
+}
+
+.pill::before{
+  content:"SUPPLIER ID" !important;
+  display:block !important;
+  margin-bottom:3px !important;
+  color:var(--v121-muted) !important;
+  font-size:7px !important;
+  line-height:1 !important;
+  letter-spacing:.08em !important;
+  font-weight:800 !important;
+}
+
+.header .pill:nth-child(2)::before{
+  content:"LOT / TARGET" !important;
+}
+
+.header .pill:nth-child(2){
+  color:var(--v121-blue-soft) !important;
+  border-color:color-mix(in srgb, var(--v121-blue-soft) 64%, transparent) !important;
+}
+
+.sync-dot{
+  right:8px !important;
+  width:6px !important;
+  height:6px !important;
+  background:var(--v121-blue) !important;
+  border:0 !important;
+  box-shadow:0 0 0 1px var(--v121-blue) !important;
+}
+
+.scoreboard{
+  display:grid !important;
+  grid-template-columns:repeat(2, minmax(0,1fr)) !important;
+  gap:1px !important;
+  padding:0 !important;
+  margin:0 0 8px !important;
+  background:var(--v121-line) !important;
+  border:1px solid var(--v121-line) !important;
+  border-radius:0 !important;
+  box-shadow:0 18px 42px rgba(0,0,0,.32) !important;
+  overflow:hidden !important;
+}
+
+.scoreboard > .label{
+  grid-column:1 / -1 !important;
+  position:relative !important;
+  margin:0 !important;
+  padding:10px 10px 58px !important;
+  min-height:136px !important;
+  background:var(--ui-panel-bg, #050712) !important;
+  border-bottom:1px solid var(--v121-line) !important;
+  color:var(--v121-blue) !important;
+  text-align:left !important;
+  font-size:clamp(52px, var(--font-size-display, 58px), 92px) !important;
+  line-height:.78 !important;
+  font-weight:var(--font-weight-score, 900) !important;
+  letter-spacing:-.1em !important;
+  text-transform:none !important;
+}
+
+.scoreboard > .label::before{
+  content:"★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★" !important;
+  position:absolute !important;
+  left:10px !important;
+  top:10px !important;
+  transform:translateY(-120%) !important;
+  color:var(--v121-blue) !important;
+  font-size:10px !important;
+  letter-spacing:.16em !important;
+  opacity:.95 !important;
+}
+
+.scoreboard > .label::after{
+  content:"CURRENT GAME  /  SCORE DOCUMENT  /  NO IMAGE ASSETS" !important;
+  position:absolute !important;
+  left:10px !important;
+  right:10px !important;
+  bottom:12px !important;
+  padding-top:8px !important;
+  border-top:1px solid var(--v121-line) !important;
+  color:var(--v121-muted) !important;
+  font-size:9px !important;
+  line-height:1.1 !important;
+  letter-spacing:.08em !important;
+  font-weight:800 !important;
+  text-transform:uppercase !important;
+}
+
+.player-card{
+  position:relative !important;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 44px !important;
+  grid-template-rows:auto 1fr auto !important;
+  min-height:112px !important;
+  margin:0 !important;
+  padding:10px !important;
+  gap:7px !important;
+  background:var(--ui-panel-bg, #050712) !important;
+  color:var(--v121-blue) !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  overflow:hidden !important;
+}
+
+.scoreboard > .player-card:nth-child(2),
+.scoreboard > .player-card:nth-child(3),
+.scoreboard > .player-card:nth-child(4),
+.scoreboard > .player-card:nth-child(5){
+  background:var(--ui-panel-bg, #050712) !important;
+}
+
+.player-card::before{
+  content:"PLAYER ID" !important;
+  position:absolute !important;
+  left:10px !important;
+  top:10px !important;
+  color:var(--v121-muted) !important;
+  font-size:7px !important;
+  line-height:1 !important;
+  letter-spacing:.08em !important;
+  font-weight:850 !important;
+  z-index:2 !important;
+}
+
+.player-card::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  background:
+    linear-gradient(90deg, transparent calc(100% - 46px), var(--v121-line-soft) calc(100% - 46px), var(--v121-line-soft) calc(100% - 45px), transparent calc(100% - 45px)),
+    linear-gradient(var(--v121-line-faint) 1px, transparent 1px),
+    linear-gradient(90deg, var(--v121-line-faint) 1px, transparent 1px) !important;
+  background-size:auto, 26px 26px, 26px 26px !important;
+  opacity:1 !important;
+  pointer-events:none !important;
+  z-index:0 !important;
+}
+
+.player-card > div:nth-child(2){
+  grid-column:1 !important;
+  grid-row:1 !important;
+  align-self:start !important;
+  padding-top:14px !important;
+  z-index:1 !important;
+}
+
+.player-name,
+.player-card .player-name{
+  color:var(--v121-blue) !important;
+  font-size:var(--font-size-player-name, 13px) !important;
+  line-height:1.05 !important;
+  font-weight:var(--font-weight-title, 850) !important;
+  letter-spacing:-.02em !important;
+  text-transform:uppercase !important;
+}
+
+.progress{
+  height:3px !important;
+  margin-top:8px !important;
+  max-width:100% !important;
+  background:var(--v121-line-faint) !important;
+  border:0 !important;
+  border-radius:0 !important;
+}
+
+.progress-fill{
+  background:var(--v121-blue) !important;
+  border-radius:0 !important;
+}
+
+.ring{
+  grid-column:2 !important;
+  grid-row:1 / span 2 !important;
+  justify-self:end !important;
+  align-self:start !important;
+  width:36px !important;
+  height:48px !important;
+  min-width:36px !important;
+  min-height:48px !important;
+  border-radius:0 !important;
+  border:1px solid var(--v121-line) !important;
+  background:transparent !important;
+  color:var(--v121-blue-soft) !important;
+  font-size:8px !important;
+  line-height:1 !important;
+  font-weight:var(--font-weight-label, 800) !important;
+  letter-spacing:-.02em !important;
+  z-index:1 !important;
+}
+
+.total.score-transition,
+.scoreboard .total,
+.player-card .total{
+  grid-column:1 / -1 !important;
+  grid-row:2 !important;
+  align-self:end !important;
+  justify-self:start !important;
+  color:var(--v121-blue) !important;
+  font-size:clamp(35px, var(--font-size-score, 54px), 84px) !important;
+  line-height:.82 !important;
+  font-weight:var(--font-weight-score, 900) !important;
+  letter-spacing:-.08em !important;
+  z-index:1 !important;
+}
+
+.player-card .total::after{
+  content:" KG CO₂e" !important;
+  margin-left:4px !important;
+  color:var(--v121-muted) !important;
+  font-size:10px !important;
+  letter-spacing:-.02em !important;
+  font-weight:750 !important;
+}
+
+.rounds{
+  margin:0 0 8px !important;
+}
+
+.rounds-card{
+  min-height:86px !important;
+  height:86px !important;
+  max-height:86px !important;
+  padding:10px !important;
+  border-radius:0 !important;
+  background:var(--ui-rounds-bg, #050712) !important;
+  color:var(--v121-blue) !important;
+  border:1px solid var(--v121-line) !important;
+  box-shadow:none !important;
+  overflow:hidden !important;
+}
+
+.rounds-card::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  background:
+    linear-gradient(90deg, transparent 0 calc(50% - .5px), var(--v121-line-soft) calc(50% - .5px) calc(50% + .5px), transparent calc(50% + .5px)),
+    linear-gradient(var(--v121-line-faint) 1px, transparent 1px),
+    linear-gradient(90deg, var(--v121-line-faint) 1px, transparent 1px) !important;
+  background-size:auto, 28px 28px, 28px 28px !important;
+  opacity:1 !important;
+  pointer-events:none !important;
+}
+
+.empty-title{
+  color:var(--v121-blue) !important;
+  font-size:clamp(26px, calc(var(--font-size-display, 58px) * .52), 48px) !important;
+  line-height:.86 !important;
+  font-weight:var(--font-weight-score, 900) !important;
+  letter-spacing:-.07em !important;
+}
+
+.empty-title::before{
+  content:"ROUND LEDGER" !important;
+  display:block !important;
+  margin-bottom:8px !important;
+  color:var(--v121-muted) !important;
+  font-size:8px !important;
+  letter-spacing:.08em !important;
+  line-height:1 !important;
+  font-weight:850 !important;
+}
+
+.empty-sub,
+.last-round-hint,
+.last-round-label,
+.sync-line,
+.analytics-grid span{
+  color:var(--v121-muted) !important;
+  font-size:var(--font-size-caption, 9px) !important;
+  font-weight:var(--font-weight-label, 800) !important;
+  letter-spacing:.04em !important;
+  text-transform:uppercase !important;
+}
+
+.last-round-label{
+  color:var(--v121-muted) !important;
+  letter-spacing:.08em !important;
+}
+
+.last-round-grid{
+  color:var(--v121-blue) !important;
+}
+
+.last-round-player:not(:last-child){
+  border-right:1px solid var(--v121-line-soft) !important;
+}
+
+.last-round-player-name{
+  color:var(--v121-blue-soft) !important;
+}
+
+.last-round-player-score{
+  color:var(--v121-blue) !important;
+  font-size:clamp(22px, 7vw, 34px) !important;
+  line-height:.86 !important;
+  font-weight:var(--font-weight-score, 900) !important;
+  letter-spacing:-.07em !important;
+}
+
+.dock{
+  padding:6px 12px calc(var(--safe-bottom) + 8px) !important;
+}
+
+.dock-panel,
+.dock-panel.glass{
+  padding:8px !important;
+  border-radius:0 !important;
+  background:var(--ui-panel-bg, #050712) !important;
+  border:1px solid var(--v121-line) !important;
+  box-shadow:0 -18px 44px rgba(0,0,0,.44) !important;
+}
+
+.input-row{
+  position:relative !important;
+  margin:0 !important;
+  padding:8px 0 8px !important;
+  border:0 !important;
+  border-bottom:1px solid var(--v121-line-soft) !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  overflow:hidden !important;
+}
+
+.input-row::before{
+  content:"" !important;
+  position:absolute !important;
+  left:0 !important;
+  top:8px !important;
+  bottom:8px !important;
+  width:4px !important;
+  background:var(--ui-card-1, #2f5fff) !important;
+}
+
+.input-row:nth-child(2)::before{background:var(--ui-card-2, #7e9cff) !important;}
+.input-row:nth-child(3)::before{background:var(--ui-card-3, #f1b044) !important;}
+.input-row:nth-child(4)::before{background:var(--ui-card-4, #ff5f64) !important;}
+
+.input-main{
+  grid-template-columns:minmax(44px, 62px) 34px minmax(0,1fr) 34px !important;
+  gap:7px !important;
+  min-height:38px !important;
+  padding-left:12px !important;
+}
+
+.input-name{
+  color:var(--ui-card-1, #2f5fff) !important;
+  font-size:var(--font-size-input-name, 12px) !important;
+  font-weight:var(--font-weight-title, 850) !important;
+  letter-spacing:-.015em !important;
+  text-transform:uppercase !important;
+}
+.input-row:nth-child(2) .input-name{color:var(--ui-card-2, #7e9cff) !important;}
+.input-row:nth-child(3) .input-name{color:var(--ui-card-3, #f1b044) !important;}
+.input-row:nth-child(4) .input-name{color:var(--ui-card-4, #ff5f64) !important;}
+
+.round-input{
+  height:36px !important;
+  min-height:36px !important;
+  padding:0 6px !important;
+  border-radius:0 !important;
+  background:var(--ui-input-bg, #02030a) !important;
+  color:var(--ui-input-text, #2f5fff) !important;
+  border:1px solid var(--v121-line) !important;
+  box-shadow:none !important;
+  font-size:clamp(22px, var(--font-size-input, 30px), 56px) !important;
+  font-weight:var(--font-weight-score, 900) !important;
+  line-height:1 !important;
+  letter-spacing:-.055em !important;
+}
+
+.round-input::placeholder{
+  color:color-mix(in srgb, var(--ui-input-text, #2f5fff) 38%, transparent) !important;
+}
+
+.icon-btn,
+.closed-toggle{
+  width:34px !important;
+  height:34px !important;
+  min-width:34px !important;
+  min-height:34px !important;
+  max-width:34px !important;
+  max-height:34px !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  color:var(--v121-blue) !important;
+  border:1px solid var(--v121-line) !important;
+  box-shadow:none !important;
+  font-size:calc(var(--font-size-button, 16px) * 1.22) !important;
+  font-weight:var(--font-weight-score, 900) !important;
+}
+
+.closed-toggle{
+  color:var(--v121-blue-soft) !important;
+  border-color:color-mix(in srgb, var(--v121-blue-soft) 68%, transparent) !important;
+}
+
+.closed-toggle.active,
+.icon-btn.active{
+  background:var(--ui-button-bg, #2f5fff) !important;
+  color:var(--ui-button-text, #02030a) !important;
+  border-color:var(--ui-button-bg, #2f5fff) !important;
+}
+
+.quick-grid{
+  margin-top:6px !important;
+  padding-left:12px !important;
+  gap:6px !important;
+}
+
+.quick{
+  height:29px !important;
+  min-height:29px !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  color:var(--v121-blue-soft) !important;
+  border:1px solid var(--v121-line-soft) !important;
+  box-shadow:none !important;
+  font-size:var(--font-size-caption, 9px) !important;
+  font-weight:var(--font-weight-label, 800) !important;
+  letter-spacing:.02em !important;
+}
+
+.penalties{
+  gap:6px !important;
+  margin:8px 0 !important;
+}
+
+.penalty{
+  height:31px !important;
+  min-height:31px !important;
+  border-radius:0 !important;
+  background:color-mix(in srgb, var(--ui-card-4, #ff5f64) 18%, transparent) !important;
+  color:var(--ui-card-4, #ff5f64) !important;
+  border:1px solid color-mix(in srgb, var(--ui-card-4, #ff5f64) 62%, transparent) !important;
+  box-shadow:none !important;
+  font-size:var(--font-size-caption, 9px) !important;
+  font-weight:var(--font-weight-label, 800) !important;
+}
+
+.add-round,
+.add-round.glass-soft{
+  height:52px !important;
+  min-height:52px !important;
+  border-radius:0 !important;
+  background:var(--ui-button-bg, #2f5fff) !important;
+  color:var(--ui-button-text, #02030a) !important;
+  border:1px solid var(--ui-button-bg, #2f5fff) !important;
+  box-shadow:none !important;
+  font-size:var(--font-size-button, 16px) !important;
+  font-weight:var(--font-weight-score, 900) !important;
+  letter-spacing:-.035em !important;
+  text-transform:uppercase !important;
+}
+
+.add-round-plus{
+  width:28px !important;
+  height:28px !important;
+  border-radius:0 !important;
+  background:var(--ui-button-text, #02030a) !important;
+  color:var(--ui-button-bg, #2f5fff) !important;
+  border:1px solid var(--ui-button-text, #02030a) !important;
+  font-size:20px !important;
+}
+
+.modal-shade{
+  background:rgba(0,0,0,.78) !important;
+}
+
+.modal,
+.sheet,
+.typography-panel{
+  border-radius:0 !important;
+  background:var(--ui-panel-bg, #050712) !important;
+  color:var(--v121-blue) !important;
+  border:1px solid var(--v121-line) !important;
+  box-shadow:0 20px 68px rgba(0,0,0,.62) !important;
+}
+
+.modal-title,
+.rounds-popup-title{
+  color:var(--v121-blue) !important;
+  font-size:clamp(30px, var(--font-size-modal-title, 42px), 78px) !important;
+  line-height:.82 !important;
+  font-weight:var(--font-weight-score, 900) !important;
+  letter-spacing:-.08em !important;
+  text-transform:none !important;
+  text-align:left !important;
+}
+
+.modal-title::before,
+.rounds-popup-title::before{
+  content:"APP DOCUMENT" !important;
+  display:block !important;
+  margin-bottom:8px !important;
+  color:var(--v121-muted) !important;
+  font-size:8px !important;
+  line-height:1 !important;
+  letter-spacing:.08em !important;
+  font-weight:800 !important;
+  text-transform:uppercase !important;
+}
+
+.modal-btn,
+.primary,
+.segment button,
+.ui-studio-tabs button,
+.ui-control-row button,
+.ui-preset-grid button,
+.ui-studio-wide-btn{
+  border-radius:0 !important;
+  background:transparent !important;
+  color:var(--v121-blue-soft) !important;
+  border:1px solid var(--v121-line-soft) !important;
+  box-shadow:none !important;
+  font-size:var(--font-size-body, 12px) !important;
+  font-weight:var(--font-weight-title, 850) !important;
+  text-transform:uppercase !important;
+}
+
+.segment button.selected,
+.ui-studio-tabs button.active,
+.modal-btn.danger,
+.primary{
+  background:var(--ui-button-bg, #2f5fff) !important;
+  color:var(--ui-button-text, #02030a) !important;
+  border-color:var(--ui-button-bg, #2f5fff) !important;
+}
+
+.form-input,
+.history-item,
+.analytics-grid div,
+.type-control,
+.ui-control-row,
+.ui-studio-section{
+  border-radius:0 !important;
+  background:transparent !important;
+  color:var(--v121-blue) !important;
+  border:1px solid var(--v121-line-soft) !important;
+  box-shadow:none !important;
+  font-size:var(--font-size-body, 12px) !important;
+}
+
+.form-input{
+  background:var(--ui-bg, #02030a) !important;
+  color:var(--v121-blue) !important;
+}
+
+.form-input::placeholder{
+  color:color-mix(in srgb, var(--v121-blue) 38%, transparent) !important;
+}
+
+.history-item strong,
+.analytics-grid strong{
+  color:var(--v121-blue) !important;
+}
+
+.ui-studio-tabs{
+  grid-template-columns:repeat(4, minmax(0, 1fr)) !important;
+  gap:6px !important;
+}
+
+.ui-studio-page{
+  gap:7px !important;
+}
+
+.ui-studio-section{
+  color:var(--v121-muted) !important;
+  letter-spacing:.08em !important;
+  text-transform:uppercase !important;
+  font-size:var(--font-size-caption, 9px) !important;
+  font-weight:var(--font-weight-label, 800) !important;
+}
+
+.ui-color-row input[type="color"]{
+  border-radius:0 !important;
+  border:1px solid var(--v121-line) !important;
+  background:transparent !important;
+}
+
+/* Keep the v117/v118 four-player scroll-fit behavior while applying the passport skin. */
+.app.players-4 .ui{
+  gap:6px !important;
+  padding-top:calc(var(--safe-top) + 7px) !important;
+}
+
+.app.players-4 .header{
+  gap:6px !important;
+  margin-bottom:0 !important;
+}
+
+.app.players-4 .pill{
+  height:38px !important;
+  min-height:38px !important;
+  padding:6px 8px !important;
+  font-size:8.5px !important;
+}
+
+.app.players-4 .scoreboard > .label{
+  min-height:106px !important;
+  padding-bottom:44px !important;
+  font-size:clamp(40px, calc(var(--font-size-display, 58px) * .84), 64px) !important;
+}
+
+.app.players-4 .player-card{
+  min-height:86px !important;
+  padding:8px !important;
+  grid-template-columns:minmax(0,1fr) 36px !important;
+  gap:5px !important;
+}
+
+.app.players-4 .player-card::before{
+  left:8px !important;
+  top:8px !important;
+  font-size:6.5px !important;
+}
+
+.app.players-4 .player-card > div:nth-child(2){
+  padding-top:12px !important;
+}
+
+.app.players-4 .ring{
+  width:30px !important;
+  height:38px !important;
+  min-width:30px !important;
+  min-height:38px !important;
+  font-size:7px !important;
+}
+
+.app.players-4 .player-name{
+  font-size:clamp(9px, calc(var(--font-size-player-name, 13px) * .88), 15px) !important;
+}
+
+.app.players-4 .total.score-transition,
+.app.players-4 .scoreboard .total,
+.app.players-4 .player-card .total{
+  font-size:clamp(27px, calc(var(--font-size-score, 54px) * .7), 48px) !important;
+}
+
+.app.players-4 .rounds-card{
+  height:70px !important;
+  min-height:70px !important;
+  max-height:70px !important;
+  padding:8px !important;
+}
+
+.app.players-4 .dock-panel,
+.app.players-4 .dock-panel.glass{
+  padding:7px !important;
+}
+
+.app.players-4 .input-row{
+  padding:6px 0 !important;
+}
+
+.app.players-4 .input-main{
+  grid-template-columns:minmax(38px, 56px) 30px minmax(0,1fr) 30px !important;
+  min-height:32px !important;
+  gap:6px !important;
+}
+
+.app.players-4 .input-name{
+  font-size:clamp(8px, calc(var(--font-size-input-name, 12px) * .86), 14px) !important;
+}
+
+.app.players-4 .round-input{
+  height:31px !important;
+  min-height:31px !important;
+  font-size:clamp(18px, calc(var(--font-size-input, 30px) * .78), 40px) !important;
+}
+
+.app.players-4 .icon-btn,
+.app.players-4 .closed-toggle{
+  width:30px !important;
+  height:30px !important;
+  min-width:30px !important;
+  min-height:30px !important;
+  font-size:18px !important;
+}
+
+.app.players-4 .quick{
+  height:25px !important;
+  min-height:25px !important;
+  font-size:8px !important;
+}
+
+.app.players-4 .penalty{
+  height:27px !important;
+  min-height:27px !important;
+  font-size:8px !important;
+}
+
+.app.players-4 .add-round{
+  height:47px !important;
+  min-height:47px !important;
+}
+
+@media (max-height:760px){
+  .scoreboard > .label{
+    min-height:104px !important;
+    padding-bottom:42px !important;
+    font-size:clamp(39px, calc(var(--font-size-display, 58px) * .82), 64px) !important;
+  }
+
+  .player-card{
+    min-height:84px !important;
+  }
+
+  .rounds-card{
+    height:70px !important;
+    min-height:70px !important;
+    max-height:70px !important;
+  }
+
+  .input-row{
+    padding:6px 0 !important;
   }
 }

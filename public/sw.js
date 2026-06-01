@@ -1,5 +1,5 @@
 const CACHE_NAME = "rummy500-v52";
-const ASSETS = ["/", "/manifest.webmanifest", "/bg.jpg"];
+const ASSETS = ["/", "/manifest.webmanifest"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

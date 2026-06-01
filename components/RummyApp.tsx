@@ -13,10 +13,10 @@ type SyncStatus = "loading" | "synced" | "syncing" | "offline";
 type CloudGame = Game & { __sync?: { clientId: string; version: number } };
 
 const DEFAULT_PLAYERS: Player[] = [
-  { id: "p1", name: "You", color: "#eaff1a" },
-  { id: "p2", name: "GF", color: "#ff8acb" },
-  { id: "p3", name: "Player 3", color: "#ff4b4b" },
-  { id: "p4", name: "Player 4", color: "#aa8cff" }
+  { id: "p1", name: "You", color: "#2f5fff" },
+  { id: "p2", name: "GF", color: "#7e9cff" },
+  { id: "p3", name: "Player 3", color: "#f1b044" },
+  { id: "p4", name: "Player 4", color: "#ff5f64" }
 ];
 
 const STORAGE_KEY = "rummy500_clean_v51";
@@ -25,56 +25,57 @@ const CLOUD_UPDATED_KEY = "rummy500_clean_v51_cloud_updated_at";
 const CLIENT_ID_KEY = "rummy500_clean_v51_client_id";
 const SAVE_DEBOUNCE_MS = 700;
 const PENDING_SYNC_KEY = "rummy500_clean_v52_pending_sync";
+const UI_STUDIO_STORAGE_PREFIX = "rummy500_v121_passport_ui";
 
 type UiStudioTab = "type" | "colors" | "space" | "radius" | "glass" | "layout" | "presets";
 
 const UI_STUDIO_DEFAULTS: Record<string, string> = {
-  "--font-size-caption": "10px",
-  "--font-size-body": "13px",
-  "--font-size-title": "18px",
-  "--font-size-display": "68px",
-  "--font-size-modal-title": "46px",
+  "--font-size-caption": "9px",
+  "--font-size-body": "12px",
+  "--font-size-title": "16px",
+  "--font-size-display": "58px",
+  "--font-size-modal-title": "42px",
   "--font-size-player-name": "13px",
-  "--font-size-input-name": "13px",
-  "--font-size-input": "32px",
-  "--font-size-score": "56px",
-  "--font-size-button": "18px",
+  "--font-size-input-name": "12px",
+  "--font-size-input": "30px",
+  "--font-size-score": "54px",
+  "--font-size-button": "16px",
   "--font-weight-label": "800",
-  "--font-weight-body": "700",
-  "--font-weight-title": "900",
-  "--font-weight-score": "950",
-  "--space-sm": "8px",
-  "--space-md": "12px",
-  "--space-lg": "16px",
+  "--font-weight-body": "650",
+  "--font-weight-title": "850",
+  "--font-weight-score": "900",
+  "--space-sm": "7px",
+  "--space-md": "10px",
+  "--space-lg": "14px",
   "--radius-sm": "0px",
   "--radius-lg": "0px",
   "--radius-xl": "0px",
   "--glass-blur": "0px",
-  "--glass-opacity": "0.06",
-  "--glass-border-strength": "0.16",
-  "--glass-shadow-strength": "0.44",
-  "--ui-density-scale": "1",
-  "--ui-bg": "#050006",
-  "--ui-bg-a": "#e884c9",
-  "--ui-bg-b": "#ff4b4f",
-  "--ui-bg-c": "#eaff1a",
-  "--ui-bg-d": "#315cff",
-  "--ui-grid": "#050006",
-  "--ui-panel-bg": "#050006",
-  "--ui-panel-line": "#eaff1a",
-  "--ui-text": "#050006",
-  "--ui-muted": "#4c1b3e",
-  "--ui-on-dark-primary": "#eaff1a",
-  "--ui-on-dark-secondary": "#e884c9",
-  "--ui-button-bg": "#eaff1a",
-  "--ui-button-text": "#050006",
-  "--ui-input-bg": "#eaff1a",
-  "--ui-input-text": "#050006",
-  "--ui-rounds-bg": "#ffb000",
-  "--ui-card-1": "#eaff1a",
-  "--ui-card-2": "#e884c9",
-  "--ui-card-3": "#ff4b4f",
-  "--ui-card-4": "#aa8cff"
+  "--glass-opacity": "0.02",
+  "--glass-border-strength": "0.22",
+  "--glass-shadow-strength": "0.28",
+  "--ui-density-scale": "0.96",
+  "--ui-bg": "#02030a",
+  "--ui-bg-a": "#060914",
+  "--ui-bg-b": "#0a1228",
+  "--ui-bg-c": "#2f5fff",
+  "--ui-bg-d": "#8a5cff",
+  "--ui-grid": "#2f5fff",
+  "--ui-panel-bg": "#050712",
+  "--ui-panel-line": "#2f5fff",
+  "--ui-text": "#2f5fff",
+  "--ui-muted": "#6f84d8",
+  "--ui-on-dark-primary": "#2f5fff",
+  "--ui-on-dark-secondary": "#7e9cff",
+  "--ui-button-bg": "#2f5fff",
+  "--ui-button-text": "#02030a",
+  "--ui-input-bg": "#02030a",
+  "--ui-input-text": "#2f5fff",
+  "--ui-rounds-bg": "#050712",
+  "--ui-card-1": "#2f5fff",
+  "--ui-card-2": "#7e9cff",
+  "--ui-card-3": "#f1b044",
+  "--ui-card-4": "#ff5f64"
 };
 
 const UI_STUDIO_PLAYER_COLOR_VARS: Record<string, number> = {
@@ -558,7 +559,7 @@ export default function RummyApp() {
     setUiValues((previous) => ({ ...previous, [name]: value }));
 
     try {
-      localStorage.setItem(`rummy-type-${name}`, value);
+      localStorage.setItem(`${UI_STUDIO_STORAGE_PREFIX}-${name}`, value);
     } catch {}
   }
 
@@ -708,7 +709,7 @@ export default function RummyApp() {
 
     Object.keys(UI_STUDIO_DEFAULTS).forEach((name) => {
       try {
-        const saved = localStorage.getItem(`rummy-type-${name}`);
+        const saved = localStorage.getItem(`${UI_STUDIO_STORAGE_PREFIX}-${name}`);
         const value = saved || UI_STUDIO_DEFAULTS[name];
         nextValues[name] = value;
         document.documentElement.style.setProperty(name, value);
