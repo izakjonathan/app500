@@ -1,0 +1,15 @@
+V121 Blueprint 2-Player Spacing Pass
+
+Built from V120.
+
+Focus:
+- Improved spacing specifically for 2-player games.
+- Added cleaner separation between header, scoreboard and Last Round.
+- Reduced the oversized gap between Last Round and the first point-control card.
+- Improved spacing between player control cards.
+- Tightened penalties/Add Round spacing so the bottom section feels connected.
+- Added short/tall viewport adjustments for better iPhone balance.
+- Kept existing 3-player and 4-player behavior from V120.
+
+No scoring/sync/game logic changed.
+No typography scale or button/card sizes changed.

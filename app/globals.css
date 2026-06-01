@@ -1081,3 +1081,116 @@ input::placeholder{
     margin-bottom: 10px !important;
   }
 }
+
+
+/* ===== V121 BLUEPRINT 2-PLAYER SPACING PASS =====
+   Focus:
+   - improve vertical rhythm specifically for 2-player games
+   - separate the header from the scoreboard
+   - separate scoreboard from Last Round
+   - reduce the oversized gap between Last Round and the first point-control card
+   - keep 3/4-player scroll behavior from V120 intact
+*/
+
+.app.players-2{
+  align-content:start !important;
+}
+
+/* Main upper stack: cleaner gaps between header, scoreboard and Last Round. */
+.app.players-2 .ui{
+  gap:18px !important;
+  padding-bottom:0 !important;
+}
+
+.app.players-2 .header{
+  margin-bottom:0 !important;
+}
+
+.app.players-2 .scoreboard{
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+
+.app.players-2 .rounds{
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+  padding-bottom:0 !important;
+}
+
+.app.players-2 .rounds-card{
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+
+/* Bottom stack: pull the first player control closer to Last Round. */
+.app.players-2 .dock{
+  padding-top:6px !important;
+  padding-bottom:calc(max(env(safe-area-inset-bottom, 0px), 0px) + 12px) !important;
+}
+
+/* Player control rows: consistent but calmer spacing. */
+.app.players-2 .input-row{
+  margin-top:0 !important;
+  margin-bottom:18px !important;
+}
+
+.app.players-2 .dock-panel > .input-row:first-child{
+  margin-top:0 !important;
+}
+
+.app.players-2 .dock-panel > .input-row:last-of-type{
+  margin-bottom:16px !important;
+}
+
+/* Penalties should sit close enough to the input cards to feel connected. */
+.app.players-2 .penalties{
+  margin-top:0 !important;
+  margin-bottom:14px !important;
+  gap:14px !important;
+}
+
+/* Add Round should feel like the final control, not a detached footer. */
+.app.players-2 .add-round{
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+
+/* On short iPhone viewports, tighten only the vertical rhythm. */
+@media (max-height:760px){
+  .app.players-2 .ui{
+    gap:14px !important;
+  }
+
+  .app.players-2 .dock{
+    padding-top:4px !important;
+    padding-bottom:calc(max(env(safe-area-inset-bottom, 0px), 0px) + 8px) !important;
+  }
+
+  .app.players-2 .input-row{
+    margin-bottom:14px !important;
+  }
+
+  .app.players-2 .dock-panel > .input-row:last-of-type{
+    margin-bottom:12px !important;
+  }
+
+  .app.players-2 .penalties{
+    margin-bottom:10px !important;
+  }
+}
+
+/* On taller screens, avoid leaving all extra space under the Add Round button by giving
+   the upper sections a slightly more relaxed rhythm. */
+@media (min-height:820px){
+  .app.players-2 .ui{
+    gap:20px !important;
+  }
+
+  .app.players-2 .input-row{
+    margin-bottom:20px !important;
+  }
+
+  .app.players-2 .penalties{
+    margin-bottom:16px !important;
+  }
+}
