@@ -13,10 +13,10 @@ type SyncStatus = "loading" | "synced" | "syncing" | "offline";
 type CloudGame = Game & { __sync?: { clientId: string; version: number } };
 
 const DEFAULT_PLAYERS: Player[] = [
-  { id: "p1", name: "You", color: "#ffd36b" },
-  { id: "p2", name: "GF", color: "#82efaa" },
-  { id: "p3", name: "Player 3", color: "#93c5fd" },
-  { id: "p4", name: "Player 4", color: "#f0abfc" }
+  { id: "p1", name: "You", color: "#050506" },
+  { id: "p2", name: "GF", color: "#625d69" },
+  { id: "p3", name: "Player 3", color: "#74837b" },
+  { id: "p4", name: "Player 4", color: "#392f37" }
 ];
 
 const STORAGE_KEY = "rummy500_clean_v51";

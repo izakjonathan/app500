@@ -631,3 +631,430 @@ body{
     min-height:50px !important;
   }
 }
+
+
+/* ===== V118 MUTED EDITORIAL UI - STABLE REBUILD =====
+   Built on V117, not on the broken V116 styling pass.
+   This keeps:
+   - players-2 / players-3 / players-4 root class
+   - app-level vertical scrolling
+   - floating bottom controls
+   - UI Studio/settings/game modals
+   - all scoring and sync functionality
+*/
+
+:root{
+  --editorial-ink:#050506;
+  --editorial-ink-soft:rgba(5,5,6,.62);
+  --editorial-ink-faint:rgba(5,5,6,.36);
+  --editorial-sage:#b9c7bb;
+  --editorial-lilac:#acaab6;
+  --editorial-mauve:#bbaeb8;
+  --editorial-panel:rgba(5,5,6,.065);
+  --editorial-panel-strong:rgba(5,5,6,.105);
+  --editorial-line:rgba(5,5,6,.11);
+  --editorial-line-strong:rgba(5,5,6,.2);
+  --editorial-shadow:0 16px 42px rgba(5,5,6,.14);
+}
+
+html,
+body{
+  background:
+    radial-gradient(circle at 14% 8%, rgba(235,241,232,.45), transparent 34%),
+    radial-gradient(circle at 88% 22%, rgba(205,194,207,.38), transparent 38%),
+    linear-gradient(120deg, var(--editorial-sage) 0%, var(--editorial-lilac) 52%, var(--editorial-mauve) 100%) !important;
+  color:var(--editorial-ink) !important;
+}
+
+.app{
+  color:var(--editorial-ink) !important;
+  background:transparent !important;
+}
+
+.bg{
+  background:
+    radial-gradient(circle at 18% 13%, rgba(244,248,240,.36), transparent 31%),
+    radial-gradient(circle at 86% 28%, rgba(210,197,209,.34), transparent 34%),
+    radial-gradient(circle at 14% 84%, rgba(145,159,149,.24), transparent 36%),
+    linear-gradient(120deg, var(--editorial-sage) 0%, var(--editorial-lilac) 52%, var(--editorial-mauve) 100%) !important;
+  background-color:var(--editorial-sage) !important;
+  filter:none !important;
+}
+
+.bg::before,
+.bg::after{
+  content:"" !important;
+  position:absolute !important;
+  pointer-events:none !important;
+}
+
+.bg::before{
+  width:118px !important;
+  height:106px !important;
+  right:14px !important;
+  top:28% !important;
+  border-radius:28px !important;
+  opacity:.32 !important;
+  background:repeating-linear-gradient(135deg, rgba(5,5,6,.14) 0 5px, transparent 5px 12px) !important;
+}
+
+.bg::after{
+  width:176px !important;
+  height:176px !important;
+  left:50% !important;
+  top:31% !important;
+  transform:translate(-50%, -12%) !important;
+  opacity:.27 !important;
+  border-radius:50% !important;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(5,5,6,.72) 0 14px, transparent 15px),
+    radial-gradient(circle at 30% 50%, rgba(5,5,6,.58) 0 14px, transparent 15px),
+    radial-gradient(circle at 70% 50%, rgba(5,5,6,.58) 0 14px, transparent 15px),
+    radial-gradient(circle at 50% 30%, rgba(5,5,6,.38) 0 14px, transparent 15px),
+    radial-gradient(circle at 50% 70%, rgba(5,5,6,.38) 0 14px, transparent 15px),
+    radial-gradient(circle at 22% 30%, rgba(5,5,6,.18) 0 14px, transparent 15px),
+    radial-gradient(circle at 78% 30%, rgba(5,5,6,.18) 0 14px, transparent 15px),
+    radial-gradient(circle at 22% 70%, rgba(5,5,6,.18) 0 14px, transparent 15px),
+    radial-gradient(circle at 78% 70%, rgba(5,5,6,.18) 0 14px, transparent 15px) !important;
+}
+
+.ui{
+  padding-top:calc(var(--safe-top) + 14px) !important;
+}
+
+.header{
+  grid-template-columns:minmax(0, 1.05fr) minmax(0, .95fr) !important;
+  gap:10px !important;
+  margin-bottom:6px !important;
+}
+
+.glass,
+.glass-soft{
+  color:var(--editorial-ink) !important;
+  background:var(--editorial-panel) !important;
+  border:1px solid var(--editorial-line) !important;
+  box-shadow:var(--editorial-shadow) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+.glass::before,
+.glass-soft::before{
+  display:none !important;
+}
+
+.pill{
+  min-height:46px !important;
+  height:46px !important;
+  justify-content:flex-start !important;
+  text-align:left !important;
+  color:var(--editorial-ink) !important;
+  background:rgba(5,5,6,.055) !important;
+  border-color:rgba(5,5,6,.085) !important;
+  border-radius:18px !important;
+  padding:0 14px !important;
+  font-weight:900 !important;
+  letter-spacing:-.06em !important;
+}
+
+.pill .sync-dot{
+  right:11px !important;
+}
+
+.scoreboard{
+  background:rgba(5,5,6,.05) !important;
+  border-color:rgba(5,5,6,.08) !important;
+  border-radius:28px !important;
+  padding:12px !important;
+}
+
+.label,
+.modal-title,
+.last-round-label,
+.sync-line,
+.analytics-grid span,
+.empty-sub,
+.last-round-hint{
+  color:var(--editorial-ink-faint) !important;
+}
+
+.label,
+.modal-title,
+.last-round-label{
+  letter-spacing:-.02em !important;
+  text-transform:none !important;
+  font-weight:900 !important;
+  text-align:left !important;
+  font-size:14px !important;
+}
+
+.scoreboard > .label{
+  font-size:clamp(22px, 6.4vw, 32px) !important;
+  line-height:.84 !important;
+  letter-spacing:-.085em !important;
+  color:var(--editorial-ink) !important;
+  margin:0 0 12px !important;
+}
+
+.player-card{
+  background:rgba(5,5,6,.075) !important;
+  border-color:rgba(5,5,6,.08) !important;
+  border-radius:24px !important;
+  box-shadow:none !important;
+}
+
+.ring{
+  color:var(--editorial-ink) !important;
+  border-width:0 !important;
+  width:38px !important;
+  height:38px !important;
+  background:var(--editorial-ink) !important;
+  color:rgba(255,255,255,.86) !important;
+  font-size:10px !important;
+  letter-spacing:-.04em !important;
+}
+
+.player-name,
+.input-name,
+.last-round-player-name{
+  color:var(--editorial-ink) !important;
+  font-weight:900 !important;
+  letter-spacing:-.055em !important;
+}
+
+.progress{
+  background:rgba(5,5,6,.11) !important;
+}
+
+.progress-fill{
+  background:var(--editorial-ink) !important;
+}
+
+.total.score-transition,
+.scoreboard .total,
+.player-card .total{
+  color:var(--editorial-ink) !important;
+  letter-spacing:-.09em !important;
+}
+
+.rounds-card{
+  background:rgba(5,5,6,.055) !important;
+  border-color:rgba(5,5,6,.085) !important;
+  border-radius:30px !important;
+  color:var(--editorial-ink) !important;
+  box-shadow:var(--editorial-shadow) !important;
+}
+
+.empty-title{
+  color:var(--editorial-ink) !important;
+  letter-spacing:-.075em !important;
+  line-height:.9 !important;
+}
+
+.last-round-grid{
+  color:var(--editorial-ink) !important;
+}
+
+.last-round-player-score{
+  color:var(--editorial-ink) !important;
+  letter-spacing:-.08em !important;
+}
+
+.input-row{
+  background:rgba(5,5,6,.06) !important;
+  border:1px solid rgba(5,5,6,.085) !important;
+  box-shadow:var(--editorial-shadow) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+.round-input{
+  color:var(--editorial-ink) !important;
+  font-weight:950 !important;
+}
+
+.round-input::placeholder{
+  color:rgba(5,5,6,.28) !important;
+}
+
+.icon-btn,
+.closed-toggle,
+.quick,
+.penalty,
+.add-round,
+.modal-btn,
+.primary,
+.segment button,
+.ui-studio-tabs button,
+.ui-control-row button,
+.ui-preset-grid button,
+.ui-studio-wide-btn{
+  background:rgba(5,5,6,.08) !important;
+  color:var(--editorial-ink) !important;
+  border:1px solid rgba(5,5,6,.075) !important;
+  box-shadow:none !important;
+}
+
+.icon-btn{
+  font-weight:950 !important;
+}
+
+.closed-toggle.active,
+.icon-btn.active,
+.segment button.selected,
+.ui-studio-tabs button.active{
+  background:var(--editorial-ink) !important;
+  color:rgba(255,255,255,.9) !important;
+}
+
+.quick{
+  font-weight:900 !important;
+  letter-spacing:-.04em !important;
+}
+
+.penalty{
+  background:rgba(5,5,6,.10) !important;
+  color:rgba(5,5,6,.72) !important;
+  font-weight:900 !important;
+}
+
+.add-round{
+  background:var(--editorial-ink) !important;
+  color:rgba(255,255,255,.92) !important;
+  border-color:rgba(5,5,6,.18) !important;
+  box-shadow:0 15px 40px rgba(5,5,6,.22) !important;
+}
+
+.add-round-plus{
+  background:rgba(255,255,255,.14) !important;
+  color:rgba(255,255,255,.92) !important;
+}
+
+.modal,
+.sheet,
+.typography-panel{
+  background:rgba(186,190,190,.94) !important;
+  color:var(--editorial-ink) !important;
+  border-color:rgba(5,5,6,.13) !important;
+  box-shadow:0 22px 70px rgba(5,5,6,.28) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+.modal-title{
+  text-align:left !important;
+  color:var(--editorial-ink) !important;
+  margin-bottom:10px !important;
+}
+
+.form-input{
+  background:rgba(5,5,6,.08) !important;
+  color:var(--editorial-ink) !important;
+}
+
+.form-input::placeholder{
+  color:rgba(5,5,6,.38) !important;
+}
+
+.history-item,
+.analytics-grid div,
+.type-control,
+.ui-control-row,
+.ui-studio-section{
+  background:rgba(5,5,6,.065) !important;
+  color:var(--editorial-ink) !important;
+  border-color:rgba(5,5,6,.08) !important;
+}
+
+/* Keep the V117 four-player behaviour after the visual overrides. */
+.app.players-4 .ui{
+  gap:8px !important;
+  padding-top:calc(var(--safe-top) + 8px) !important;
+}
+
+.app.players-4 .header{
+  gap:8px !important;
+  margin-bottom:4px !important;
+}
+
+.app.players-4 .pill{
+  min-height:42px !important;
+  height:42px !important;
+  border-radius:16px !important;
+  padding-inline:12px !important;
+  font-size:calc(var(--font-size-body, 14px) * .9) !important;
+}
+
+.app.players-4 .scoreboard{
+  padding:10px 11px 11px !important;
+  border-radius:26px !important;
+}
+
+.app.players-4 .scoreboard > .label{
+  font-size:clamp(20px, 5.8vw, 28px) !important;
+  margin-bottom:9px !important;
+}
+
+.app.players-4 .player-card{
+  min-height:50px !important;
+  padding:7px 11px !important;
+  margin-bottom:7px !important;
+  grid-template-columns:40px minmax(0,1fr) auto !important;
+  gap:9px !important;
+}
+
+.app.players-4 .ring{
+  width:34px !important;
+  height:34px !important;
+  font-size:9px !important;
+}
+
+.app.players-4 .rounds-card{
+  min-height:84px !important;
+  padding:12px 14px !important;
+  border-radius:26px !important;
+}
+
+.app.players-4 .input-row{
+  margin-bottom:9px !important;
+  padding:8px 10px 9px !important;
+  border-radius:22px !important;
+}
+
+.app.players-4 .input-main{
+  min-height:44px !important;
+  grid-template-columns:minmax(46px, 68px) 40px minmax(0,1fr) 40px !important;
+  gap:8px !important;
+}
+
+.app.players-4 .round-input{
+  height:40px !important;
+  min-height:40px !important;
+}
+
+.app.players-4 .icon-btn,
+.app.players-4 .closed-toggle{
+  width:40px !important;
+  height:40px !important;
+  min-width:40px !important;
+  min-height:40px !important;
+  max-width:40px !important;
+  max-height:40px !important;
+  border-radius:14px !important;
+  font-size:23px !important;
+}
+
+.app.players-4 .quick{
+  height:31px !important;
+  min-height:31px !important;
+}
+
+.app.players-4 .penalty{
+  height:32px !important;
+  min-height:32px !important;
+}
+
+.app.players-4 .add-round{
+  height:50px !important;
+  min-height:50px !important;
+}
