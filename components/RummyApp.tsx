@@ -13,10 +13,10 @@ type SyncStatus = "loading" | "synced" | "syncing" | "offline";
 type CloudGame = Game & { __sync?: { clientId: string; version: number } };
 
 const DEFAULT_PLAYERS: Player[] = [
-  { id: "p1", name: "You", color: "#2f5fff" },
-  { id: "p2", name: "GF", color: "#7e9cff" },
-  { id: "p3", name: "Player 3", color: "#f1b044" },
-  { id: "p4", name: "Player 4", color: "#ff5f64" }
+  { id: "p1", name: "You", color: "#143fd7" },
+  { id: "p2", name: "GF", color: "#143fd7" },
+  { id: "p3", name: "Player 3", color: "#143fd7" },
+  { id: "p4", name: "Player 4", color: "#143fd7" }
 ];
 
 const STORAGE_KEY = "rummy500_clean_v51";
@@ -25,24 +25,24 @@ const CLOUD_UPDATED_KEY = "rummy500_clean_v51_cloud_updated_at";
 const CLIENT_ID_KEY = "rummy500_clean_v51_client_id";
 const SAVE_DEBOUNCE_MS = 700;
 const PENDING_SYNC_KEY = "rummy500_clean_v52_pending_sync";
-const UI_STUDIO_STORAGE_PREFIX = "rummy500_v121_passport_ui";
+const UI_STUDIO_STORAGE_PREFIX = "rummy500_v122_simple_passport_ui";
 
 type UiStudioTab = "type" | "colors" | "space" | "radius" | "glass" | "layout" | "presets";
 
 const UI_STUDIO_DEFAULTS: Record<string, string> = {
-  "--font-size-caption": "9px",
-  "--font-size-body": "12px",
-  "--font-size-title": "16px",
-  "--font-size-display": "58px",
-  "--font-size-modal-title": "42px",
-  "--font-size-player-name": "13px",
-  "--font-size-input-name": "12px",
+  "--font-size-caption": "8px",
+  "--font-size-body": "11px",
+  "--font-size-title": "14px",
+  "--font-size-display": "52px",
+  "--font-size-modal-title": "44px",
+  "--font-size-player-name": "18px",
+  "--font-size-input-name": "10px",
   "--font-size-input": "30px",
   "--font-size-score": "54px",
-  "--font-size-button": "16px",
-  "--font-weight-label": "800",
+  "--font-size-button": "13px",
+  "--font-weight-label": "850",
   "--font-weight-body": "650",
-  "--font-weight-title": "850",
+  "--font-weight-title": "780",
   "--font-weight-score": "900",
   "--space-sm": "7px",
   "--space-md": "10px",
@@ -51,31 +51,31 @@ const UI_STUDIO_DEFAULTS: Record<string, string> = {
   "--radius-lg": "0px",
   "--radius-xl": "0px",
   "--glass-blur": "0px",
-  "--glass-opacity": "0.02",
-  "--glass-border-strength": "0.22",
-  "--glass-shadow-strength": "0.28",
-  "--ui-density-scale": "0.96",
-  "--ui-bg": "#02030a",
-  "--ui-bg-a": "#060914",
-  "--ui-bg-b": "#0a1228",
-  "--ui-bg-c": "#2f5fff",
-  "--ui-bg-d": "#8a5cff",
-  "--ui-grid": "#2f5fff",
-  "--ui-panel-bg": "#050712",
-  "--ui-panel-line": "#2f5fff",
-  "--ui-text": "#2f5fff",
-  "--ui-muted": "#6f84d8",
-  "--ui-on-dark-primary": "#2f5fff",
-  "--ui-on-dark-secondary": "#7e9cff",
-  "--ui-button-bg": "#2f5fff",
-  "--ui-button-text": "#02030a",
-  "--ui-input-bg": "#02030a",
-  "--ui-input-text": "#2f5fff",
-  "--ui-rounds-bg": "#050712",
-  "--ui-card-1": "#2f5fff",
-  "--ui-card-2": "#7e9cff",
-  "--ui-card-3": "#f1b044",
-  "--ui-card-4": "#ff5f64"
+  "--glass-opacity": "1",
+  "--glass-border-strength": "1",
+  "--glass-shadow-strength": "0.15",
+  "--ui-density-scale": "0.95",
+  "--ui-bg": "#120e09",
+  "--ui-bg-a": "#120e09",
+  "--ui-bg-b": "#23170d",
+  "--ui-bg-c": "#f3f1e8",
+  "--ui-bg-d": "#143fd7",
+  "--ui-grid": "#143fd7",
+  "--ui-panel-bg": "#f3f1e8",
+  "--ui-panel-line": "#143fd7",
+  "--ui-text": "#143fd7",
+  "--ui-muted": "#4760b5",
+  "--ui-on-dark-primary": "#143fd7",
+  "--ui-on-dark-secondary": "#4760b5",
+  "--ui-button-bg": "#143fd7",
+  "--ui-button-text": "#f3f1e8",
+  "--ui-input-bg": "#f3f1e8",
+  "--ui-input-text": "#143fd7",
+  "--ui-rounds-bg": "#f3f1e8",
+  "--ui-card-1": "#143fd7",
+  "--ui-card-2": "#143fd7",
+  "--ui-card-3": "#143fd7",
+  "--ui-card-4": "#143fd7"
 };
 
 const UI_STUDIO_PLAYER_COLOR_VARS: Record<string, number> = {
@@ -94,10 +94,10 @@ const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
   Default: UI_STUDIO_DEFAULTS,
   Compact: {
     ...UI_STUDIO_DEFAULTS,
-    "--font-size-caption": "9px",
-    "--font-size-body": "12px",
+    "--font-size-caption": "8px",
+    "--font-size-body": "11px",
     "--font-size-title": "15px",
-    "--font-size-display": "58px",
+    "--font-size-display": "52px",
     "--font-size-input": "29px",
     "--font-size-score": "48px",
     "--space-sm": "6px",
@@ -122,7 +122,7 @@ const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
     ...UI_STUDIO_DEFAULTS,
     "--glass-blur": "22px",
     "--glass-opacity": "0.09",
-    "--glass-border-strength": "0.22",
+    "--glass-border-strength": "1",
     "--glass-shadow-strength": "0.55"
   }
 };
@@ -191,23 +191,45 @@ function getShareUrl(game: Game) {
 
 type ScoreboardProps = { game: Game; scoreTotals: Record<string, number> };
 const Scoreboard = memo(function Scoreboard({ game, scoreTotals }: ScoreboardProps) {
+  const activeRoundCount = activeRounds(game.rounds).length;
+  const starterName = game.players.find((player) => player.id === game.starterId)?.name || "—";
+
   return (
-    <section className="glass scoreboard scoreboard-stable">
-      <div className="label">Rummy 500</div>
-      {game.players.map((player) => {
-        const total = scoreTotals[player.id] || 0;
-        const progress = Math.max(0, Math.min(100, Math.round((total / game.targetScore) * 100)));
-        return (
-          <div key={player.id} className="glass-soft player-card score-transition">
-            <div className="ring" style={{ color: player.color }}>{progress}%</div>
-            <div>
+    <section className="glass scoreboard scoreboard-stable passport-scoreboard">
+      <div className="passport-score-head">
+        <div className="passport-mark" aria-hidden="true">
+          {Array.from({ length: 12 }, (_, index) => <span key={index} />)}
+        </div>
+        <div className="passport-title-block">
+          <div className="label">Rummy 500</div>
+          <div className="passport-title">Score<br />Passport</div>
+        </div>
+      </div>
+
+      <div className="passport-meta-grid">
+        <div><span>Game</span><strong>{game.gameName || "No game"}</strong></div>
+        <div><span>Target</span><strong>{game.targetScore}</strong></div>
+        <div><span>Round</span><strong>{activeRoundCount}</strong></div>
+        <div className="passport-starter"><span>Starter</span><strong>{starterName}</strong></div>
+      </div>
+
+      <div className="passport-player-list">
+        {game.players.map((player, index) => {
+          const total = scoreTotals[player.id] || 0;
+          const progress = Math.max(0, Math.min(100, Math.round((total / game.targetScore) * 100)));
+          return (
+            <div key={player.id} className="glass-soft player-card score-transition" style={{ "--player-color": player.color } as React.CSSProperties}>
+              <div className="player-card-top">
+                <span>{`Player ${String(index + 1).padStart(2, "0")}`}</span>
+                <span>{progress}%</span>
+              </div>
               <div className="player-name">{player.name}</div>
-              <div className="progress"><div className="progress-fill" style={{ width: `${progress}%`, background: player.color }} /></div>
+              <div className="total score-transition">{total}</div>
+              <div className="passport-rule"><span style={{ width: `${progress}%` }} /></div>
             </div>
-            <div className="total score-transition">{total}</div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </section>
   );
 });
