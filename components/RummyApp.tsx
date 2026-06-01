@@ -13,10 +13,10 @@ type SyncStatus = "loading" | "synced" | "syncing" | "offline";
 type CloudGame = Game & { __sync?: { clientId: string; version: number } };
 
 const DEFAULT_PLAYERS: Player[] = [
-  { id: "p1", name: "You", color: "#050506" },
-  { id: "p2", name: "GF", color: "#625d69" },
-  { id: "p3", name: "Player 3", color: "#74837b" },
-  { id: "p4", name: "Player 4", color: "#392f37" }
+  { id: "p1", name: "You", color: "#eaff1a" },
+  { id: "p2", name: "GF", color: "#ff8acb" },
+  { id: "p3", name: "Player 3", color: "#ff4b4b" },
+  { id: "p4", name: "Player 4", color: "#aa8cff" }
 ];
 
 const STORAGE_KEY = "rummy500_clean_v51";
@@ -155,7 +155,7 @@ type ScoreboardProps = { game: Game; scoreTotals: Record<string, number> };
 const Scoreboard = memo(function Scoreboard({ game, scoreTotals }: ScoreboardProps) {
   return (
     <section className="glass scoreboard scoreboard-stable">
-      <div className="label">Scoreboard</div>
+      <div className="label">Rummy 500</div>
       {game.players.map((player) => {
         const total = scoreTotals[player.id] || 0;
         const progress = Math.max(0, Math.min(100, Math.round((total / game.targetScore) * 100)));

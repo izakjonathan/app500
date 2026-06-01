@@ -2,8 +2,8 @@
   "name": "Rummy 500",
   "short_name": "Rummy",
   "display": "standalone",
-  "background_color": "#b9c7bb",
-  "theme_color": "#b9c7bb",
+  "background_color": "#050006",
+  "theme_color": "#050006",
   "start_url": "/",
   "scope": "/",
   "icons": []
