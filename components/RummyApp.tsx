@@ -13,10 +13,10 @@ type SyncStatus = "loading" | "synced" | "syncing" | "offline";
 type CloudGame = Game & { __sync?: { clientId: string; version: number } };
 
 const DEFAULT_PLAYERS: Player[] = [
-  { id: "p1", name: "You", color: "#143fd7" },
-  { id: "p2", name: "GF", color: "#143fd7" },
-  { id: "p3", name: "Player 3", color: "#143fd7" },
-  { id: "p4", name: "Player 4", color: "#143fd7" }
+  { id: "p1", name: "You", color: "#ffd36b" },
+  { id: "p2", name: "GF", color: "#82efaa" },
+  { id: "p3", name: "Player 3", color: "#93c5fd" },
+  { id: "p4", name: "Player 4", color: "#f0abfc" }
 ];
 
 const STORAGE_KEY = "rummy500_clean_v51";
@@ -25,81 +25,43 @@ const CLOUD_UPDATED_KEY = "rummy500_clean_v51_cloud_updated_at";
 const CLIENT_ID_KEY = "rummy500_clean_v51_client_id";
 const SAVE_DEBOUNCE_MS = 700;
 const PENDING_SYNC_KEY = "rummy500_clean_v52_pending_sync";
-const UI_STUDIO_STORAGE_PREFIX = "rummy500_v123_minimal_passport_ui";
 
-type UiStudioTab = "type" | "colors" | "space" | "radius" | "glass" | "layout" | "presets";
+type UiStudioTab = "type" | "space" | "radius" | "glass" | "layout" | "presets";
 
 const UI_STUDIO_DEFAULTS: Record<string, string> = {
-  "--font-size-caption": "8px",
-  "--font-size-body": "10px",
-  "--font-size-title": "12px",
-  "--font-size-display": "43px",
-  "--font-size-modal-title": "40px",
-  "--font-size-player-name": "13px",
-  "--font-size-input-name": "8px",
-  "--font-size-input": "26px",
-  "--font-size-score": "48px",
-  "--font-size-button": "12px",
-  "--font-weight-label": "850",
-  "--font-weight-body": "650",
-  "--font-weight-title": "780",
+  "--font-size-caption": "10px",
+  "--font-size-body": "14px",
+  "--font-size-title": "16px",
+  "--font-size-display": "28px",
+  "--font-size-input": "34px",
+  "--font-size-score": "42px",
+  "--font-weight-label": "700",
+  "--font-weight-body": "600",
+  "--font-weight-title": "800",
   "--font-weight-score": "900",
-  "--space-sm": "7px",
-  "--space-md": "10px",
-  "--space-lg": "14px",
-  "--radius-sm": "0px",
-  "--radius-lg": "0px",
-  "--radius-xl": "0px",
-  "--glass-blur": "0px",
-  "--glass-opacity": "1",
-  "--glass-border-strength": "1",
-  "--glass-shadow-strength": "0.15",
-  "--ui-density-scale": "0.95",
-  "--ui-bg": "#050403",
-  "--ui-bg-a": "#050403",
-  "--ui-bg-b": "#12100a",
-  "--ui-bg-c": "#efeee6",
-  "--ui-bg-d": "#143fd7",
-  "--ui-grid": "#143fd7",
-  "--ui-panel-bg": "#efeee6",
-  "--ui-panel-line": "#143fd7",
-  "--ui-text": "#143fd7",
-  "--ui-muted": "#4760b5",
-  "--ui-on-dark-primary": "#143fd7",
-  "--ui-on-dark-secondary": "#4760b5",
-  "--ui-button-bg": "#143fd7",
-  "--ui-button-text": "#efeee6",
-  "--ui-input-bg": "#efeee6",
-  "--ui-input-text": "#143fd7",
-  "--ui-rounds-bg": "#efeee6",
-  "--ui-card-1": "#143fd7",
-  "--ui-card-2": "#143fd7",
-  "--ui-card-3": "#143fd7",
-  "--ui-card-4": "#143fd7"
+  "--space-sm": "8px",
+  "--space-md": "12px",
+  "--space-lg": "16px",
+  "--radius-sm": "12px",
+  "--radius-lg": "24px",
+  "--radius-xl": "32px",
+  "--glass-blur": "12px",
+  "--glass-opacity": "0.06",
+  "--glass-border-strength": "0.16",
+  "--glass-shadow-strength": "0.44",
+  "--ui-density-scale": "1"
 };
-
-const UI_STUDIO_PLAYER_COLOR_VARS: Record<string, number> = {
-  "--ui-card-1": 0,
-  "--ui-card-2": 1,
-  "--ui-card-3": 2,
-  "--ui-card-4": 3
-};
-
-function isHexColor(value: string) {
-  return /^#[0-9a-fA-F]{6}$/.test(value);
-}
-
 
 const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
   Default: UI_STUDIO_DEFAULTS,
   Compact: {
     ...UI_STUDIO_DEFAULTS,
-    "--font-size-caption": "8px",
-    "--font-size-body": "11px",
+    "--font-size-caption": "9px",
+    "--font-size-body": "12px",
     "--font-size-title": "15px",
-    "--font-size-display": "52px",
-    "--font-size-input": "29px",
-    "--font-size-score": "48px",
+    "--font-size-display": "24px",
+    "--font-size-input": "30px",
+    "--font-size-score": "38px",
     "--space-sm": "6px",
     "--space-md": "10px",
     "--space-lg": "13px",
@@ -110,9 +72,9 @@ const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
     "--font-size-caption": "11px",
     "--font-size-body": "15px",
     "--font-size-title": "18px",
-    "--font-size-display": "76px",
-    "--font-size-input": "38px",
-    "--font-size-score": "66px",
+    "--font-size-display": "32px",
+    "--font-size-input": "40px",
+    "--font-size-score": "50px",
     "--space-sm": "10px",
     "--space-md": "14px",
     "--space-lg": "20px",
@@ -122,7 +84,7 @@ const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
     ...UI_STUDIO_DEFAULTS,
     "--glass-blur": "22px",
     "--glass-opacity": "0.09",
-    "--glass-border-strength": "1",
+    "--glass-border-strength": "0.22",
     "--glass-shadow-strength": "0.55"
   }
 };
@@ -191,36 +153,23 @@ function getShareUrl(game: Game) {
 
 type ScoreboardProps = { game: Game; scoreTotals: Record<string, number> };
 const Scoreboard = memo(function Scoreboard({ game, scoreTotals }: ScoreboardProps) {
-  const activeRoundCount = activeRounds(game.rounds).length;
-  const starterName = game.players.find((player) => player.id === game.starterId)?.name || "—";
-
   return (
-    <section className="glass scoreboard scoreboard-stable passport-scoreboard">
-      <div className="passport-score-head simple-score-head">
-        <div className="passport-title-block">
-          <div className="label">Rummy 500</div>
-          <div className="passport-title">Score Passport</div>
-        </div>
-      </div>
-
-      <div className="passport-meta-grid">
-        <div><span>Game</span><strong>{game.gameName || "No game"}</strong></div>
-        <div><span>Target</span><strong>{game.targetScore}</strong></div>
-        <div><span>Round</span><strong>{activeRoundCount}</strong></div>
-        <div className="passport-starter"><span>Starter</span><strong>{starterName}</strong></div>
-      </div>
-
-      <div className="passport-player-list">
-        {game.players.map((player) => {
-          const total = scoreTotals[player.id] || 0;
-          return (
-            <div key={player.id} className="glass-soft player-card score-transition" style={{ "--player-color": player.color } as React.CSSProperties}>
+    <section className="glass scoreboard scoreboard-stable">
+      <div className="label">Scoreboard</div>
+      {game.players.map((player) => {
+        const total = scoreTotals[player.id] || 0;
+        const progress = Math.max(0, Math.min(100, Math.round((total / game.targetScore) * 100)));
+        return (
+          <div key={player.id} className="glass-soft player-card score-transition">
+            <div className="ring" style={{ color: player.color }}>{progress}%</div>
+            <div>
               <div className="player-name">{player.name}</div>
-              <div className="total score-transition">{total}</div>
+              <div className="progress"><div className="progress-fill" style={{ width: `${progress}%`, background: player.color }} /></div>
             </div>
-          );
-        })}
-      </div>
+            <div className="total score-transition">{total}</div>
+          </div>
+        );
+      })}
     </section>
   );
 });
@@ -572,26 +521,8 @@ export default function RummyApp() {
     setUiValues((previous) => ({ ...previous, [name]: value }));
 
     try {
-      localStorage.setItem(`${UI_STUDIO_STORAGE_PREFIX}-${name}`, value);
+      localStorage.setItem(`rummy-type-${name}`, value);
     } catch {}
-  }
-
-  function colorValue(name: string, fallback = "#000000") {
-    const value = uiValue(name);
-    return isHexColor(value) ? value : fallback;
-  }
-
-  function setUiColor(name: string, value: string) {
-    const nextValue = value.trim();
-    setUiVar(name, nextValue);
-
-    const playerIndex = UI_STUDIO_PLAYER_COLOR_VARS[name];
-    if (typeof playerIndex === "number") {
-      setGame((previous) => ({
-        ...previous,
-        players: previous.players.map((player, index) => index === playerIndex ? { ...player, color: nextValue } : player)
-      }));
-    }
   }
 
   function editUiVar(name: string, fallback: string) {
@@ -599,11 +530,7 @@ export default function RummyApp() {
     const value = typeof window !== "undefined" ? window.prompt(`Set ${name}`, current) : null;
     if (!value) return;
 
-    if (name.startsWith("--ui-")) {
-      setUiColor(name, value.trim());
-    } else {
-      setUiVar(name, value.trim());
-    }
+    setUiVar(name, value.trim());
   }
 
   function adjustUiVar(
@@ -628,10 +555,7 @@ export default function RummyApp() {
   }
 
   function applyUiPreset(values: Record<string, string>) {
-    Object.entries(values).forEach(([name, value]) => {
-      if (name.startsWith("--ui-")) setUiColor(name, value);
-      else setUiVar(name, value);
-    });
+    Object.entries(values).forEach(([name, value]) => setUiVar(name, value));
   }
 
   function getStoredUiPresets(): Record<string, Record<string, string>> {
@@ -722,7 +646,7 @@ export default function RummyApp() {
 
     Object.keys(UI_STUDIO_DEFAULTS).forEach((name) => {
       try {
-        const saved = localStorage.getItem(`${UI_STUDIO_STORAGE_PREFIX}-${name}`);
+        const saved = localStorage.getItem(`rummy-type-${name}`);
         const value = saved || UI_STUDIO_DEFAULTS[name];
         nextValues[name] = value;
         document.documentElement.style.setProperty(name, value);
@@ -784,13 +708,28 @@ export default function RummyApp() {
                 <div className="empty-sub">Tap to view round history</div>
               </>
             ) : (
-              <div className="rounds-summary-line">
-                <span>Round {rounds.length}</span>
-                <strong>Last: {game.players.map((player) => {
-                  const value = Number(latestRound?.scores[player.id] || 0) + (latestRound?.closedBy === player.id ? 15 : 0);
-                  return `${player.name} ${signed(value)}`;
-                }).join(" · ")}</strong>
-              </div>
+              <>
+                <div className="last-round-top centered">
+                  <div className="last-round-label">LAST ROUND #{rounds.length}</div>
+                </div>
+
+                <div
+                  className="last-round-grid"
+                  style={{ gridTemplateColumns: `repeat(${game.players.length}, minmax(0, 1fr))` }}
+                >
+                  {game.players.map((player) => {
+                    const value = Number(latestRound?.scores[player.id] || 0) + (latestRound?.closedBy === player.id ? 15 : 0);
+                    return (
+                      <div key={player.id} className="last-round-player">
+                        <div className="last-round-player-name" style={{ color: player.color }}>{player.name}</div>
+                        <div className="last-round-player-score">{signed(value)}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="last-round-hint">Tap for full rounds overview</div>
+              </>
             )}
           </button>
         </section>
@@ -831,6 +770,7 @@ export default function RummyApp() {
             <button type="button" onClick={shareGame} className="glass-soft modal-btn share-game-btn">
               {shareStatus === "copied" ? "Copied link" : shareStatus === "shared" ? "Shared" : "Share current game"}
             </button>
+            <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn">UI Studio</button>
             <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn typography-settings-button">UI Studio</button>
             <div className="modal-grid">
               <button type="button" onClick={undo} className="glass-soft modal-btn">Undo</button>
@@ -875,7 +815,6 @@ export default function RummyApp() {
             <div className="ui-studio-tabs">
               {[
                 ["type", "Type"],
-                ["colors", "Colors"],
                 ["space", "Space"],
                 ["radius", "Radius"],
                 ["glass", "Glass"],
@@ -897,15 +836,12 @@ export default function RummyApp() {
               <div className="ui-studio-page">
                 <div className="ui-studio-section">Font sizes</div>
                 {[
-                  ["Tiny labels", "--font-size-caption", 1, 10, "px", 6, 22],
-                  ["Body text", "--font-size-body", 1, 13, "px", 8, 28],
-                  ["Player names", "--font-size-player-name", 1, 13, "px", 8, 30],
-                  ["Dock names", "--font-size-input-name", 1, 13, "px", 8, 26],
-                  ["Buttons", "--font-size-button", 1, 18, "px", 10, 36],
-                  ["App title", "--font-size-display", 1, 68, "px", 28, 104],
-                  ["Modal title", "--font-size-modal-title", 1, 46, "px", 24, 86],
-                  ["Round input", "--font-size-input", 1, 32, "px", 18, 70],
-                  ["Total score", "--font-size-score", 1, 56, "px", 24, 96]
+                  ["Caption", "--font-size-caption", 1, 10, "px", 6, 20],
+                  ["Body", "--font-size-body", 1, 14, "px", 8, 26],
+                  ["Title", "--font-size-title", 1, 16, "px", 10, 32],
+                  ["Display", "--font-size-display", 1, 28, "px", 14, 54],
+                  ["Input", "--font-size-input", 1, 34, "px", 20, 70],
+                  ["Total score", "--font-size-score", 1, 42, "px", 24, 82]
                 ].map(([label, name, step, fallback, unit, min, max]) => (
                   <div key={String(name)} className="ui-control-row">
                     <span>{label}</span>
@@ -929,79 +865,6 @@ export default function RummyApp() {
                     <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || String(fallback))}>{uiValue(String(name))}</button>
                     <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), "number", 100, 950)}>+</button>
                     <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {uiStudioTab === "colors" && (
-              <div className="ui-studio-page">
-                <div className="ui-studio-section">Background</div>
-                {[
-                  ["App black", "--ui-bg", "#050006"],
-                  ["BG color 1", "--ui-bg-a", "#e884c9"],
-                  ["BG color 2", "--ui-bg-b", "#ff4b4f"],
-                  ["BG glow", "--ui-bg-c", "#eaff1a"],
-                  ["BG accent", "--ui-bg-d", "#315cff"],
-                  ["Grid lines", "--ui-grid", "#050006"]
-                ].map(([label, name, fallback]) => (
-                  <div key={String(name)} className="ui-control-row ui-color-row">
-                    <span>{label}</span>
-                    <input
-                      type="color"
-                      value={colorValue(String(name), String(fallback))}
-                      onChange={(event) => setUiColor(String(name), event.target.value)}
-                      aria-label={`${label} color`}
-                    />
-                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), String(fallback))}>{uiValue(String(name))}</button>
-                    <button type="button" className="mini-reset" onClick={() => setUiColor(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
-                  </div>
-                ))}
-
-                <div className="ui-studio-section">Main UI</div>
-                {[
-                  ["Panel bg", "--ui-panel-bg", "#050006"],
-                  ["Panel line", "--ui-panel-line", "#eaff1a"],
-                  ["Dark text", "--ui-text", "#050006"],
-                  ["Muted text", "--ui-muted", "#4c1b3e"],
-                  ["On dark primary", "--ui-on-dark-primary", "#eaff1a"],
-                  ["On dark secondary", "--ui-on-dark-secondary", "#e884c9"],
-                  ["Button bg", "--ui-button-bg", "#eaff1a"],
-                  ["Button text", "--ui-button-text", "#050006"],
-                  ["Input bg", "--ui-input-bg", "#eaff1a"],
-                  ["Input text", "--ui-input-text", "#050006"],
-                  ["Rounds card", "--ui-rounds-bg", "#ffb000"]
-                ].map(([label, name, fallback]) => (
-                  <div key={String(name)} className="ui-control-row ui-color-row">
-                    <span>{label}</span>
-                    <input
-                      type="color"
-                      value={colorValue(String(name), String(fallback))}
-                      onChange={(event) => setUiColor(String(name), event.target.value)}
-                      aria-label={`${label} color`}
-                    />
-                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), String(fallback))}>{uiValue(String(name))}</button>
-                    <button type="button" className="mini-reset" onClick={() => setUiColor(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
-                  </div>
-                ))}
-
-                <div className="ui-studio-section">Player cards</div>
-                {[
-                  ["Player 1", "--ui-card-1", "#eaff1a"],
-                  ["Player 2", "--ui-card-2", "#e884c9"],
-                  ["Player 3", "--ui-card-3", "#ff4b4f"],
-                  ["Player 4", "--ui-card-4", "#aa8cff"]
-                ].map(([label, name, fallback]) => (
-                  <div key={String(name)} className="ui-control-row ui-color-row">
-                    <span>{label}</span>
-                    <input
-                      type="color"
-                      value={colorValue(String(name), String(fallback))}
-                      onChange={(event) => setUiColor(String(name), event.target.value)}
-                      aria-label={`${label} color`}
-                    />
-                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), String(fallback))}>{uiValue(String(name))}</button>
-                    <button type="button" className="mini-reset" onClick={() => setUiColor(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
                   </div>
                 ))}
               </div>

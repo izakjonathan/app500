@@ -73,7 +73,7 @@ input {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background-image: none;
+  background-image: url("/bg.jpg");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -944,7 +944,7 @@ body {
   width: 100vw !important;
   min-height: 100svh !important;
   height: 100svh !important;
-  background-image: none !important;
+  background-image: url("/bg.jpg") !important;
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
