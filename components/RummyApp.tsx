@@ -46,6 +46,12 @@ const UI_STUDIO_DEFAULTS: Record<string, string> = {
   "--blueprint-section-gap": "16px",
   "--blueprint-section-gap-tight": "12px",
   "--blueprint-input-gap": "15px",
+  "--top-section-gap": "16px",
+  "--scoreboard-gap": "16px",
+  "--last-round-gap": "8px",
+  "--input-card-gap": "18px",
+  "--penalty-gap": "14px",
+  "--bottom-gap": "12px",
   "--passport-blue": "#244cdd",
   "--passport-bg": "#efe9dc",
   "--passport-muted": "rgba(36,76,221,.38)"
@@ -64,7 +70,13 @@ const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
     "--ui-density-scale": "0.9",
     "--blueprint-section-gap": "12px",
     "--blueprint-section-gap-tight": "9px",
-    "--blueprint-input-gap": "11px"
+    "--blueprint-input-gap": "11px",
+    "--top-section-gap": "12px",
+    "--scoreboard-gap": "12px",
+    "--last-round-gap": "5px",
+    "--input-card-gap": "14px",
+    "--penalty-gap": "10px",
+    "--bottom-gap": "8px"
   },
   Large: {
     ...UI_STUDIO_DEFAULTS,
@@ -77,7 +89,13 @@ const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
     "--ui-density-scale": "1.12",
     "--blueprint-section-gap": "20px",
     "--blueprint-section-gap-tight": "16px",
-    "--blueprint-input-gap": "20px"
+    "--blueprint-input-gap": "20px",
+    "--top-section-gap": "20px",
+    "--scoreboard-gap": "20px",
+    "--last-round-gap": "10px",
+    "--input-card-gap": "22px",
+    "--penalty-gap": "16px",
+    "--bottom-gap": "14px"
   }
 };
 
@@ -863,11 +881,26 @@ export default function RummyApp() {
 
             {uiStudioTab === "space" && (
               <div className="ui-studio-page">
-                <div className="ui-studio-section">Spacing</div>
+                <div className="ui-studio-section">Main section gaps</div>
                 {[
-                  ["Section gap", "--blueprint-section-gap", 1, 16, 6, 32],
-                  ["Tight gap", "--blueprint-section-gap-tight", 1, 12, 4, 24],
-                  ["Input gap", "--blueprint-input-gap", 1, 15, 6, 30]
+                  ["Top gap", "--top-section-gap", 1, 16, 4, 30],
+                  ["Score gap", "--scoreboard-gap", 1, 16, 4, 30],
+                  ["Last → Controls", "--last-round-gap", 1, 8, 0, 24]
+                ].map(([label, name, step, fallback, min, max]) => (
+                  <div key={String(name)} className="ui-control-row">
+                    <span>{label}</span>
+                    <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), "px", Number(min), Number(max))}>−</button>
+                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || `${fallback}px`)}>{uiValue(String(name))}</button>
+                    <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), "px", Number(min), Number(max))}>+</button>
+                    <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
+                  </div>
+                ))}
+
+                <div className="ui-studio-section">Bottom gaps</div>
+                {[
+                  ["Input cards", "--input-card-gap", 1, 18, 6, 32],
+                  ["Penalty gap", "--penalty-gap", 1, 14, 4, 28],
+                  ["Bottom gap", "--bottom-gap", 1, 12, 0, 28]
                 ].map(([label, name, step, fallback, min, max]) => (
                   <div key={String(name)} className="ui-control-row">
                     <span>{label}</span>

@@ -818,3 +818,131 @@ body{
     padding-top:7px !important;
   }
 }
+
+
+/* ===== V125 SPACING CONTROL SPLIT =====
+   Adds separate UI Studio controls for:
+   --top-section-gap       Header/top pills → scoreboard
+   --scoreboard-gap        Scoreboard → Last Round
+   --last-round-gap        Last Round → first point-control card
+   --input-card-gap        Between point-control cards
+   --penalty-gap           Input controls → penalty/Add Round section
+   --bottom-gap            Bottom safe-area breathing room
+*/
+
+:root{
+  --top-section-gap:16px;
+  --scoreboard-gap:16px;
+  --last-round-gap:8px;
+  --input-card-gap:18px;
+  --penalty-gap:14px;
+  --bottom-gap:12px;
+}
+
+.header{
+  margin-bottom:var(--top-section-gap) !important;
+}
+
+.scoreboard{
+  margin-bottom:var(--scoreboard-gap) !important;
+}
+
+.rounds{
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+
+.rounds-card{
+  margin-bottom:0 !important;
+}
+
+.dock{
+  padding-top:var(--last-round-gap) !important;
+  padding-bottom:calc(max(env(safe-area-inset-bottom, 0px), 0px) + var(--bottom-gap)) !important;
+}
+
+.input-row{
+  margin-bottom:var(--input-card-gap) !important;
+}
+
+.dock-panel > .input-row:first-child{
+  margin-top:0 !important;
+}
+
+.dock-panel > .input-row:last-of-type{
+  margin-bottom:var(--penalty-gap) !important;
+}
+
+.penalties{
+  margin-top:0 !important;
+  margin-bottom:var(--penalty-gap) !important;
+}
+
+.app.players-2 .header{
+  margin-bottom:var(--top-section-gap) !important;
+}
+
+.app.players-2 .scoreboard{
+  margin-bottom:var(--scoreboard-gap) !important;
+}
+
+.app.players-2 .dock{
+  padding-top:var(--last-round-gap) !important;
+  padding-bottom:calc(max(env(safe-area-inset-bottom, 0px), 0px) + var(--bottom-gap)) !important;
+}
+
+.app.players-2 .input-row{
+  margin-bottom:var(--input-card-gap) !important;
+}
+
+.app.players-2 .dock-panel > .input-row:last-of-type{
+  margin-bottom:var(--penalty-gap) !important;
+}
+
+.app.players-2 .penalties{
+  margin-bottom:var(--penalty-gap) !important;
+}
+
+.app.players-4 .header{
+  margin-bottom:calc(var(--top-section-gap) * .7) !important;
+}
+
+.app.players-4 .scoreboard{
+  margin-bottom:calc(var(--scoreboard-gap) * .7) !important;
+}
+
+.app.players-4 .dock{
+  padding-top:calc(var(--last-round-gap) * .75) !important;
+}
+
+.app.players-4 .input-row{
+  margin-bottom:calc(var(--input-card-gap) * .75) !important;
+}
+
+.app.players-4 .dock-panel > .input-row:last-of-type,
+.app.players-4 .penalties{
+  margin-bottom:calc(var(--penalty-gap) * .75) !important;
+}
+
+@media (max-height:760px){
+  .header{
+    margin-bottom:calc(var(--top-section-gap) * .75) !important;
+  }
+
+  .scoreboard{
+    margin-bottom:calc(var(--scoreboard-gap) * .75) !important;
+  }
+
+  .dock{
+    padding-top:calc(var(--last-round-gap) * .75) !important;
+  }
+
+  .input-row{
+    margin-bottom:calc(var(--input-card-gap) * .75) !important;
+  }
+
+  .penalties,
+  .dock-panel > .input-row:last-of-type{
+    margin-bottom:calc(var(--penalty-gap) * .75) !important;
+  }
+}
