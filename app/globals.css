@@ -723,3 +723,13 @@ body{
     margin-bottom:16px !important;
   }
 }
+
+
+/* ===== V123 SPACING CONTROLS CONSOLIDATED =====
+   UI Studio now exposes only spacing variables that are actually used:
+   --blueprint-section-gap
+   --blueprint-section-gap-tight
+   --blueprint-input-gap
+
+   Removed legacy UI Studio spacing controls from the active system.
+*/

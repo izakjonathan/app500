@@ -39,13 +39,13 @@ const UI_STUDIO_DEFAULTS: Record<string, string> = {
   "--font-weight-body": "600",
   "--font-weight-title": "800",
   "--font-weight-score": "900",
-  "--space-sm": "8px",
-  "--space-md": "12px",
-  "--space-lg": "16px",
   "--radius-sm": "12px",
   "--radius-lg": "24px",
   "--radius-xl": "32px",
   "--ui-density-scale": "1",
+  "--blueprint-section-gap": "16px",
+  "--blueprint-section-gap-tight": "12px",
+  "--blueprint-input-gap": "15px",
   "--passport-blue": "#244cdd",
   "--passport-bg": "#efe9dc",
   "--passport-muted": "rgba(36,76,221,.38)"
@@ -61,10 +61,10 @@ const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
     "--font-size-display": "24px",
     "--font-size-input": "30px",
     "--font-size-score": "38px",
-    "--space-sm": "6px",
-    "--space-md": "10px",
-    "--space-lg": "13px",
-    "--ui-density-scale": "0.9"
+    "--ui-density-scale": "0.9",
+    "--blueprint-section-gap": "12px",
+    "--blueprint-section-gap-tight": "9px",
+    "--blueprint-input-gap": "11px"
   },
   Large: {
     ...UI_STUDIO_DEFAULTS,
@@ -74,10 +74,10 @@ const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
     "--font-size-display": "32px",
     "--font-size-input": "40px",
     "--font-size-score": "50px",
-    "--space-sm": "10px",
-    "--space-md": "14px",
-    "--space-lg": "20px",
-    "--ui-density-scale": "1.12"
+    "--ui-density-scale": "1.12",
+    "--blueprint-section-gap": "20px",
+    "--blueprint-section-gap-tight": "16px",
+    "--blueprint-input-gap": "20px"
   }
 };
 
@@ -863,16 +863,16 @@ export default function RummyApp() {
 
             {uiStudioTab === "space" && (
               <div className="ui-studio-page">
-                <div className="ui-studio-section">Spacing scale</div>
+                <div className="ui-studio-section">Spacing</div>
                 {[
-                  ["Small", "--space-sm", 1, 8, 0, 24],
-                  ["Medium", "--space-md", 1, 12, 0, 32],
-                  ["Large", "--space-lg", 1, 16, 0, 44]
+                  ["Section gap", "--blueprint-section-gap", 1, 16, 6, 32],
+                  ["Tight gap", "--blueprint-section-gap-tight", 1, 12, 4, 24],
+                  ["Input gap", "--blueprint-input-gap", 1, 15, 6, 30]
                 ].map(([label, name, step, fallback, min, max]) => (
                   <div key={String(name)} className="ui-control-row">
                     <span>{label}</span>
                     <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), "px", Number(min), Number(max))}>−</button>
-                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || String(fallback))}>{uiValue(String(name))}</button>
+                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || `${fallback}px`)}>{uiValue(String(name))}</button>
                     <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), "px", Number(min), Number(max))}>+</button>
                     <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
                   </div>
