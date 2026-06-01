@@ -196,13 +196,10 @@ const Scoreboard = memo(function Scoreboard({ game, scoreTotals }: ScoreboardPro
 
   return (
     <section className="glass scoreboard scoreboard-stable passport-scoreboard">
-      <div className="passport-score-head">
-        <div className="passport-mark" aria-hidden="true">
-          {Array.from({ length: 12 }, (_, index) => <span key={index} />)}
-        </div>
+      <div className="passport-score-head simple-score-head">
         <div className="passport-title-block">
           <div className="label">Rummy 500</div>
-          <div className="passport-title">Score<br />Passport</div>
+          <div className="passport-title">Score Passport</div>
         </div>
       </div>
 
@@ -214,18 +211,12 @@ const Scoreboard = memo(function Scoreboard({ game, scoreTotals }: ScoreboardPro
       </div>
 
       <div className="passport-player-list">
-        {game.players.map((player, index) => {
+        {game.players.map((player) => {
           const total = scoreTotals[player.id] || 0;
-          const progress = Math.max(0, Math.min(100, Math.round((total / game.targetScore) * 100)));
           return (
             <div key={player.id} className="glass-soft player-card score-transition" style={{ "--player-color": player.color } as React.CSSProperties}>
-              <div className="player-card-top">
-                <span>{`Player ${String(index + 1).padStart(2, "0")}`}</span>
-                <span>{progress}%</span>
-              </div>
               <div className="player-name">{player.name}</div>
               <div className="total score-transition">{total}</div>
-              <div className="passport-rule"><span style={{ width: `${progress}%` }} /></div>
             </div>
           );
         })}
@@ -793,28 +784,13 @@ export default function RummyApp() {
                 <div className="empty-sub">Tap to view round history</div>
               </>
             ) : (
-              <>
-                <div className="last-round-top centered">
-                  <div className="last-round-label">LAST ROUND #{rounds.length}</div>
-                </div>
-
-                <div
-                  className="last-round-grid"
-                  style={{ gridTemplateColumns: `repeat(${game.players.length}, minmax(0, 1fr))` }}
-                >
-                  {game.players.map((player) => {
-                    const value = Number(latestRound?.scores[player.id] || 0) + (latestRound?.closedBy === player.id ? 15 : 0);
-                    return (
-                      <div key={player.id} className="last-round-player">
-                        <div className="last-round-player-name" style={{ color: player.color }}>{player.name}</div>
-                        <div className="last-round-player-score">{signed(value)}</div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="last-round-hint">Tap for full rounds overview</div>
-              </>
+              <div className="rounds-summary-line">
+                <span>Round {rounds.length}</span>
+                <strong>Last: {game.players.map((player) => {
+                  const value = Number(latestRound?.scores[player.id] || 0) + (latestRound?.closedBy === player.id ? 15 : 0);
+                  return `${player.name} ${signed(value)}`;
+                }).join(" · ")}</strong>
+              </div>
             )}
           </button>
         </section>

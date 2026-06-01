@@ -3529,3 +3529,238 @@ html,body{
 }
 
 .app.players-4 .ui{padding-top:calc(var(--safe-top) + 6px)!important;gap:0!important}.app.players-4 .header{gap:5px!important;margin-bottom:5px!important}.app.players-4 .pill{height:28px!important;min-height:28px!important;font-size:6.8px!important;padding:4px 6px!important}.app.players-4 .scoreboard.passport-scoreboard,.app.players-4 .scoreboard.scoreboard-stable{padding:8px!important}.app.players-4 .passport-score-head{min-height:50px!important;grid-template-columns:42px minmax(0,1fr)!important;gap:7px!important;padding-bottom:6px!important}.app.players-4 .passport-mark{width:34px!important;height:34px!important}.app.players-4 .passport-mark span{width:2.5px!important;height:2.5px!important;margin:-1.25px 0 0 -1.25px!important;transform:rotate(calc(var(--i,0) * 30deg)) translateY(-14px)!important}.app.players-4 .passport-title{font-size:clamp(28px,calc(var(--font-size-display,43px) * .78),35px)!important}.app.players-4 .passport-meta-grid{margin:6px 0!important}.app.players-4 .passport-meta-grid>div,.app.players-4 .passport-starter{height:28px!important;padding:3px 4px!important}.app.players-4 .passport-meta-grid span,.app.players-4 .player-card-top span,.app.players-4 .last-round-label,.app.players-4 .last-round-hint{font-size:6px!important}.app.players-4 .passport-meta-grid strong,.app.players-4 .passport-starter strong{font-size:7.6px!important;margin-top:3px!important}.app.players-4 .passport-player-list{gap:5px!important}.app.players-4 .player-card,.app.players-4 .scoreboard .player-card,.app.players-4 .passport-scoreboard .player-card{min-height:70px!important;padding:5px!important;gap:2px!important}.app.players-4 .player-name{font-size:9.5px!important}.app.players-4 .total.score-transition,.app.players-4 .scoreboard .total,.app.players-4 .player-card .total{font-size:clamp(27px,calc(var(--font-size-score,48px) * .62),36px)!important}.app.players-4 .rounds-card{min-height:42px!important;padding:6px 8px!important}.app.players-4 .last-round-grid{display:none!important}.app.players-4 .dock{padding-top:5px!important}.app.players-4 .dock-panel,.app.players-4 .dock-panel.glass{padding:7px 8px 8px!important}.app.players-4 .input-row{padding:4px 0!important}.app.players-4 .input-main{grid-template-columns:minmax(38px,56px) 27px minmax(0,1fr) 27px!important;min-height:27px!important;gap:5px!important}.app.players-4 .input-name{font-size:6.6px!important}.app.players-4 .round-input{height:27px!important;min-height:27px!important;font-size:21px!important}.app.players-4 .icon-btn,.app.players-4 .closed-toggle{width:27px!important;height:27px!important;min-width:27px!important;min-height:27px!important;font-size:15px!important}.app.players-4 .quick-grid{margin-left:61px!important;margin-top:4px!important}.app.players-4 .quick{height:20px!important;min-height:20px!important;font-size:6px!important}.app.players-4 .penalties{margin:6px 0!important}.app.players-4 .penalty{height:22px!important;min-height:22px!important;font-size:6px!important}.app.players-4 .add-round{height:39px!important;min-height:39px!important}
+
+/* ===== V124 SIMPLIFIED PRODUCT PASSPORT UI =====
+   Simplifies the V123 build without removing scoring/game functionality.
+   - removes decorative passport mark/progress details
+   - compresses scoreboard and round-history preview
+   - makes input rows cleaner and less compartmentalized
+*/
+:root{
+  --v124-page-max:430px;
+  --v124-paper:var(--ui-panel-bg,#efeee6);
+  --v124-blue:var(--ui-text,#143fd7);
+  --v124-line:color-mix(in srgb,var(--v124-blue) 44%,transparent);
+  --v124-line-soft:color-mix(in srgb,var(--v124-blue) 18%,transparent);
+}
+
+.ui{
+  width:min(100%,var(--v124-page-max))!important;
+  padding:calc(var(--safe-top) + 8px) 12px 0!important;
+}
+
+.header{
+  grid-template-columns:1fr auto!important;
+  gap:8px!important;
+  margin-bottom:8px!important;
+}
+
+.pill,.header .glass-soft{
+  height:34px!important;
+  min-height:34px!important;
+  border-radius:18px!important;
+  padding:0 12px!important;
+  font-size:9px!important;
+  letter-spacing:.08em!important;
+  border-color:var(--v124-line-soft)!important;
+}
+
+.header .pill:first-child{
+  max-width:170px!important;
+}
+
+.scoreboard.passport-scoreboard,.scoreboard.scoreboard-stable{
+  border-radius:28px!important;
+  padding:18px!important;
+  border-color:var(--v124-line-soft)!important;
+  box-shadow:0 18px 42px rgba(0,0,0,.28)!important;
+}
+
+.passport-score-head.simple-score-head,
+.passport-score-head{
+  display:block!important;
+  min-height:0!important;
+  padding:0 0 14px!important;
+  border-bottom:1px solid var(--v124-line)!important;
+}
+
+.passport-mark{display:none!important}
+.passport-title-block{text-align:left!important}
+.scoreboard .label,.passport-title-block .label{
+  text-align:left!important;
+  font-size:9px!important;
+  letter-spacing:.26em!important;
+  margin:0 0 8px!important;
+}
+.passport-title{
+  font-size:clamp(42px,11.4vw,62px)!important;
+  line-height:.9!important;
+  letter-spacing:-.085em!important;
+  max-width:7.6em!important;
+}
+
+.passport-meta-grid{
+  margin:14px 0!important;
+  border:0!important;
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:0!important;
+}
+.passport-meta-grid>div,.passport-starter{
+  height:auto!important;
+  min-height:0!important;
+  padding:0 10px 0 0!important;
+  border:0!important;
+  background:transparent!important;
+}
+.passport-meta-grid>div:not(:first-child){
+  border-left:1px solid var(--v124-line-soft)!important;
+  padding-left:10px!important;
+}
+.passport-meta-grid span{font-size:8px!important;letter-spacing:.14em!important;margin-bottom:5px!important}
+.passport-meta-grid strong{font-size:13px!important;letter-spacing:-.02em!important;margin:0!important}
+
+.passport-player-list{
+  gap:10px!important;
+}
+.player-card,.scoreboard .player-card,.passport-scoreboard .player-card{
+  min-height:120px!important;
+  padding:14px!important;
+  border-radius:8px!important;
+  border-color:var(--v124-line-soft)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:space-between!important;
+  gap:18px!important;
+}
+.player-name,.scoreboard .player-name{
+  font-size:clamp(13px,var(--font-size-player-name,13px),18px)!important;
+  letter-spacing:.16em!important;
+}
+.total,.scoreboard .total,.player-card .total,.total.score-transition{
+  font-size:clamp(50px,calc(var(--font-size-score,48px) * 1.18),68px)!important;
+  line-height:.82!important;
+}
+.player-card-top,.passport-rule{display:none!important}
+
+.rounds{
+  width:min(100%,var(--v124-page-max))!important;
+  padding:0 12px!important;
+  margin:8px auto 0!important;
+}
+.rounds-card,.rounds-card.glass{
+  min-height:0!important;
+  padding:12px 16px!important;
+  border-radius:22px!important;
+  border-color:var(--v124-line-soft)!important;
+  box-shadow:none!important;
+}
+.empty-title{font-size:14px!important;letter-spacing:.08em!important;text-transform:uppercase!important}
+.empty-sub{font-size:8px!important;margin-top:4px!important}
+.rounds-summary-line{
+  display:grid!important;
+  gap:5px!important;
+  text-align:left!important;
+  color:var(--v124-blue)!important;
+}
+.rounds-summary-line span{
+  font-size:8px!important;
+  letter-spacing:.16em!important;
+  text-transform:uppercase!important;
+  color:color-mix(in srgb,var(--v124-blue) 64%,var(--v124-paper))!important;
+  font-weight:850!important;
+}
+.rounds-summary-line strong{
+  font-size:11px!important;
+  line-height:1.2!important;
+  font-weight:800!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+  text-overflow:ellipsis!important;
+}
+.last-round-grid,.last-round-hint,.last-round-top{display:none!important}
+
+.dock{
+  width:min(100%,var(--v124-page-max))!important;
+  padding:8px 12px calc(var(--safe-bottom) + 12px)!important;
+}
+.dock-panel,.dock-panel.glass{
+  padding:14px!important;
+  border-radius:28px!important;
+  border-color:var(--v124-line-soft)!important;
+  box-shadow:0 18px 42px rgba(0,0,0,.26)!important;
+}
+.input-row{
+  padding:8px 0!important;
+  border-bottom:1px solid var(--v124-line-soft)!important;
+}
+.input-main{
+  grid-template-columns:minmax(56px,86px) 38px minmax(0,1fr) 38px!important;
+  min-height:40px!important;
+  gap:9px!important;
+}
+.input-name{
+  font-size:9px!important;
+  letter-spacing:.16em!important;
+}
+.round-input{
+  height:38px!important;
+  min-height:38px!important;
+  font-size:30px!important;
+  border-bottom:1px solid var(--v124-line)!important;
+}
+.icon-btn,.closed-toggle{
+  width:38px!important;
+  height:38px!important;
+  min-width:38px!important;
+  min-height:38px!important;
+  font-size:21px!important;
+  border-color:var(--v124-line)!important;
+}
+.quick-grid{
+  margin:7px 0 0 95px!important;
+  gap:6px!important;
+  border:0!important;
+}
+.quick{
+  height:26px!important;
+  min-height:26px!important;
+  border:1px solid var(--v124-line-soft)!important;
+  border-radius:14px!important;
+  font-size:8px!important;
+}
+.penalties{
+  border:0!important;
+  gap:8px!important;
+  margin:10px 0!important;
+}
+.penalty{
+  height:30px!important;
+  min-height:30px!important;
+  border:1px solid var(--v124-line-soft)!important;
+  border-radius:15px!important;
+  font-size:8px!important;
+}
+.add-round,.add-round.glass-soft{
+  height:52px!important;
+  min-height:52px!important;
+  border-radius:26px!important;
+  letter-spacing:.16em!important;
+}
+.add-round-plus{
+  border-radius:18px!important;
+}
+
+@media (max-height:760px){
+  .scoreboard.passport-scoreboard,.scoreboard.scoreboard-stable{padding:14px!important;border-radius:24px!important}
+  .passport-title{font-size:clamp(34px,10vw,48px)!important}
+  .passport-meta-grid{margin:11px 0!important}
+  .passport-meta-grid span{font-size:7px!important}.passport-meta-grid strong{font-size:10px!important}
+  .player-card,.scoreboard .player-card,.passport-scoreboard .player-card{min-height:92px!important;padding:10px!important;gap:12px!important}
+  .total,.scoreboard .total,.player-card .total,.total.score-transition{font-size:clamp(36px,calc(var(--font-size-score,48px) * .86),52px)!important}
+  .rounds-card,.rounds-card.glass{padding:9px 13px!important;border-radius:18px!important}
+  .dock-panel,.dock-panel.glass{padding:11px!important;border-radius:24px!important}
+  .input-row{padding:6px 0!important}.input-main{grid-template-columns:minmax(48px,72px) 32px minmax(0,1fr) 32px!important;min-height:32px!important;gap:7px!important}
+  .round-input,.icon-btn,.closed-toggle{height:32px!important;min-height:32px!important}.icon-btn,.closed-toggle{width:32px!important;min-width:32px!important;font-size:18px!important}.round-input{font-size:24px!important}
+  .quick-grid{margin-left:79px!important}.quick{height:23px!important;min-height:23px!important}.penalty{height:26px!important;min-height:26px!important}.add-round,.add-round.glass-soft{height:46px!important;min-height:46px!important}
+}
