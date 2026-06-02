@@ -166,3 +166,33 @@
     font-size:var(--font-size-title) !important;
   }
 }
+
+
+/* ===== V136 TYPOGRAPHY QA FIX ===== */
+
+/* Slightly calm Last Round after the V135 redesign */
+.last-round-player-name{
+  font-size:calc(var(--font-size-body) * .88) !important;
+}
+
+.last-round-player-score{
+  font-size:calc(var(--font-size-display) * .86) !important;
+}
+
+.last-round-hint{
+  font-size:calc(var(--font-size-caption) * .92) !important;
+}
+
+/* Prevent top pill text from feeling too heavy when it wraps */
+.pill{
+  font-size:calc(var(--font-size-body) * .96) !important;
+}
+
+/* Three-player mode: keep names readable but reduce vertical demand */
+.app.players-3 .input-name{
+  font-size:calc(var(--font-size-title) * 1.02) !important;
+}
+
+.app.players-3 .round-input{
+  font-size:calc(var(--font-size-input) * .94) !important;
+}

@@ -1,0 +1,18 @@
+{
+  "globals.css": {
+    "lines": 3,
+    "chars": 81
+  },
+  "globals-base.css": {
+    "lines": 953,
+    "chars": 18134
+  },
+  "theme.css": {
+    "lines": 101,
+    "chars": 3160
+  },
+  "typography.css": {
+    "lines": 198,
+    "chars": 4539
+  }
+}

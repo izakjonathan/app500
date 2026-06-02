@@ -794,3 +794,160 @@ input{min-width:0;border:0;outline:none}
     font-size:var(--font-size-title) !important;
   }
 }
+
+
+/* ===== V136 VISUAL QA FIX PASS =====
+   Screenshot-driven polish after V135.
+   Focus:
+   - better 3-player fit
+   - more reliable bottom scroll room above Safari bar
+   - Last Round card slightly calmer/less tall
+   - top game pill less likely to wrap awkwardly
+*/
+
+:root{
+  --section-rhythm:14px;
+}
+
+/* Give the page enough scrollable bottom breathing room on iPhone/Safari */
+.app{
+  padding-bottom:calc(env(safe-area-inset-bottom, 0px) + 96px) !important;
+}
+
+.dock{
+  padding-bottom:calc(max(env(safe-area-inset-bottom, 0px), 0px) + 118px) !important;
+}
+
+/* Make the right top pill handle long game text better */
+.pill{
+  min-width:0 !important;
+  text-align:center !important;
+  line-height:1.08 !important;
+  overflow:hidden !important;
+}
+
+.pill span,
+.pill strong{
+  min-width:0 !important;
+}
+
+/* Last Round: keep the design but reduce height and improve balance */
+.rounds-card{
+  min-height:114px !important;
+  padding:16px 18px 14px !important;
+}
+
+.last-round-label{
+  min-height:22px !important;
+  padding:0 11px !important;
+}
+
+.last-round-grid{
+  margin-top:6px !important;
+}
+
+.last-round-player{
+  min-height:40px !important;
+  gap:4px !important;
+}
+
+/* Three-player games need a slightly tighter vertical rhythm */
+.app.players-3 .header,
+.app.players-3 .scoreboard{
+  margin-bottom:12px !important;
+}
+
+.app.players-3 .dock{
+  padding-top:12px !important;
+}
+
+.app.players-3 .rounds-card{
+  min-height:108px !important;
+  padding:15px 16px 13px !important;
+}
+
+.app.players-3 .input-row{
+  margin-bottom:14px !important;
+  padding-top:10px !important;
+  padding-bottom:12px !important;
+}
+
+.app.players-3 .input-main{
+  min-height:50px !important;
+}
+
+.app.players-3 .quick{
+  height:34px !important;
+  min-height:34px !important;
+}
+
+.app.players-3 .penalties{
+  margin-bottom:12px !important;
+}
+
+.app.players-3 .penalty{
+  height:38px !important;
+  min-height:38px !important;
+}
+
+.app.players-3 .add-round{
+  height:54px !important;
+  min-height:54px !important;
+}
+
+/* Two-player still gets open spacing, but not oversized */
+.app.players-2 .rounds-card{
+  min-height:112px !important;
+}
+
+.app.players-2 .input-row{
+  margin-bottom:16px !important;
+}
+
+/* Four-player remains compact */
+.app.players-4 .rounds-card{
+  min-height:92px !important;
+}
+
+.app.players-4 .dock{
+  padding-bottom:calc(max(env(safe-area-inset-bottom, 0px), 0px) + 104px) !important;
+}
+
+/* Short screens: preserve scrollability and reduce vertical mass */
+@media (max-height:760px){
+  :root{
+    --section-rhythm:11px;
+  }
+
+  .dock{
+    padding-bottom:calc(max(env(safe-area-inset-bottom, 0px), 0px) + 104px) !important;
+  }
+
+  .rounds-card{
+    min-height:100px !important;
+    padding:13px 15px 12px !important;
+  }
+
+  .last-round-player{
+    min-height:34px !important;
+  }
+
+  .app.players-3 .input-row{
+    margin-bottom:11px !important;
+  }
+
+  .app.players-3 .quick{
+    height:31px !important;
+    min-height:31px !important;
+  }
+
+  .app.players-3 .penalty{
+    height:34px !important;
+    min-height:34px !important;
+  }
+
+  .app.players-3 .add-round{
+    height:50px !important;
+    min-height:50px !important;
+  }
+}
