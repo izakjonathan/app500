@@ -93,3 +93,13 @@ input.round-input{
   border:0 !important;
   border-radius:999px !important;
 }
+
+
+/* ===== V133 RADIUS + LAYOUT CONTROLS RECONNECTED ===== */
+.ui-color-picker::-webkit-color-swatch{
+  border-radius:999px !important;
+}
+
+.ui-color-picker::-moz-color-swatch{
+  border-radius:999px !important;
+}

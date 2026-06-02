@@ -1,0 +1,39 @@
+V132 UI Studio Control Audit
+
+Built from rummy500-v131-full-app-qa-audit.zip
+
+Active/effective controls:
+--bottom-gap
+--font-size-body
+--font-size-caption
+--font-size-display
+--font-size-input
+--font-size-score
+--font-size-title
+--font-weight-body
+--font-weight-label
+--font-weight-score
+--font-weight-title
+--input-card-gap
+--last-round-gap
+--passport-bg
+--passport-blue
+--passport-muted
+--penalty-gap
+--scoreboard-gap
+--top-section-gap
+
+Controls needing action:
+--radius-lg
+--radius-sm
+--radius-xl
+--ui-density-scale
+
+Main finding:
+- Type, Space, and Color are active.
+- Radius exists in UI Studio but current CSS uses fixed radii.
+- Layout/density exists in UI Studio but --ui-density-scale is not used by current CSS.
+- Presets should be cleaned after deciding whether Radius/Layout stay.
+
+Recommended V133:
+Reconnect radius controls or remove Radius/Layout from UI Studio.

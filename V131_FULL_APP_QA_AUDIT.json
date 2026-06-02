@@ -1,0 +1,273 @@
+{
+  "version": "V131 Full App QA Audit",
+  "built_from": "rummy500-v130-css-cleanup-qa-fix.zip",
+  "created_at_utc": "2026-06-02T12:18:37Z",
+  "summary": {
+    "code_changes": [
+      "Kept V130 UI/CSS behavior.",
+      "Confirmed build scripts use NEXT_PRIVATE_BUILD_WORKER=1.",
+      "Added QA audit files and manual test checklist."
+    ],
+    "intentional_no_change": [
+      "No scoring logic changes.",
+      "No Supabase/local sync changes.",
+      "No design/layout changes."
+    ]
+  },
+  "checks": [
+    {
+      "check": "RummyApp.tsx exists",
+      "passed": true,
+      "note": "components/RummyApp.tsx"
+    },
+    {
+      "check": "package.json exists",
+      "passed": true,
+      "note": "package.json"
+    },
+    {
+      "check": "Build script uses single Next worker",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "Vercel build script exists",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "UI Studio button is not duplicated",
+      "passed": true,
+      "note": "count=1"
+    },
+    {
+      "check": "Native color picker exists",
+      "passed": true,
+      "note": "UI Studio color tab"
+    },
+    {
+      "check": "Player count root class exists",
+      "passed": true,
+      "note": "players-2/3/4 CSS hooks"
+    },
+    {
+      "check": "Closed toggle class exists",
+      "passed": true,
+      "note": "closed tick alignment hook"
+    },
+    {
+      "check": "Add round plus class exists",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "Supabase import still present",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "Score functions still present",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "Add round function present",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "Undo function present",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "Reset function present",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "Share game function present",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "CSS imports only in globals.css",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "Blueprint color variables present",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "Precise spacing variables present",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "Old broad spacing variables removed",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "Glass blur disabled",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "Round input background fix present",
+      "passed": true,
+      "note": ""
+    },
+    {
+      "check": "UI Studio bottom room fix present",
+      "passed": true,
+      "note": ""
+    }
+  ],
+  "css_size_audit": {
+    "globals.css": {
+      "lines": 3,
+      "chars": 81
+    },
+    "globals-base.css": {
+      "lines": 343,
+      "chars": 10876
+    },
+    "theme.css": {
+      "lines": 95,
+      "chars": 3354
+    },
+    "typography.css": {
+      "lines": 95,
+      "chars": 3232
+    }
+  },
+  "ui_studio_defaults": [
+    "--font-size-caption",
+    "--font-size-body",
+    "--font-size-title",
+    "--font-size-display",
+    "--font-size-input",
+    "--font-size-score",
+    "--font-weight-label",
+    "--font-weight-body",
+    "--font-weight-title",
+    "--font-weight-score",
+    "--radius-sm",
+    "--radius-lg",
+    "--radius-xl",
+    "--ui-density-scale",
+    "--top-section-gap",
+    "--scoreboard-gap",
+    "--last-round-gap",
+    "--input-card-gap",
+    "--penalty-gap",
+    "--bottom-gap",
+    "--passport-blue",
+    "--passport-bg",
+    "--passport-muted"
+  ],
+  "css_vars_used_with_var": [
+    "--bottom-gap",
+    "--count",
+    "--font-size-body",
+    "--font-size-caption",
+    "--font-size-display",
+    "--font-size-input",
+    "--font-size-score",
+    "--font-size-title",
+    "--font-weight-body",
+    "--font-weight-label",
+    "--font-weight-score",
+    "--font-weight-title",
+    "--input-card-gap",
+    "--last-round-gap",
+    "--passport-bg",
+    "--passport-blue",
+    "--passport-faint",
+    "--passport-muted",
+    "--penalty-gap",
+    "--safe-bottom",
+    "--safe-top",
+    "--scoreboard-gap",
+    "--top-section-gap"
+  ],
+  "css_vars_declared": [
+    "--bottom-gap",
+    "--font-size-body",
+    "--font-size-caption",
+    "--font-size-display",
+    "--font-size-input",
+    "--font-size-score",
+    "--font-size-title",
+    "--font-weight-body",
+    "--font-weight-label",
+    "--font-weight-score",
+    "--font-weight-title",
+    "--input-card-gap",
+    "--last-round-gap",
+    "--passport-bg",
+    "--passport-blue",
+    "--passport-faint",
+    "--passport-muted",
+    "--penalty-gap",
+    "--safe-bottom",
+    "--safe-top",
+    "--scoreboard-gap",
+    "--top-section-gap"
+  ],
+  "ui_defaults_not_seen_in_css": [
+    "--radius-sm",
+    "--radius-lg",
+    "--radius-xl",
+    "--ui-density-scale"
+  ],
+  "css_declared_vars_without_ui_default": [],
+  "functions_found": [
+    "activeRounds",
+    "addPenalty",
+    "addRound",
+    "adjustUiVar",
+    "applyUiPreset",
+    "createDefaultGame",
+    "createGame",
+    "deleteCustomUiPreset",
+    "editUiVar",
+    "exportUiPreset",
+    "flushPendingSync",
+    "gameSignature",
+    "getAnalytics",
+    "getClientId",
+    "getShareUrl",
+    "getStoredUiPresets",
+    "haptic",
+    "importUiPreset",
+    "isUntouchedDefault",
+    "loadCloud",
+    "loadCustomUiPreset",
+    "negative",
+    "newSetup",
+    "quick",
+    "rematch",
+    "renameCustomUiPreset",
+    "resetGame",
+    "saveCustomUiPreset",
+    "saveGame",
+    "setStoredUiPresets",
+    "setUiVar",
+    "shareGame",
+    "signed",
+    "stripSync",
+    "toggleStarter",
+    "totals",
+    "uiValue",
+    "undo",
+    "updateTypeVar"
+  ],
+  "callbacks_found": [
+    "queueCloudSave"
+  ],
+  "recommended_next_step": "V132 UI Studio control audit: test each Type/Space/Radius/Color/Layout/Preset control and remove or reconnect anything that does not affect the current Blueprint UI."
+}

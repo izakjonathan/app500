@@ -1,0 +1,22 @@
+V133 UI Studio Controls Reconnected
+
+Built from V132.
+
+Recommended fixes applied:
+- Radius tab is kept and now affects real CSS.
+- Layout tab is kept and now controls --ui-density-scale.
+- Presets can continue using radius/density values.
+- Radius variables are mapped to:
+  - large modules
+  - cards
+  - input rows
+  - buttons
+  - UI Studio controls
+- Density now scales:
+  - main section gaps
+  - header/scoreboard spacing
+  - Last Round to controls spacing
+  - input card spacing
+  - penalty/bottom spacing
+
+No game/scoring/sync logic changed.

@@ -11,6 +11,10 @@
   --input-card-gap:18px;
   --penalty-gap:14px;
   --bottom-gap:12px;
+  --radius-sm:12px;
+  --radius-lg:24px;
+  --radius-xl:32px;
+  --ui-density-scale:1;
 }
 
 *{ box-sizing:border-box; }
@@ -74,7 +78,7 @@ input{ min-width:0; border:0; outline:none; }
 
 .scoreboard{
   min-height:0;
-  border-radius:26px;
+  border-radius:var(--radius-xl);
   padding:12px;
   margin-bottom:var(--scoreboard-gap);
 }
@@ -89,7 +93,7 @@ input{ min-width:0; border:0; outline:none; }
   gap:12px;
   padding:9px 12px;
   margin-bottom:8px;
-  border-radius:22px;
+  border-radius:var(--radius-lg);
 }
 .player-card:last-child{ margin-bottom:0; }
 
@@ -110,7 +114,7 @@ input{ min-width:0; border:0; outline:none; }
 .rounds-card{
   width:100%;
   min-height:112px;
-  border-radius:30px;
+  border-radius:var(--radius-xl);
   padding:16px 18px;
   margin:0;
   display:grid;
@@ -145,7 +149,7 @@ input{ min-width:0; border:0; outline:none; }
   z-index:1;
   margin:0 0 var(--input-card-gap);
   padding:11px 12px 14px;
-  border-radius:28px;
+  border-radius:var(--radius-xl);
   overflow:visible;
 }
 .dock-panel > .input-row:first-child{ margin-top:0; }
@@ -178,7 +182,7 @@ input{ min-width:0; border:0; outline:none; }
   min-height:46px;
   max-width:46px;
   max-height:46px;
-  border-radius:16px;
+  border-radius:var(--radius-sm);
   display:grid;
   place-items:center;
   padding:0;
@@ -206,7 +210,7 @@ input{ min-width:0; border:0; outline:none; }
   gap:12px;
   margin:0 0 var(--penalty-gap);
 }
-.penalty{ height:40px; min-height:40px; padding:0 12px; border-radius:22px; }
+.penalty{ height:40px; min-height:40px; padding:0 12px; border-radius:var(--radius-lg); }
 
 .add-round{
   position:relative;
@@ -216,7 +220,7 @@ input{ min-width:0; border:0; outline:none; }
   width:100%;
   height:58px;
   min-height:58px;
-  border-radius:30px;
+  border-radius:var(--radius-xl);
   margin:0;
 }
 .add-round span:first-child{ justify-self:center; transform:translateX(18px); }
@@ -239,39 +243,39 @@ input{ min-width:0; border:0; outline:none; }
 
 .modal-shade{ position:fixed; inset:0; z-index:9000; pointer-events:auto; }
 .modal,.sheet{ position:fixed; z-index:9100; pointer-events:auto; }
-.modal{ left:14px; right:14px; top:calc(var(--safe-top) + 58px); border-radius:28px; padding:16px; }
-.sheet{ left:10px; right:10px; bottom:calc(var(--safe-bottom) + 10px); max-height:86dvh; overflow:auto; border-radius:30px; padding:16px; }
+.modal{ left:14px; right:14px; top:calc(var(--safe-top) + 58px); border-radius:var(--radius-xl); padding:16px; }
+.sheet{ left:10px; right:10px; bottom:calc(var(--safe-bottom) + 10px); max-height:86dvh; overflow:auto; border-radius:var(--radius-xl); padding:16px; }
 .settings-modal{ z-index:9200; max-height:72dvh; overflow:auto; }
 .typography-panel{ z-index:12000; left:14px; right:14px; top:calc(var(--safe-top) + 64px); bottom:calc(var(--safe-bottom) + 18px); max-height:none; overflow:auto; }
 
 .modal-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.modal-btn{ height:50px; border-radius:18px; }
+.modal-btn{ height:50px; border-radius:var(--radius-lg); }
 .share-game-btn,.typography-settings-button{ width:100%; margin-bottom:8px; }
 
 .analytics-grid{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); align-items:stretch; gap:10px; margin-bottom:12px; }
 .analytics-grid > div{ display:grid; grid-template-rows:auto auto; align-content:center; justify-items:center; gap:6px; min-height:62px; padding:8px 6px; text-align:center; }
 
 .history{ display:grid; gap:8px; }
-.history-item{ padding:10px 12px; border-radius:16px; }
+.history-item{ padding:10px 12px; border-radius:var(--radius-sm); }
 
 .form-grid{ display:grid; gap:10px; }
-.form-input{ min-height:48px; border-radius:16px; padding:0 12px; }
-.segment{ display:grid; grid-template-columns:repeat(var(--count), minmax(0,1fr)); gap:6px; border-radius:16px; padding:4px; }
-.segment button{ min-height:40px; border-radius:12px; }
+.form-input{ min-height:48px; border-radius:var(--radius-sm); padding:0 12px; }
+.segment{ display:grid; grid-template-columns:repeat(var(--count), minmax(0,1fr)); gap:6px; border-radius:var(--radius-sm); padding:4px; }
+.segment button{ min-height:40px; border-radius:var(--radius-sm); }
 
 .ui-studio-tabs{ position:relative; z-index:1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; margin-bottom:6px; }
-.ui-studio-tabs button{ height:34px; border-radius:13px; }
+.ui-studio-tabs button{ height:34px; border-radius:var(--radius-sm); }
 .ui-studio-page{ position:relative; z-index:1; display:grid; gap:7px; }
-.ui-control-row{ position:relative; z-index:1; display:grid; grid-template-columns:1fr 38px 64px 38px 54px; align-items:center; gap:7px; min-height:44px; padding:7px 9px; border-radius:16px; }
+.ui-control-row{ position:relative; z-index:1; display:grid; grid-template-columns:1fr 38px 64px 38px 54px; align-items:center; gap:7px; min-height:44px; padding:7px 9px; border-radius:var(--radius-sm); }
 .color-control-row{ grid-template-columns:1fr 42px minmax(92px, auto) 54px; align-items:center; }
-.ui-value-button{ height:32px; min-width:64px; border-radius:12px; }
-.mini-reset{ height:32px; border-radius:12px; }
+.ui-value-button{ height:32px; min-width:64px; border-radius:var(--radius-sm); }
+.mini-reset{ height:32px; border-radius:var(--radius-sm); }
 .ui-color-picker{ width:34px; height:34px; min-width:34px; min-height:34px; padding:0; border-radius:999px; overflow:hidden; appearance:none; -webkit-appearance:none; }
 .ui-color-picker::-webkit-color-swatch-wrapper{ padding:0; }
 .ui-color-picker::-webkit-color-swatch{ border:0; border-radius:999px; }
 .ui-color-picker::-moz-color-swatch{ border:0; border-radius:999px; }
 .ui-preset-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
-.ui-preset-grid button,.ui-studio-wide-btn{ min-height:42px; border-radius:14px; }
+.ui-preset-grid button,.ui-studio-wide-btn{ min-height:42px; border-radius:var(--radius-sm); }
 
 .app.players-2 .header{ margin-bottom:var(--top-section-gap); }
 .app.players-2 .scoreboard{ margin-bottom:var(--scoreboard-gap); }
@@ -284,17 +288,17 @@ input{ min-width:0; border:0; outline:none; }
 .app.players-4 .scoreboard{ margin-bottom:calc(var(--scoreboard-gap) * .7); }
 .app.players-4 .ui{ gap:13px; padding-top:calc(var(--safe-top) + 8px); padding-bottom:10px; }
 .app.players-4 .pill{ min-height:44px; height:44px; padding-inline:14px; }
-.app.players-4 .scoreboard{ padding:11px 12px 12px; border-radius:28px; }
+.app.players-4 .scoreboard{ padding:11px 12px 12px; border-radius:var(--radius-xl); }
 .app.players-4 .label{ margin-bottom:8px; }
 .app.players-4 .player-card{ min-height:54px; padding:7px 12px; margin-bottom:7px; grid-template-columns:42px minmax(0,1fr) auto; gap:10px; }
 .app.players-4 .ring{ width:34px; height:34px; }
 .app.players-4 .progress{ max-width:160px; }
-.app.players-4 .rounds-card{ min-height:86px; padding:12px 14px; border-radius:28px; }
+.app.players-4 .rounds-card{ min-height:86px; padding:12px 14px; border-radius:var(--radius-xl); }
 .app.players-4 .dock{ padding-left:12px; padding-right:12px; padding-top:calc(var(--last-round-gap) * .75); }
-.app.players-4 .input-row{ margin-bottom:calc(var(--input-card-gap) * .75); padding:9px 10px 12px; border-radius:24px; }
+.app.players-4 .input-row{ margin-bottom:calc(var(--input-card-gap) * .75); padding:9px 10px 12px; border-radius:var(--radius-lg); }
 .app.players-4 .input-main{ min-height:46px; grid-template-columns:minmax(48px,70px) 42px minmax(0,1fr) 42px; gap:8px; }
 .app.players-4 .round-input{ height:42px; min-height:42px; }
-.app.players-4 .icon-btn,.app.players-4 .closed-toggle{ width:42px; height:42px; min-width:42px; min-height:42px; max-width:42px; max-height:42px; border-radius:15px; }
+.app.players-4 .icon-btn,.app.players-4 .closed-toggle{ width:42px; height:42px; min-width:42px; min-height:42px; max-width:42px; max-height:42px; border-radius:var(--radius-sm); }
 .app.players-4 .quick-grid{ margin-top:8px; gap:7px; }
 .app.players-4 .quick{ height:32px; min-height:32px; }
 .app.players-4 .penalties{ grid-template-columns:repeat(2,minmax(0,1fr)) !important; gap:8px; margin:0 0 calc(var(--penalty-gap) * .75); }
@@ -340,4 +344,86 @@ input{ min-width:0; border:0; outline:none; }
     top:calc(var(--safe-top) + 54px);
     bottom:calc(var(--safe-bottom) + 20px);
   }
+}
+
+
+/* ===== V133 RADIUS + LAYOUT CONTROLS RECONNECTED =====
+   UI Studio Radius and Layout tabs now affect real CSS.
+*/
+
+:root{
+  --radius-sm:12px;
+  --radius-lg:24px;
+  --radius-xl:32px;
+  --ui-density-scale:1;
+}
+
+/* Density affects spacing relationships and vertical rhythm */
+.ui{
+  gap:calc(var(--top-section-gap) * var(--ui-density-scale)) !important;
+}
+
+.header{
+  margin-bottom:calc(var(--top-section-gap) * var(--ui-density-scale)) !important;
+}
+
+.scoreboard{
+  margin-bottom:calc(var(--scoreboard-gap) * var(--ui-density-scale)) !important;
+}
+
+.dock{
+  padding-top:calc(var(--last-round-gap) * var(--ui-density-scale)) !important;
+  padding-bottom:calc(max(env(safe-area-inset-bottom, 0px), 0px) + (var(--bottom-gap) * var(--ui-density-scale))) !important;
+}
+
+.input-row{
+  margin-bottom:calc(var(--input-card-gap) * var(--ui-density-scale)) !important;
+}
+
+.dock-panel > .input-row:last-of-type,
+.penalties{
+  margin-bottom:calc(var(--penalty-gap) * var(--ui-density-scale)) !important;
+}
+
+/* Radius variables mapped to current Blueprint components */
+.scoreboard,
+.rounds-card,
+.modal,
+.sheet,
+.typography-panel{
+  border-radius:var(--radius-xl) !important;
+}
+
+.player-card,
+.input-row,
+.add-round,
+.modal-btn,
+.form-input,
+.history-item,
+.ui-control-row{
+  border-radius:var(--radius-lg) !important;
+}
+
+.icon-btn,
+.closed-toggle,
+.segment button,
+.ui-studio-tabs button,
+.ui-value-button,
+.mini-reset,
+.ui-preset-grid button,
+.ui-studio-wide-btn{
+  border-radius:var(--radius-sm) !important;
+}
+
+.pill,
+.quick,
+.add-round-plus,
+.ring,
+.ui-color-picker{
+  border-radius:999px !important;
+}
+
+/* Keep ring circular even when radius controls are set low */
+.ring{
+  border-radius:50% !important;
 }

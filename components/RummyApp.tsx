@@ -908,14 +908,14 @@ export default function RummyApp() {
               <div className="ui-studio-page">
                 <div className="ui-studio-section">Corner radius</div>
                 {[
-                  ["Small", "--radius-sm", 1, 12, 0, 30],
-                  ["Large", "--radius-lg", 1, 24, 0, 48],
-                  ["XL", "--radius-xl", 1, 32, 0, 60]
+                  ["Small controls", "--radius-sm", 1, 12, 0, 30],
+                  ["Cards", "--radius-lg", 1, 24, 0, 48],
+                  ["Large modules", "--radius-xl", 1, 32, 0, 64]
                 ].map(([label, name, step, fallback, min, max]) => (
                   <div key={String(name)} className="ui-control-row">
                     <span>{label}</span>
                     <button type="button" onClick={() => adjustUiVar(String(name), -Number(step), Number(fallback), "px", Number(min), Number(max))}>−</button>
-                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || String(fallback))}>{uiValue(String(name))}</button>
+                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)] || `${fallback}px`)}>{uiValue(String(name))}</button>
                     <button type="button" onClick={() => adjustUiVar(String(name), Number(step), Number(fallback), "px", Number(min), Number(max))}>+</button>
                     <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
                   </div>
@@ -950,6 +950,15 @@ export default function RummyApp() {
             {uiStudioTab === "layout" && (
               <div className="ui-studio-page">
                 <div className="ui-studio-section">Density</div>
+                <div className="ui-control-row">
+                  <span>Density</span>
+                  <button type="button" onClick={() => adjustUiVar("--ui-density-scale", -0.05, 1, "opacity", 0.75, 1.25)}>−</button>
+                  <button type="button" className="ui-value-button" onClick={() => editUiVar("--ui-density-scale", UI_STUDIO_DEFAULTS["--ui-density-scale"])}>{uiValue("--ui-density-scale")}</button>
+                  <button type="button" onClick={() => adjustUiVar("--ui-density-scale", 0.05, 1, "opacity", 0.75, 1.25)}>+</button>
+                  <button type="button" className="mini-reset" onClick={() => setUiVar("--ui-density-scale", UI_STUDIO_DEFAULTS["--ui-density-scale"])}>Reset</button>
+                </div>
+
+                <div className="ui-studio-section">Quick density</div>
                 {[
                   ["Compact", "0.9"],
                   ["Balanced", "1"],
