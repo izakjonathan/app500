@@ -1048,3 +1048,144 @@ body{
 .type-control{
   background:var(--passport-bg) !important;
 }
+
+
+/* ===== V128 MICROSPACING + COLOR PICKER FIX =====
+   Fixes:
+   - Add-round plus circle alignment
+   - Settings statistics alignment
+   - Native color picker in UI Studio color controls
+*/
+
+/* Add-round plus alignment */
+.add-round{
+  display:grid !important;
+  grid-template-columns:1fr auto !important;
+  align-items:center !important;
+  position:relative !important;
+}
+
+.add-round span:first-child{
+  justify-self:center !important;
+  transform:translateX(18px) !important;
+}
+
+.add-round-plus{
+  position:absolute !important;
+  right:16px !important;
+  top:50% !important;
+  transform:translateY(-50%) !important;
+  display:grid !important;
+  place-items:center !important;
+  text-align:center !important;
+  line-height:1 !important;
+  padding:0 !important;
+  width:32px !important;
+  height:32px !important;
+  min-width:32px !important;
+  min-height:32px !important;
+  font-size:23px !important;
+  font-weight:780 !important;
+}
+
+/* Settings statistics alignment */
+.analytics-grid{
+  align-items:stretch !important;
+  gap:10px !important;
+}
+
+.analytics-grid > div{
+  display:grid !important;
+  grid-template-rows:auto auto !important;
+  align-content:center !important;
+  justify-items:center !important;
+  gap:6px !important;
+  min-height:62px !important;
+  padding:8px 6px !important;
+  text-align:center !important;
+}
+
+.analytics-grid span,
+.analytics-grid strong{
+  display:block !important;
+  width:100% !important;
+  text-align:center !important;
+  line-height:1 !important;
+  margin:0 !important;
+}
+
+.analytics-grid span{
+  font-size:9px !important;
+  letter-spacing:.14em !important;
+}
+
+.analytics-grid strong{
+  font-size:18px !important;
+  letter-spacing:-.04em !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+/* Settings menu rhythm */
+.settings-modal .modal-title{
+  margin-bottom:12px !important;
+}
+
+.settings-modal .sync-line{
+  margin-bottom:12px !important;
+}
+
+.settings-modal .analytics-grid{
+  margin-bottom:12px !important;
+}
+
+.settings-modal .share-game-btn,
+.settings-modal .typography-settings-button{
+  margin-bottom:8px !important;
+}
+
+/* Native color picker in UI Studio */
+.color-control-row{
+  grid-template-columns:1fr 42px minmax(92px, auto) 54px !important;
+  align-items:center !important;
+}
+
+.ui-color-picker{
+  width:34px !important;
+  height:34px !important;
+  min-width:34px !important;
+  min-height:34px !important;
+  padding:0 !important;
+  border:1.5px solid var(--passport-blue) !important;
+  border-radius:999px !important;
+  background:transparent !important;
+  overflow:hidden !important;
+  appearance:none !important;
+  -webkit-appearance:none !important;
+}
+
+.ui-color-picker::-webkit-color-swatch-wrapper{
+  padding:0 !important;
+}
+
+.ui-color-picker::-webkit-color-swatch{
+  border:0 !important;
+  border-radius:999px !important;
+}
+
+.ui-color-picker::-moz-color-swatch{
+  border:0 !important;
+  border-radius:999px !important;
+}
+
+.color-value-button{
+  min-width:92px !important;
+  font-size:11px !important;
+  letter-spacing:-.02em !important;
+}
+
+/* Tiny control-row rhythm cleanup */
+.ui-control-row{
+  min-height:44px !important;
+}

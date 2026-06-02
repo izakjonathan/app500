@@ -1,0 +1,12 @@
+V128 Microspacing + Color Picker Fix
+
+Built from V127.
+
+Fixes:
+- Add-round plus circle is now vertically and horizontally centered.
+- Settings/statistics cards are centered and aligned consistently.
+- Settings menu spacing is cleaner.
+- UI Studio Color tab now uses native color picker inputs instead of only text/value entry.
+- Color values can still be edited manually by tapping the value.
+
+No scoring/sync/game logic changed.

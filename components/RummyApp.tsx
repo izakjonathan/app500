@@ -51,7 +51,7 @@ const UI_STUDIO_DEFAULTS: Record<string, string> = {
   "--bottom-gap": "12px",
   "--passport-blue": "#244cdd",
   "--passport-bg": "#efe9dc",
-  "--passport-muted": "rgba(36,76,221,.38)"
+  "--passport-muted": "#244cdd"
 };
 
 const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
@@ -929,12 +929,18 @@ export default function RummyApp() {
                 {[
                   ["Text / Border Blue", "--passport-blue", "#244cdd"],
                   ["Background Beige", "--passport-bg", "#efe9dc"],
-                  ["Soft Line", "--passport-muted", "rgba(36,76,221,.38)"]
+                  ["Soft Line", "--passport-muted", "#244cdd"]
                 ].map(([label, name, fallback]) => (
                   <div key={String(name)} className="ui-control-row color-control-row">
                     <span>{label}</span>
-                    <button type="button" className="ui-color-swatch" style={{ background: uiValue(String(name)) }} onClick={() => editUiVar(String(name), String(fallback))} />
-                    <button type="button" className="ui-value-button" onClick={() => editUiVar(String(name), String(fallback))}>{uiValue(String(name))}</button>
+                    <input
+                      type="color"
+                      className="ui-color-picker"
+                      value={uiValue(String(name)).startsWith("#") ? uiValue(String(name)) : String(fallback)}
+                      onChange={(event) => setUiVar(String(name), event.target.value)}
+                      aria-label={String(label)}
+                    />
+                    <button type="button" className="ui-value-button color-value-button" onClick={() => editUiVar(String(name), String(fallback))}>{uiValue(String(name))}</button>
                     <button type="button" className="mini-reset" onClick={() => setUiVar(String(name), UI_STUDIO_DEFAULTS[String(name)])}>Reset</button>
                   </div>
                 ))}
