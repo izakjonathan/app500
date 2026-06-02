@@ -10,6 +10,7 @@ type Round = { id: string; scores: Record<string, number>; closedBy: string | nu
 type HistoryItem = { gameId: string; gameName: string; winnerName: string; rounds: number; finishedAt: string };
 type Game = { gameId: string | null; gameName: string; players: Player[]; targetScore: number; starterId: string; rounds: Round[]; status: "active" | "finished"; winnerId: string | null; updatedAt?: string; archived?: boolean };
 type SyncStatus = "loading" | "synced" | "syncing" | "offline";
+type DevicePresence = { clientId: string; name: string; joinedAt: string; gameName: string };
 type CloudGame = Game & { __sync?: { clientId: string; version: number } };
 
 const DEFAULT_PLAYERS: Player[] = [
@@ -28,6 +29,7 @@ const PENDING_SYNC_KEY = "rummy500_clean_v52_pending_sync";
 
 const GAME_LIBRARY_KEY = "rummy500_multi_game_library_v139";
 const ACTIVE_GAME_KEY = "rummy500_active_game_id_v139";
+const DEVICE_NAME_KEY = "rummy500_device_name_v144";
 
 function cloudUpdatedKey(gameId: string) { return `${CLOUD_UPDATED_KEY}_${gameId}`; }
 function pendingSyncKey(gameId: string) { return `${PENDING_SYNC_KEY}_${gameId}`; }
@@ -78,6 +80,29 @@ function visibleSavedGames(games: Game[], showArchived: boolean) {
 }
 function shortGameCode(gameId?: string | null) {
   return gameId ? gameId.slice(0, 6).toUpperCase() : "LOCAL";
+}
+function getDeviceName() {
+  if (typeof window === "undefined") return "This device";
+
+  try {
+    const saved = localStorage.getItem(DEVICE_NAME_KEY);
+    if (saved) return saved;
+
+    const ua = navigator.userAgent || "";
+    const type = /iPhone/i.test(ua) ? "iPhone" : /iPad/i.test(ua) ? "iPad" : /Android/i.test(ua) ? "Android" : "Device";
+    const name = `${type} ${Math.random().toString(36).slice(2, 5).toUpperCase()}`;
+    localStorage.setItem(DEVICE_NAME_KEY, name);
+    return name;
+  } catch {
+    return "This device";
+  }
+}
+function uniquePresence(devices: DevicePresence[]) {
+  const byId = new Map<string, DevicePresence>();
+  devices.forEach((device) => {
+    if (device?.clientId) byId.set(device.clientId, device);
+  });
+  return Array.from(byId.values()).sort((a, b) => a.name.localeCompare(b.name));
 }
 
 type UiStudioTab = "type" | "space" | "radius" | "color" | "layout" | "presets";
@@ -253,6 +278,7 @@ export default function RummyApp() {
   const [roomLoadStatus, setRoomLoadStatus] = useState<"idle" | "loading" | "loaded" | "missing">("idle");
   const [isCommitting, setIsCommitting] = useState(false);
   const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "shared">("idle");
+  const [connectedDevices, setConnectedDevices] = useState<DevicePresence[]>([]);
 
   const clientId = useRef("");
   const cloudLoaded = useRef(false);
@@ -562,6 +588,50 @@ export default function RummyApp() {
     };
   }, [game.gameId]);
 
+
+  useEffect(() => {
+    const activeCloudId = gameCloudId(game);
+
+    if (!clientId.current) clientId.current = getClientId();
+
+    const localPresence: DevicePresence = {
+      clientId: clientId.current || "local",
+      name: getDeviceName(),
+      joinedAt: new Date().toISOString(),
+      gameName: game.gameName || "Rummy 500"
+    };
+
+    if (!supabase || !activeCloudId) {
+      setConnectedDevices([localPresence]);
+      return;
+    }
+
+    const channel = supabase.channel(`rummy-presence-${activeCloudId}`, {
+      config: { presence: { key: localPresence.clientId } }
+    });
+
+    const updatePresence = () => {
+      const state = channel.presenceState() as Record<string, DevicePresence[]>;
+      const remoteDevices = Object.values(state).flat();
+      setConnectedDevices(uniquePresence(remoteDevices.length ? remoteDevices : [localPresence]));
+    };
+
+    channel
+      .on("presence", { event: "sync" }, updatePresence)
+      .on("presence", { event: "join" }, updatePresence)
+      .on("presence", { event: "leave" }, updatePresence)
+      .subscribe(async (status) => {
+        if (status === "SUBSCRIBED") {
+          await channel.track(localPresence);
+          updatePresence();
+        }
+      });
+
+    return () => {
+      channel.untrack().catch(() => {});
+      supabase.removeChannel(channel);
+    };
+  }, [game.gameId, game.gameName]);
 
   useEffect(() => {
     function flushPendingSync() {
@@ -1045,6 +1115,11 @@ export default function RummyApp() {
             <div className="modal-title">Settings</div>
             <div className="sync-line">Cloud sync: {syncStatus}</div>
             <div className="sync-line">Room {shortGameCode(game.gameId)} · {roomLoadStatus}</div>
+            <div className="room-meta-row">
+              <span>Shared game</span>
+              <span>Anyone with link can edit</span>
+              <span>{connectedDevices.length} connected</span>
+            </div>
             <div className="analytics-grid">
               <div><span>Rounds</span><strong>{analytics.roundsPlayed}</strong></div>
               <div><span>Avg</span><strong>{analytics.averageRoundPoints}</strong></div>
@@ -1077,6 +1152,11 @@ export default function RummyApp() {
             <div className="modal-title">Invite Players</div>
             <div className="sync-line">Share this game with anyone who should play or follow along.</div>
             <div className={`room-status room-status-${roomLoadStatus}`}>Room status: {roomLoadStatus}</div>
+            <div className="room-meta-row">
+              <span>Room: {shortGameCode(game.gameId)}</span>
+              <span>Shared game</span>
+              <span>Anyone with link can edit</span>
+            </div>
 
             <div className="invite-card">
               <div className="invite-code-label">Game code</div>
@@ -1085,10 +1165,23 @@ export default function RummyApp() {
               <div className="invite-url">{getShareUrl(game)}</div>
             </div>
 
+            <div className="invite-section-title">Players in this game</div>
             <div className="invite-players">
               {game.players.map((player) => (
                 <div key={player.id} className="invite-player">
                   <span>{player.name}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="invite-section-title">Connected devices</div>
+            <div className="presence-list">
+              {connectedDevices.length === 0 ? (
+                <div className="presence-item">Only this device</div>
+              ) : connectedDevices.map((device) => (
+                <div key={device.clientId} className="presence-item">
+                  <span>{device.name}</span>
+                  <small>{device.clientId === clientId.current ? "You" : "Connected"}</small>
                 </div>
               ))}
             </div>
@@ -1131,7 +1224,7 @@ export default function RummyApp() {
                   <button type="button" onClick={() => switchSavedGame(item)} className="game-library-main">
                     <strong>{item.gameName || "Untitled game"}</strong>
                     <span>{item.players.map((player) => player.name).join(" · ")}</span>
-                    <span>{item.players.length} players · {activeRounds(item.rounds).length} rounds · {item.targetScore} target · {shortGameCode(item.gameId)}</span>
+                    <span>{item.players.length} players · {activeRounds(item.rounds).length} rounds · {item.targetScore} target · Room {shortGameCode(item.gameId)} · Shared</span>
                     <span>{item.archived ? "Archived" : `Last opened ${formatGameUpdated(item.updatedAt)}`}</span>
                   </button>
                   <div className="game-library-actions">

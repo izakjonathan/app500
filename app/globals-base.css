@@ -411,3 +411,47 @@ input{min-width:0;border:0;outline:none}
   padding:10px 12px;
   border-radius:var(--radius-lg);
 }
+
+
+/* V144 active players / presence */
+.room-meta-row{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-bottom:12px;
+}
+.room-meta-row span{
+  min-height:32px;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  border-radius:var(--radius-sm);
+  padding:0 7px;
+}
+.invite-section-title{
+  text-align:center;
+  margin:12px 0 8px;
+}
+.presence-list{
+  display:grid;
+  gap:8px;
+  margin-bottom:12px;
+}
+.presence-item{
+  min-height:38px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  padding:0 10px;
+  border-radius:var(--radius-sm);
+}
+.presence-item span{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+@media (max-width:380px){
+  .room-meta-row{grid-template-columns:1fr}
+}

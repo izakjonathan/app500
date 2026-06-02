@@ -253,3 +253,17 @@
   font-size:var(--font-size-caption);
   font-weight:var(--font-weight-label);
 }
+
+
+/* V144 active players / presence */
+.room-meta-row span,
+.invite-section-title,
+.presence-item,
+.presence-item small{
+  font-size:var(--font-size-caption);
+  font-weight:var(--font-weight-label);
+}
+.invite-section-title{
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}

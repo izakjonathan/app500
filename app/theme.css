@@ -142,3 +142,15 @@ input::placeholder{
   border:1.5px solid var(--passport-blue);
   color:var(--passport-blue);
 }
+
+
+/* V144 active players / presence */
+.room-meta-row span,
+.presence-item{
+  background:var(--passport-bg);
+  border:1.5px solid var(--passport-blue);
+  color:var(--passport-blue);
+}
+.presence-item small{
+  opacity:.72;
+}
