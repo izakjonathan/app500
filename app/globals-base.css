@@ -461,3 +461,16 @@ input{min-width:0;border:0;outline:none}
 .app.players-4 .dock-panel>.input-row:last-of-type{
   margin-bottom:calc(var(--penalty-gap) * .75);
 }
+
+
+/* V147 Add Round primary button */
+.add-round{
+  grid-template-columns:1fr !important;
+}
+.add-round span:first-child{
+  justify-self:center !important;
+  transform:none !important;
+}
+.add-round-plus{
+  display:none !important;
+}

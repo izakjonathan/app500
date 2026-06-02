@@ -267,3 +267,10 @@
   letter-spacing:.18em;
   text-transform:uppercase;
 }
+
+
+/* V147 Add Round primary button */
+.add-round{
+  font-weight:var(--font-weight-title) !important;
+  letter-spacing:-.035em !important;
+}

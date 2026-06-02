@@ -1098,7 +1098,7 @@ export default function RummyApp() {
               <div className="quick-grid">{[5, 10, 25, 50].map((amount) => <button key={amount} disabled={isCommitting} type="button" onClick={() => quick(player.id, amount)} className="quick">+{amount}</button>)}</div>
             </div>
           ))}
-          <button type="button" disabled={isCommitting} onClick={addRound} className="glass-soft add-round"><span>{isCommitting ? "Adding…" : "Add round"}</span><span className="add-round-plus">+</span></button>
+          <button type="button" disabled={isCommitting} onClick={addRound} className="glass-soft add-round"><span>{isCommitting ? "Adding…" : "Add round"}</span></button>
         </div>
       </section>
 

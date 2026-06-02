@@ -154,3 +154,16 @@ input::placeholder{
 .presence-item small{
   opacity:.72;
 }
+
+
+/* V147 Add Round primary button */
+.add-round,
+.add-round.glass-soft{
+  background:var(--passport-blue) !important;
+  background-color:var(--passport-blue) !important;
+  border-color:var(--passport-blue) !important;
+  color:var(--passport-bg) !important;
+}
+.add-round span{
+  color:var(--passport-bg) !important;
+}
