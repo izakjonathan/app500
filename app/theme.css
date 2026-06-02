@@ -55,3 +55,41 @@ button,input{ color:inherit; }
 .modal-shade{ background:rgba(239,233,220,.74); }
 input::placeholder{ color:rgba(36,76,221,.42); }
 .ui-color-picker{ border:1.5px solid var(--passport-blue); }
+
+
+/* ===== V130 CSS CLEANUP QA FIX ===== */
+
+.round-input,
+input.round-input{
+  background:transparent !important;
+  background-color:transparent !important;
+  background-image:none !important;
+  box-shadow:none !important;
+  border:0 !important;
+  color:var(--passport-blue) !important;
+}
+
+.add-round-plus{
+  background:var(--passport-bg) !important;
+  border:1.5px solid var(--passport-blue) !important;
+  color:var(--passport-blue) !important;
+  box-shadow:none !important;
+}
+
+.ui-color-picker{
+  background:transparent !important;
+}
+
+.ui-color-picker::-webkit-color-swatch-wrapper{
+  padding:0 !important;
+}
+
+.ui-color-picker::-webkit-color-swatch{
+  border:0 !important;
+  border-radius:999px !important;
+}
+
+.ui-color-picker::-moz-color-swatch{
+  border:0 !important;
+  border-radius:999px !important;
+}

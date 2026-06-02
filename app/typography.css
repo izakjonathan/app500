@@ -86,3 +86,10 @@
 @media (max-height:760px){
   .total{ font-size:calc(var(--font-size-score) * .88); }
 }
+
+
+/* ===== V130 CSS CLEANUP QA FIX ===== */
+
+.round-input{
+  text-align:center;
+}

@@ -315,3 +315,29 @@ input{ min-width:0; border:0; outline:none; }
   .app.players-4 .penalty{ height:32px; min-height:32px; }
   .app.players-4 .add-round{ height:50px; min-height:50px; }
 }
+
+
+/* ===== V130 CSS CLEANUP QA FIX =====
+   Small fixes after the CSS cleanup pass.
+*/
+
+.round-input{
+  appearance:none;
+  -webkit-appearance:none;
+}
+
+.add-round-plus{
+  border:1.5px solid var(--passport-blue);
+}
+
+.typography-panel{
+  bottom:calc(var(--safe-bottom) + 28px);
+  padding-bottom:calc(18px + var(--safe-bottom));
+}
+
+@media (max-height:760px){
+  .typography-panel{
+    top:calc(var(--safe-top) + 54px);
+    bottom:calc(var(--safe-bottom) + 20px);
+  }
+}
