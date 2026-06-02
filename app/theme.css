@@ -99,3 +99,38 @@ input::placeholder{
 .ui-color-picker::-webkit-color-swatch-wrapper{padding:0 !important}
 .ui-color-picker::-webkit-color-swatch{border:0 !important;border-radius:999px !important}
 .ui-color-picker::-moz-color-swatch{border:0 !important;border-radius:999px !important}
+
+
+/* V139 multi-game library */
+.game-library-delete{
+  background:transparent;
+  border:1.5px solid var(--passport-blue);
+  color:var(--passport-blue);
+}
+.game-library-main{
+  background:transparent;
+  color:var(--passport-blue);
+}
+
+
+/* V140-V141 shared-game/library polish */
+.game-library-main,
+.game-library-actions button{
+  background:transparent;
+  color:var(--passport-blue);
+}
+.game-library-actions button{
+  border:1.5px solid var(--passport-blue);
+}
+
+
+/* V142 group sharing invite panel */
+.invite-card,
+.invite-player{
+  background:var(--passport-bg);
+  border:1.5px solid var(--passport-blue);
+  color:var(--passport-blue);
+}
+.invite-url{
+  opacity:.78;
+}

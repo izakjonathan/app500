@@ -196,3 +196,52 @@
 .app.players-3 .round-input{
   font-size:calc(var(--font-size-input) * .94) !important;
 }
+
+
+/* V139 multi-game library */
+.game-library-main strong{
+  font-size:var(--font-size-title);
+  font-weight:var(--font-weight-title);
+  letter-spacing:-.04em;
+}
+.game-library-main span,
+.game-library-delete{
+  font-size:var(--font-size-caption);
+  font-weight:var(--font-weight-label);
+}
+
+
+/* V140-V141 shared-game/library polish */
+.game-library-main strong{
+  font-size:var(--font-size-title);
+  font-weight:var(--font-weight-title);
+  letter-spacing:-.04em;
+}
+.game-library-main span,
+.game-library-actions button{
+  font-size:var(--font-size-caption);
+  font-weight:var(--font-weight-label);
+}
+
+
+/* V142 group sharing invite panel */
+.invite-code-label{
+  font-size:var(--font-size-caption);
+  font-weight:var(--font-weight-label);
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.invite-code{
+  font-size:calc(var(--font-size-display) * 1.1);
+  font-weight:var(--font-weight-score);
+  letter-spacing:.08em;
+}
+.invite-game-name{
+  font-size:var(--font-size-title);
+  font-weight:var(--font-weight-title);
+}
+.invite-url,
+.invite-player{
+  font-size:var(--font-size-caption);
+  font-weight:var(--font-weight-label);
+}

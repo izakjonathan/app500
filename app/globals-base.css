@@ -258,3 +258,144 @@ input{min-width:0;border:0;outline:none}
   .app.players-4 .penalty{height:32px;min-height:32px}
   .app.players-4 .add-round{height:50px;min-height:50px}
 }
+
+
+/* V139 multi-game library */
+.game-library-panel{
+  top:calc(var(--safe-top) + 54px);
+  bottom:calc(var(--safe-bottom) + 24px);
+  max-height:none;
+}
+.game-library-list{gap:10px;margin-bottom:12px}
+.game-library-item{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:10px;
+  align-items:center;
+}
+.game-library-item.active{box-shadow:inset 0 0 0 1px var(--passport-blue)}
+.game-library-main{
+  display:grid;
+  gap:5px;
+  min-width:0;
+  text-align:left;
+  background:transparent;
+  color:inherit;
+  border:0;
+  padding:0;
+}
+.game-library-main span{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.game-library-delete{
+  min-height:34px;
+  padding:0 10px;
+  border-radius:var(--radius-sm);
+}
+
+
+/* V140-V141 shared-game/library polish */
+.game-library-toolbar{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:12px;
+}
+.game-library-toolbar .modal-btn:last-child{grid-column:1 / -1}
+.game-library-panel{
+  top:calc(var(--safe-top) + 48px);
+  bottom:calc(var(--safe-bottom) + 18px);
+  max-height:none;
+}
+.game-library-list{gap:10px;margin-bottom:0}
+.game-library-item{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:10px;
+  align-items:start;
+}
+.game-library-item.active{box-shadow:inset 0 0 0 1px var(--passport-blue)}
+.game-library-item.archived{opacity:.62}
+.game-library-main{
+  display:grid;
+  gap:5px;
+  min-width:0;
+  text-align:left;
+  background:transparent;
+  color:inherit;
+  border:0;
+  padding:0;
+}
+.game-library-main span{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.game-library-actions{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:6px;
+}
+.game-library-actions button{
+  min-height:34px;
+  padding:0 7px;
+  border-radius:var(--radius-sm);
+}
+@media (max-width:380px){
+  .game-library-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+
+/* V142 group sharing invite panel */
+.invite-panel{
+  top:calc(var(--safe-top) + 58px);
+  bottom:calc(var(--safe-bottom) + 24px);
+  max-height:none;
+}
+.invite-card{
+  display:grid;
+  gap:8px;
+  padding:14px;
+  border-radius:var(--radius-lg);
+  margin-bottom:12px;
+}
+.invite-code-label{
+  text-align:center;
+}
+.invite-code{
+  text-align:center;
+  padding:10px 0;
+}
+.invite-game-name,
+.invite-url{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-align:center;
+}
+.invite-players{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  margin-bottom:12px;
+}
+.invite-player{
+  min-height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:var(--radius-sm);
+}
+.game-library-toolbar{
+  grid-template-columns:1fr 1fr;
+}
+.game-library-toolbar .modal-btn:last-child{
+  grid-column:auto;
+}
+@media (max-width:380px){
+  .invite-players{grid-template-columns:1fr}
+}

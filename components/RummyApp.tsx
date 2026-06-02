@@ -8,7 +8,7 @@ import { CURRENT_GAME_ID, supabase } from "../lib/supabaseClient";
 type Player = { id: string; name: string; color: string };
 type Round = { id: string; scores: Record<string, number>; closedBy: string | null; starterId: string; deleted?: boolean };
 type HistoryItem = { gameId: string; gameName: string; winnerName: string; rounds: number; finishedAt: string };
-type Game = { gameId: string | null; gameName: string; players: Player[]; targetScore: number; starterId: string; rounds: Round[]; status: "active" | "finished"; winnerId: string | null };
+type Game = { gameId: string | null; gameName: string; players: Player[]; targetScore: number; starterId: string; rounds: Round[]; status: "active" | "finished"; winnerId: string | null; updatedAt?: string; archived?: boolean };
 type SyncStatus = "loading" | "synced" | "syncing" | "offline";
 type CloudGame = Game & { __sync?: { clientId: string; version: number } };
 
@@ -25,6 +25,60 @@ const CLOUD_UPDATED_KEY = "rummy500_clean_v51_cloud_updated_at";
 const CLIENT_ID_KEY = "rummy500_clean_v51_client_id";
 const SAVE_DEBOUNCE_MS = 700;
 const PENDING_SYNC_KEY = "rummy500_clean_v52_pending_sync";
+
+const GAME_LIBRARY_KEY = "rummy500_multi_game_library_v139";
+const ACTIVE_GAME_KEY = "rummy500_active_game_id_v139";
+
+function cloudUpdatedKey(gameId: string) { return `${CLOUD_UPDATED_KEY}_${gameId}`; }
+function pendingSyncKey(gameId: string) { return `${PENDING_SYNC_KEY}_${gameId}`; }
+function gameCloudId(game: Game) { return game.gameId || CURRENT_GAME_ID; }
+function formatGameUpdated(value?: string) {
+  if (!value) return "Not played yet";
+  try { return new Date(value).toLocaleDateString(); } catch { return "Saved"; }
+}
+function getUrlGameId() {
+  if (typeof window === "undefined") return "";
+  try { return new URL(window.location.href).searchParams.get("game") || ""; } catch { return ""; }
+}
+function setUrlGameId(gameId: string) {
+  if (typeof window === "undefined" || !gameId) return;
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set("game", gameId);
+    window.history.replaceState({}, "", url.toString());
+  } catch {}
+}
+function readGameLibrary(): Game[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(GAME_LIBRARY_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed as Game[] : [];
+  } catch { return []; }
+}
+function writeGameLibrary(games: Game[]) {
+  if (typeof window === "undefined") return;
+  try { localStorage.setItem(GAME_LIBRARY_KEY, JSON.stringify(games)); } catch {}
+}
+function touchGame(game: Game) {
+  return { ...game, updatedAt: new Date().toISOString() };
+}
+function sortGameLibrary(games: Game[]) {
+  return [...games].sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
+}
+function upsertGameInLibrary(games: Game[], game: Game) {
+  if (!game.gameId) return games;
+  const previous = games.find((item) => item.gameId === game.gameId);
+  const saved = touchGame({ ...game, archived: game.archived ?? previous?.archived ?? false });
+  const next = [saved, ...games.filter((item) => item.gameId !== game.gameId)];
+  return sortGameLibrary(next).slice(0, 50);
+}
+function visibleSavedGames(games: Game[], showArchived: boolean) {
+  return sortGameLibrary(games).filter((item) => showArchived || !item.archived);
+}
+function shortGameCode(gameId?: string | null) {
+  return gameId ? gameId.slice(0, 6).toUpperCase() : "LOCAL";
+}
 
 type UiStudioTab = "type" | "space" | "radius" | "color" | "layout" | "presets";
 
@@ -177,6 +231,7 @@ const Scoreboard = memo(function Scoreboard({ game, scoreTotals }: ScoreboardPro
 
 export default function RummyApp() {
   const [game, setGame] = useState<Game>(() => createDefaultGame());
+  const [savedGames, setSavedGames] = useState<Game[]>([]);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [closedBy, setClosedBy] = useState<string | null>(null);
@@ -185,6 +240,9 @@ export default function RummyApp() {
   const [uiStudioTab, setUiStudioTab] = useState<UiStudioTab>("type");
   const [uiValues, setUiValues] = useState<Record<string, string>>(() => ({ ...UI_STUDIO_DEFAULTS }));
   const [showRoundsPopup, setShowRoundsPopup] = useState(false);
+  const [gamesOpen, setGamesOpen] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const [showArchivedGames, setShowArchivedGames] = useState(false);
   const [gameOpen, setGameOpen] = useState(false);
   const [playerCount, setPlayerCount] = useState(2);
   const [target, setTarget] = useState<number | "custom">(1500);
@@ -204,6 +262,7 @@ export default function RummyApp() {
   const pendingGame = useRef<Game | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const syncInFlight = useRef(false);
+  const localLibraryLoaded = useRef(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -222,22 +281,50 @@ export default function RummyApp() {
 
   useEffect(() => {
     try {
+      const library = readGameLibrary();
       const savedGame = localStorage.getItem(STORAGE_KEY);
       const savedHistory = localStorage.getItem(HISTORY_KEY);
+      const urlGameId = getUrlGameId();
+      const activeGameId = urlGameId || localStorage.getItem(ACTIVE_GAME_KEY) || "";
+      let nextLibrary = library;
+
       if (savedGame) {
-        const parsed = JSON.parse(savedGame) as Game;
-        currentSignature.current = gameSignature(parsed);
-        setGame(parsed);
+        const legacyGame = JSON.parse(savedGame) as Game;
+        if (legacyGame.gameId && !nextLibrary.some((item) => item.gameId === legacyGame.gameId)) {
+          nextLibrary = upsertGameInLibrary(nextLibrary, legacyGame);
+          writeGameLibrary(nextLibrary);
+        }
       }
+
+      setSavedGames(sortGameLibrary(nextLibrary));
+
+      const selectedGame =
+        nextLibrary.find((item) => item.gameId === activeGameId) ||
+        (savedGame ? JSON.parse(savedGame) as Game : null);
+
+      if (selectedGame) {
+        currentSignature.current = gameSignature(selectedGame);
+        setGame(selectedGame);
+        if (selectedGame.gameId) setUrlGameId(selectedGame.gameId);
+      } else if (urlGameId) {
+        const placeholder = { ...createDefaultGame(), gameId: urlGameId, gameName: `Shared game ${urlGameId.slice(0, 5)}` };
+        currentSignature.current = gameSignature(placeholder);
+        setGame(placeholder);
+        setUrlGameId(urlGameId);
+      }
+
       if (savedHistory) setHistory(JSON.parse(savedHistory));
     } catch {}
+
+    localLibraryLoaded.current = true;
   }, []);
 
   const queueCloudSave = useCallback((nextGame: Game) => {
     if (!cloudLoaded.current || applyingRemote.current || !initialSyncFinished.current || isUntouchedDefault(nextGame)) return;
 
+    const cloudId = gameCloudId(nextGame);
     pendingGame.current = nextGame;
-    try { localStorage.setItem(PENDING_SYNC_KEY, JSON.stringify(nextGame)); } catch {}
+    try { localStorage.setItem(pendingSyncKey(cloudId), JSON.stringify(nextGame)); } catch {}
     setSyncStatus("syncing");
 
     if (saveTimer.current) clearTimeout(saveTimer.current);
@@ -248,6 +335,7 @@ export default function RummyApp() {
       const version = Date.now();
       localVersion.current = Math.max(localVersion.current, version);
       const gameToSave = pendingGame.current;
+      const cloudId = gameCloudId(gameToSave);
       const cloudGame: CloudGame = {
         ...gameToSave,
         __sync: {
@@ -260,7 +348,7 @@ export default function RummyApp() {
         .from("rummy_current_game")
         .upsert(
           {
-            id: CURRENT_GAME_ID,
+            id: cloudId,
             game_state: cloudGame,
             updated_at: new Date(version).toISOString()
           },
@@ -277,20 +365,36 @@ export default function RummyApp() {
       }
 
       if (data?.updated_at) {
-        try { localStorage.setItem(CLOUD_UPDATED_KEY, data.updated_at); } catch {}
+        try { localStorage.setItem(cloudUpdatedKey(cloudId), data.updated_at); } catch {}
       }
 
       pendingGame.current = null;
-      try { localStorage.removeItem(PENDING_SYNC_KEY); } catch {}
+      try { localStorage.removeItem(pendingSyncKey(cloudId)); } catch {}
       setSyncStatus("synced");
     }, SAVE_DEBOUNCE_MS);
   }, []);
 
   useEffect(() => {
+    if (!localLibraryLoaded.current) return;
+
     const signature = gameSignature(game);
     currentSignature.current = signature;
 
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(game)); } catch {}
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(game));
+      if (game.gameId) {
+        localStorage.setItem(ACTIVE_GAME_KEY, game.gameId);
+        setUrlGameId(game.gameId);
+      }
+    } catch {}
+
+    if (game.gameId) {
+      setSavedGames((previous) => {
+        const next = upsertGameInLibrary(previous, game);
+        writeGameLibrary(next);
+        return next;
+      });
+    }
 
     if (!applyingRemote.current) {
       localVersion.current = Math.max(localVersion.current, Date.now());
@@ -302,13 +406,18 @@ export default function RummyApp() {
 
   useEffect(() => {
     let mounted = true;
+    const activeCloudId = gameCloudId(game);
+
+    cloudLoaded.current = false;
+    initialSyncFinished.current = false;
+    pendingGame.current = null;
 
     async function loadCloud() {
       setSyncStatus("loading");
       const { data, error } = await supabase
         .from("rummy_current_game")
         .select("game_state, updated_at")
-        .eq("id", CURRENT_GAME_ID)
+        .eq("id", activeCloudId)
         .maybeSingle();
 
       if (!mounted) return;
@@ -324,7 +433,7 @@ export default function RummyApp() {
         const remoteRaw = data.game_state as CloudGame;
         const remoteGame = stripSync(remoteRaw);
         const remoteSignature = gameSignature(remoteGame);
-        const localUpdated = localStorage.getItem(CLOUD_UPDATED_KEY) || "";
+        const localUpdated = localStorage.getItem(cloudUpdatedKey(activeCloudId)) || "";
         const remoteUpdated = data.updated_at || "";
         const shouldApplyRemote =
           !isUntouchedDefault(remoteGame) &&
@@ -337,7 +446,7 @@ export default function RummyApp() {
           setGame(remoteGame);
           try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteGame));
-            localStorage.setItem(CLOUD_UPDATED_KEY, remoteUpdated);
+            localStorage.setItem(cloudUpdatedKey(activeCloudId), remoteUpdated);
           } catch {}
           setTimeout(() => { applyingRemote.current = false; }, 0);
         }
@@ -351,14 +460,14 @@ export default function RummyApp() {
     loadCloud();
 
     const channel = supabase
-      .channel(`rummy-live-${clientId.current || "client"}`)
+      .channel(`rummy-live-${activeCloudId}-${clientId.current || "client"}`)
       .on(
         "postgres_changes",
         {
           event: "*",
           schema: "public",
           table: "rummy_current_game",
-          filter: `id=eq.${CURRENT_GAME_ID}`
+          filter: `id=eq.${activeCloudId}`
         },
         (payload) => {
           const row = payload.new as { game_state?: CloudGame; updated_at?: string };
@@ -388,7 +497,7 @@ export default function RummyApp() {
           setGame(remoteGame);
           try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteGame));
-            if (row.updated_at) localStorage.setItem(CLOUD_UPDATED_KEY, row.updated_at);
+            if (row.updated_at) localStorage.setItem(cloudUpdatedKey(activeCloudId), row.updated_at);
           } catch {}
 
           setTimeout(() => { applyingRemote.current = false; }, 0);
@@ -405,13 +514,13 @@ export default function RummyApp() {
       if (saveTimer.current) clearTimeout(saveTimer.current);
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [game.gameId]);
 
 
   useEffect(() => {
     function flushPendingSync() {
       try {
-        const pending = localStorage.getItem(PENDING_SYNC_KEY);
+        const pending = localStorage.getItem(pendingSyncKey(gameCloudId(game)));
         if (pending) {
           queueCloudSave(JSON.parse(pending) as Game);
         }
@@ -422,7 +531,7 @@ export default function RummyApp() {
     flushPendingSync();
 
     return () => window.removeEventListener("online", flushPendingSync);
-  }, [queueCloudSave]);
+  }, [queueCloudSave, game.gameId]);
 
   const rounds = useMemo(() => activeRounds(game.rounds), [game.rounds]);
   const scoreTotals = useMemo(() => totals(game), [game]);
@@ -432,8 +541,14 @@ export default function RummyApp() {
 
   function createGame() {
     const players = DEFAULT_PLAYERS.slice(0, playerCount).map((player, index) => ({ ...player, name: names[index]?.trim() || player.name }));
-    const nextGame: Game = { gameId: crypto.randomUUID(), gameName: gameName.trim() || `Game ${new Date().toLocaleDateString()}`, players, targetScore: target === "custom" ? Number(customTarget || 1500) : target, starterId: players[0].id, rounds: [], status: "active", winnerId: null };
+    const nextGame: Game = touchGame({ gameId: crypto.randomUUID(), gameName: gameName.trim() || `Game ${new Date().toLocaleDateString()}`, players, targetScore: target === "custom" ? Number(customTarget || 1500) : target, starterId: players[0].id, rounds: [], status: "active", winnerId: null, archived: false });
     setGame(nextGame);
+    setSavedGames((previous) => {
+      const next = upsertGameInLibrary(previous, nextGame);
+      writeGameLibrary(next);
+      return next;
+    });
+    if (nextGame.gameId) setUrlGameId(nextGame.gameId);
     setInputs({}); setClosedBy(null); setGameOpen(false); haptic([8, 18, 8]);
   }
 
@@ -506,7 +621,7 @@ export default function RummyApp() {
   }
 
   function resetGame() { setGame((previous: Game) => ({ ...previous, rounds: [], status: "active", winnerId: null })); setInputs({}); setClosedBy(null); setSettingsOpen(false); }
-  function rematch() { setGame((previous: Game) => ({ ...previous, gameId: crypto.randomUUID(), rounds: [], status: "active", winnerId: null })); setInputs({}); setClosedBy(null); }
+  function rematch() { setGame((previous: Game) => ({ ...previous, gameId: crypto.randomUUID(), gameName: `${previous.gameName} rematch`, rounds: [], status: "active", winnerId: null })); setInputs({}); setClosedBy(null); }
   function newSetup() { setGame(createDefaultGame()); setInputs({}); setClosedBy(null); setGameOpen(true); }
 
   
@@ -658,6 +773,127 @@ export default function RummyApp() {
   }, []);
 
 
+  function openGameLibrary() {
+    setSettingsOpen(false);
+    setGamesOpen(true);
+  }
+
+  function switchSavedGame(nextGame: Game) {
+    const opened = touchGame(nextGame);
+    applyingRemote.current = true;
+    currentSignature.current = gameSignature(opened);
+    setGame(opened);
+    setInputs({});
+    setClosedBy(null);
+    setGamesOpen(false);
+    if (opened.gameId) {
+      setUrlGameId(opened.gameId);
+      try { localStorage.setItem(ACTIVE_GAME_KEY, opened.gameId); } catch {}
+    }
+    setSavedGames((previous) => {
+      const next = upsertGameInLibrary(previous, opened);
+      writeGameLibrary(next);
+      return next;
+    });
+    setTimeout(() => { applyingRemote.current = false; }, 0);
+  }
+
+  function deleteSavedGame(gameId: string) {
+    const next = savedGames.filter((item) => item.gameId !== gameId);
+    setSavedGames(next);
+    writeGameLibrary(next);
+
+    if (game.gameId === gameId) {
+      const fallback = next[0] || createDefaultGame();
+      setGame(fallback);
+      if (fallback.gameId) setUrlGameId(fallback.gameId);
+    }
+  }
+
+  function duplicateCurrentGame() {
+    const copy: Game = touchGame({
+      ...game,
+      gameId: crypto.randomUUID(),
+      gameName: `${game.gameName || "Game"} copy`,
+      status: "active",
+      winnerId: null,
+      archived: false
+    });
+    setGame(copy);
+    setInputs({});
+    setClosedBy(null);
+    setGamesOpen(false);
+    haptic([8, 18, 8]);
+  }
+
+  async function copySavedGameLink(nextGame: Game) {
+    const url = getShareUrl(nextGame);
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setShareStatus("copied");
+      haptic(8);
+    } catch {}
+
+    setTimeout(() => setShareStatus("idle"), 1400);
+  }
+
+  function openInvitePanel() {
+    setSettingsOpen(false);
+    setGamesOpen(false);
+    setInviteOpen(true);
+  }
+
+  async function copyCurrentGameLink() {
+    await copySavedGameLink(game);
+  }
+
+  async function shareCurrentGame() {
+    const url = getShareUrl(game);
+    const text = `Join my Rummy 500 game: ${game.gameName || "Rummy 500"}\n${url}`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: game.gameName || "Rummy 500", text, url });
+        setShareStatus("copied");
+        haptic(8);
+      } else {
+        await navigator.clipboard.writeText(text);
+        setShareStatus("copied");
+        haptic(8);
+      }
+    } catch {}
+
+    setTimeout(() => setShareStatus("idle"), 1400);
+  }
+
+  function renameSavedGame(gameId: string) {
+    const current = savedGames.find((item) => item.gameId === gameId);
+    if (!current) return;
+
+    const nextName = typeof window !== "undefined" ? window.prompt("Game name", current.gameName || "Game") : null;
+    if (!nextName?.trim()) return;
+
+    const renamed = touchGame({ ...current, gameName: nextName.trim() });
+    const next = upsertGameInLibrary(savedGames.filter((item) => item.gameId !== gameId), renamed);
+    setSavedGames(next);
+    writeGameLibrary(next);
+
+    if (game.gameId === gameId) setGame(renamed);
+  }
+
+  function archiveSavedGame(gameId: string) {
+    const current = savedGames.find((item) => item.gameId === gameId);
+    if (!current) return;
+
+    const archived = touchGame({ ...current, archived: !current.archived });
+    const next = upsertGameInLibrary(savedGames.filter((item) => item.gameId !== gameId), archived);
+    setSavedGames(next);
+    writeGameLibrary(next);
+
+    if (game.gameId === gameId) setGame(archived);
+  }
+
   function saveGame() { queueCloudSave(game); setSettingsOpen(false); }
 
   async function shareGame() {
@@ -762,6 +998,7 @@ export default function RummyApp() {
           <section className="glass modal settings-modal">
             <div className="modal-title">Settings</div>
             <div className="sync-line">Cloud sync: {syncStatus}</div>
+            <div className="sync-line">Room {shortGameCode(game.gameId)}</div>
             <div className="analytics-grid">
               <div><span>Rounds</span><strong>{analytics.roundsPlayed}</strong></div>
               <div><span>Avg</span><strong>{analytics.averageRoundPoints}</strong></div>
@@ -774,10 +1011,86 @@ export default function RummyApp() {
             <button type="button" onClick={() => { setSettingsOpen(false); setTypographyOpen(true); }} className="glass-soft modal-btn typography-settings-button">UI Studio</button>
             <div className="modal-grid">
               <button type="button" onClick={undo} className="glass-soft modal-btn">Undo</button>
+              <button type="button" onClick={openGameLibrary} className="glass-soft modal-btn">Saved Games</button>
+              <button type="button" onClick={openInvitePanel} className="glass-soft modal-btn">Invite</button>
               <button type="button" onClick={() => { setSettingsOpen(false); setGameOpen(true); }} className="glass-soft modal-btn">Game</button>
               <button type="button" onClick={saveGame} className="glass-soft modal-btn">Save</button>
               <button type="button" onClick={resetGame} className="glass-soft modal-btn danger">Reset</button>
               
+            </div>
+          </section>
+        </>
+      )}
+
+
+
+      {inviteOpen && (
+        <>
+          <div className="modal-shade" onClick={() => setInviteOpen(false)} />
+          <section className="glass sheet invite-panel">
+            <div className="modal-title">Invite Players</div>
+            <div className="sync-line">Share this game with anyone who should play or follow along.</div>
+
+            <div className="invite-card">
+              <div className="invite-code-label">Game code</div>
+              <div className="invite-code">{shortGameCode(game.gameId)}</div>
+              <div className="invite-game-name">{game.gameName || "Untitled game"}</div>
+              <div className="invite-url">{getShareUrl(game)}</div>
+            </div>
+
+            <div className="invite-players">
+              {game.players.map((player) => (
+                <div key={player.id} className="invite-player">
+                  <span>{player.name}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="modal-grid">
+              <button type="button" onClick={copyCurrentGameLink} className="glass-soft modal-btn">{shareStatus === "copied" ? "Copied" : "Copy link"}</button>
+              <button type="button" onClick={shareCurrentGame} className="glass-soft modal-btn">Share</button>
+              <button type="button" onClick={() => { setInviteOpen(false); setGamesOpen(true); }} className="glass-soft modal-btn">Saved Games</button>
+              <button type="button" onClick={() => setInviteOpen(false)} className="glass-soft modal-btn">Done</button>
+            </div>
+          </section>
+        </>
+      )}
+
+      {gamesOpen && (
+        <>
+          <div className="modal-shade" onClick={() => setGamesOpen(false)} />
+          <section className="glass sheet game-library-panel">
+            <div className="modal-title">Saved Games</div>
+            <div className="sync-line">Each game has its own shared link and sync room.</div>
+
+            <div className="game-library-toolbar">
+              <button type="button" onClick={() => { setGamesOpen(false); setGameOpen(true); }} className="glass-soft modal-btn">New game</button>
+              <button type="button" onClick={duplicateCurrentGame} className="glass-soft modal-btn">Duplicate</button>
+              <button type="button" onClick={openInvitePanel} className="glass-soft modal-btn">Invite current</button>
+              <button type="button" onClick={() => setShowArchivedGames((value) => !value)} className="glass-soft modal-btn">
+                {showArchivedGames ? "Hide archived" : "Show archived"}
+              </button>
+            </div>
+
+            <div className="history game-library-list">
+              {visibleSavedGames(savedGames, showArchivedGames).length === 0 ? (
+                <div className="history-item">No saved games yet</div>
+              ) : visibleSavedGames(savedGames, showArchivedGames).map((item) => (
+                <div key={item.gameId || item.gameName} className={`history-item game-library-item ${item.gameId === game.gameId ? "active" : ""} ${item.archived ? "archived" : ""}`}>
+                  <button type="button" onClick={() => switchSavedGame(item)} className="game-library-main">
+                    <strong>{item.gameName || "Untitled game"}</strong>
+                    <span>{item.players.map((player) => player.name).join(" · ")}</span>
+                    <span>{item.players.length} players · {activeRounds(item.rounds).length} rounds · {item.targetScore} target · {shortGameCode(item.gameId)}</span>
+                    <span>{item.archived ? "Archived" : `Last opened ${formatGameUpdated(item.updatedAt)}`}</span>
+                  </button>
+                  <div className="game-library-actions">
+                    <button type="button" onClick={() => copySavedGameLink(item)}>{shareStatus === "copied" ? "Copied" : "Link"}</button>
+                    <button type="button" onClick={() => item.gameId && renameSavedGame(item.gameId)}>Rename</button>
+                    <button type="button" onClick={() => item.gameId && archiveSavedGame(item.gameId)}>{item.archived ? "Unarchive" : "Archive"}</button>
+                    <button type="button" onClick={() => item.gameId && deleteSavedGame(item.gameId)}>Delete</button>
+                  </div>
+                </div>
+              ))}
             </div>
           </section>
         </>
@@ -1008,7 +1321,7 @@ export default function RummyApp() {
               {target === "custom" && <input value={customTarget} onChange={(event) => setCustomTarget(event.target.value)} inputMode="numeric" placeholder="Custom target" className="form-input" />}
               <div className="segment" style={{ "--count": 3 } as React.CSSProperties}>{[2, 3, 4].map((count) => <button key={count} type="button" onClick={() => setPlayerCount(count)} className={playerCount === count ? "selected" : ""}>{count}</button>)}</div>
               {Array.from({ length: playerCount }, (_, index) => <input key={index} value={names[index] || ""} onChange={(event) => setNames((previous: string[]) => previous.map((name, nameIndex) => nameIndex === index ? event.target.value : name))} placeholder={DEFAULT_PLAYERS[index]?.name || `Player ${index + 1}`} className="form-input" />)}
-              <button type="button" onClick={createGame} className="primary">Create game</button>
+              <button type="button" onClick={createGame} className="primary">Create / save game</button>
             </div>
             <div className="history">{history.slice(0, 5).map((item) => <div key={item.gameId} className="history-item"><strong>{item.gameName}</strong><span>{item.winnerName}</span></div>)}</div>
           </section>
