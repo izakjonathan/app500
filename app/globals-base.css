@@ -613,3 +613,184 @@ input{min-width:0;border:0;outline:none}
   .app.players-4 .penalty{height:32px;min-height:32px}
   .app.players-4 .add-round{height:50px;min-height:50px}
 }
+
+
+/* ===== V135 COHESIVE SPACING + CARD DESIGN PASS =====
+   CSS-only visual pass.
+   Goals:
+   - equal-feeling section rhythm
+   - refined Last Round card
+   - larger names in adjust-points cards
+   - scoreboard percentage text fits inside circle
+*/
+
+:root{
+  --section-rhythm:16px;
+}
+
+/* Use one shared rhythm between the main stacked sections */
+.ui{
+  gap:0 !important;
+}
+
+.header{
+  margin-bottom:calc(var(--section-rhythm) * var(--ui-density-scale)) !important;
+}
+
+.scoreboard{
+  margin-bottom:calc(var(--section-rhythm) * var(--ui-density-scale)) !important;
+}
+
+.rounds{
+  margin:0 !important;
+}
+
+.dock{
+  padding-top:calc(var(--section-rhythm) * var(--ui-density-scale)) !important;
+}
+
+/* Last Round card design pass */
+.rounds-card{
+  min-height:124px !important;
+  padding:18px 18px 16px !important;
+  align-content:center !important;
+}
+
+.last-round-top{
+  margin-bottom:8px !important;
+}
+
+.last-round-label{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-height:24px !important;
+  padding:0 12px !important;
+  border:1.5px solid var(--passport-blue) !important;
+  border-radius:999px !important;
+  letter-spacing:.16em !important;
+}
+
+.last-round-grid{
+  margin-top:8px !important;
+  align-items:end !important;
+}
+
+.last-round-player{
+  display:grid !important;
+  gap:6px !important;
+  justify-items:center !important;
+  align-content:center !important;
+  min-height:44px !important;
+}
+
+.last-round-player-name{
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+
+.last-round-player-score{
+  line-height:.9 !important;
+}
+
+.last-round-hint{
+  margin-top:10px !important;
+  opacity:.78 !important;
+}
+
+/* Larger names in adjust-points cards */
+.input-name{
+  font-size:calc(var(--font-size-title) * 1.08) !important;
+  font-weight:var(--font-weight-title) !important;
+  letter-spacing:-.045em !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  white-space:nowrap !important;
+}
+
+/* Give names more room without changing the overall control layout */
+.input-main{
+  grid-template-columns:minmax(58px,78px) 46px minmax(0,1fr) 46px !important;
+}
+
+/* Scoreboard percentage should fit inside the circle */
+.ring{
+  width:38px !important;
+  height:38px !important;
+  font-size:9px !important;
+  font-weight:var(--font-weight-title) !important;
+  letter-spacing:-.04em !important;
+  line-height:1 !important;
+  text-align:center !important;
+  overflow:hidden !important;
+  padding-top:1px !important;
+}
+
+.player-card{
+  grid-template-columns:48px minmax(0,1fr) auto !important;
+  min-height:60px !important;
+  padding-top:10px !important;
+  padding-bottom:10px !important;
+}
+
+/* 4-player mode keeps same design language but compressed */
+.app.players-4 .header,
+.app.players-4 .scoreboard{
+  margin-bottom:calc(var(--section-rhythm) * .72) !important;
+}
+
+.app.players-4 .dock{
+  padding-top:calc(var(--section-rhythm) * .72) !important;
+}
+
+.app.players-4 .rounds-card{
+  min-height:96px !important;
+  padding:14px 14px 12px !important;
+}
+
+.app.players-4 .last-round-label{
+  min-height:20px !important;
+  padding:0 9px !important;
+}
+
+.app.players-4 .last-round-player{
+  min-height:36px !important;
+  gap:4px !important;
+}
+
+.app.players-4 .input-main{
+  grid-template-columns:minmax(54px,72px) 42px minmax(0,1fr) 42px !important;
+}
+
+.app.players-4 .input-name{
+  font-size:calc(var(--font-size-title) * .94) !important;
+}
+
+.app.players-4 .ring{
+  width:34px !important;
+  height:34px !important;
+  font-size:8px !important;
+}
+
+/* Short viewport keeps the same relationships tighter */
+@media (max-height:760px){
+  :root{
+    --section-rhythm:12px;
+  }
+
+  .rounds-card{
+    min-height:108px !important;
+    padding:15px 16px 13px !important;
+  }
+
+  .last-round-label{
+    min-height:22px !important;
+  }
+
+  .input-name{
+    font-size:var(--font-size-title) !important;
+  }
+}

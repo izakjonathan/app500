@@ -1,0 +1,16 @@
+V135 Cohesive Spacing + Design Pass
+
+Built from V134.
+
+CSS-only visual pass:
+- Unified vertical spacing between top pills, scoreboard, Last Round, and controls.
+- Last Round card design pass:
+  - improved internal spacing
+  - pill-style Last Round label
+  - better player score layout
+- Increased names in point-control cards.
+- Adjusted point-control grid to give names more room.
+- Adjusted scoreboard percentage ring so % numbers fit better.
+- Added compressed equivalents for 4-player and short viewport modes.
+
+No game/scoring/sync logic changed.

@@ -134,3 +134,35 @@
 @media (max-height:760px){
   .total{font-size:calc(var(--font-size-score) * .88)}
 }
+
+
+/* ===== V135 TYPOGRAPHY REFINEMENTS ===== */
+
+.input-name{
+  font-size:calc(var(--font-size-title) * 1.08) !important;
+  font-weight:var(--font-weight-title) !important;
+}
+
+.ring{
+  font-size:9px !important;
+  font-weight:var(--font-weight-title) !important;
+}
+
+.last-round-label{
+  font-size:calc(var(--font-size-caption) * .92) !important;
+  font-weight:var(--font-weight-label) !important;
+}
+
+.last-round-player-name{
+  font-size:calc(var(--font-size-body) * .92) !important;
+}
+
+.last-round-player-score{
+  font-size:calc(var(--font-size-display) * .92) !important;
+}
+
+@media (max-height:760px){
+  .input-name{
+    font-size:var(--font-size-title) !important;
+  }
+}
