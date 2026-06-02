@@ -176,6 +176,12 @@ function createDefaultGame(): Game {
 
 function activeRounds(rounds: Round[]) { return rounds.filter((round) => !round.deleted); }
 
+function nextStarterId(players: Player[], currentStarterId: string) {
+  const index = players.findIndex((player) => player.id === currentStarterId);
+  const safeIndex = index >= 0 ? index : 0;
+  return players[(safeIndex + 1) % players.length]?.id || players[0]?.id || currentStarterId;
+}
+
 function totals(game: Game) {
   const result: Record<string, number> = {};
   game.players.forEach((player) => { result[player.id] = 0; });
@@ -669,11 +675,7 @@ export default function RummyApp() {
   }
 
   function toggleStarter() {
-    setGame((previous: Game) => {
-      const index = previous.players.findIndex((player) => player.id === previous.starterId);
-      const next = previous.players[(index + 1) % previous.players.length] || previous.players[0];
-      return { ...previous, starterId: next.id };
-    });
+    setGame((previous: Game) => ({ ...previous, starterId: nextStarterId(previous.players, previous.starterId) }));
   }
 
   function quick(playerId: string, amount: number) {
@@ -690,12 +692,6 @@ export default function RummyApp() {
     });
   }
 
-  function addPenalty(playerId: string) {
-    if (isCommitting) return;
-    setInputs((previous: Record<string, string>) => ({ ...previous, [playerId]: String((Number(previous[playerId] || 0) || 0) - 50) }));
-    haptic([8, 18, 8]);
-  }
-
   function addRound() {
     if (isCommitting) return;
     if (!game.gameId) { setGameOpen(true); return; }
@@ -708,7 +704,8 @@ export default function RummyApp() {
 
     setGame((previous: Game) => {
       const nextRounds = [...previous.rounds, round];
-      const draft = { ...previous, rounds: nextRounds };
+      const nextStarter = nextStarterId(previous.players, previous.starterId);
+      const draft = { ...previous, rounds: nextRounds, starterId: nextStarter };
       const nextTotals = totals(draft);
       const winnerPlayer = previous.players.find((player) => (nextTotals[player.id] || 0) >= previous.targetScore);
       if (winnerPlayer) {
@@ -1101,9 +1098,6 @@ export default function RummyApp() {
               <div className="quick-grid">{[5, 10, 25, 50].map((amount) => <button key={amount} disabled={isCommitting} type="button" onClick={() => quick(player.id, amount)} className="quick">+{amount}</button>)}</div>
             </div>
           ))}
-          <div className="penalties" style={{ gridTemplateColumns: `repeat(${game.players.length}, minmax(0, 1fr))` }}>
-            {game.players.map((player) => <button key={player.id} disabled={isCommitting} type="button" onClick={() => addPenalty(player.id)} className="penalty">-50 {player.name}</button>)}
-          </div>
           <button type="button" disabled={isCommitting} onClick={addRound} className="glass-soft add-round"><span>{isCommitting ? "Adding…" : "Add round"}</span><span className="add-round-plus">+</span></button>
         </div>
       </section>

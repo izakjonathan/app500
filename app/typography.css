@@ -36,7 +36,7 @@
   letter-spacing:-.045em;
 }
 
-.pill,.input-name,.last-round-player-name,.quick,.penalty,.modal-btn,.segment button,.history-item,.form-input,.ui-control-row span,.ui-studio-tabs button,.ui-studio-wide-btn,.ui-preset-grid button{
+.pill,.input-name,.last-round-player-name,.quick,.modal-btn,.segment button,.history-item,.form-input,.ui-control-row span,.ui-studio-tabs button,.ui-studio-wide-btn,.ui-preset-grid button{
   font-size:var(--font-size-body);
   font-weight:var(--font-weight-body);
 }
@@ -129,7 +129,7 @@
 .app.players-4 .last-round-label{font-size:calc(var(--font-size-caption) * .9)}
 .app.players-4 .last-round-player-name{font-size:calc(var(--font-size-body) * .82)}
 .app.players-4 .last-round-player-score{font-size:calc(var(--font-size-display) * .78)}
-.app.players-4 .quick,.app.players-4 .penalty{font-size:calc(var(--font-size-body) * .9)}
+.app.players-4 .quick{font-size:calc(var(--font-size-body) * .9)}
 
 @media (max-height:760px){
   .total{font-size:calc(var(--font-size-score) * .88)}

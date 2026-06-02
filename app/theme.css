@@ -21,7 +21,7 @@ button,input{
   color:inherit;
 }
 
-.glass,.glass-soft,.scoreboard,.player-card,.rounds-card,.input-row,.pill,.quick,.penalty,.icon-btn,.closed-toggle,.add-round,.modal,.sheet,.modal-btn,.share-game-btn,.typography-settings-button,.primary,.form-input,.segment,.segment button,.history-item,.analytics-grid>div,.ui-studio-tabs button,.ui-control-row,.ui-value-button,.ui-studio-wide-btn,.ui-preset-grid button,.type-control,.mini-reset{
+.glass,.glass-soft,.scoreboard,.player-card,.rounds-card,.input-row,.pill,.quick,.icon-btn,.closed-toggle,.add-round,.modal,.sheet,.modal-btn,.share-game-btn,.typography-settings-button,.primary,.form-input,.segment,.segment button,.history-item,.analytics-grid>div,.ui-studio-tabs button,.ui-control-row,.ui-value-button,.ui-studio-wide-btn,.ui-preset-grid button,.type-control,.mini-reset{
   background:var(--passport-bg);
   background-image:none;
   box-shadow:none;
@@ -32,7 +32,7 @@ button,input{
   text-shadow:none;
 }
 
-.glass::before,.glass-soft::before,.scoreboard::before,.player-card::before,.rounds-card::before,.dock-panel::before,.input-row::before,.input-row::after,.pill::before,.quick::before,.penalty::before,.icon-btn::before,.add-round::before,.modal::before,.sheet::before{
+.glass::before,.glass-soft::before,.scoreboard::before,.player-card::before,.rounds-card::before,.dock-panel::before,.input-row::before,.input-row::after,.pill::before,.quick::before::before,.icon-btn::before,.add-round::before,.modal::before,.sheet::before{
   content:none;
   display:none;
 }
@@ -42,7 +42,7 @@ button,input{
   border:0;
 }
 
-.pill,.quick,.penalty,.icon-btn,.closed-toggle,.add-round,.modal-btn,.share-game-btn,.typography-settings-button,.primary,.form-input,.segment button,.ui-studio-tabs button,.ui-studio-wide-btn,.ui-preset-grid button,.ui-value-button,.mini-reset,.ui-color-picker{
+.pill,.quick,.icon-btn,.closed-toggle,.add-round,.modal-btn,.share-game-btn,.typography-settings-button,.primary,.form-input,.segment button,.ui-studio-tabs button,.ui-studio-wide-btn,.ui-preset-grid button,.ui-value-button,.mini-reset,.ui-color-picker{
   background:transparent;
 }
 
