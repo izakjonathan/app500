@@ -399,3 +399,15 @@ input{min-width:0;border:0;outline:none}
 @media (max-width:380px){
   .invite-players{grid-template-columns:1fr}
 }
+
+
+/* V143 shared URL QA/status */
+.room-status,
+.room-warning{
+  margin-bottom:12px;
+  text-align:center;
+}
+.room-warning{
+  padding:10px 12px;
+  border-radius:var(--radius-lg);
+}

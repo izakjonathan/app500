@@ -250,6 +250,7 @@ export default function RummyApp() {
   const [gameName, setGameName] = useState("");
   const [names, setNames] = useState<string[]>(DEFAULT_PLAYERS.map((p) => p.name));
   const [syncStatus, setSyncStatus] = useState<SyncStatus>("loading");
+  const [roomLoadStatus, setRoomLoadStatus] = useState<"idle" | "loading" | "loaded" | "missing">("idle");
   const [isCommitting, setIsCommitting] = useState(false);
   const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "shared">("idle");
 
@@ -263,6 +264,7 @@ export default function RummyApp() {
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const syncInFlight = useRef(false);
   const localLibraryLoaded = useRef(false);
+  const suppressNextSaveForRemoteLoad = useRef(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -307,7 +309,9 @@ export default function RummyApp() {
         setGame(selectedGame);
         if (selectedGame.gameId) setUrlGameId(selectedGame.gameId);
       } else if (urlGameId) {
-        const placeholder = { ...createDefaultGame(), gameId: urlGameId, gameName: `Shared game ${urlGameId.slice(0, 5)}` };
+        const placeholder = { ...createDefaultGame(), gameId: urlGameId, gameName: `Loading shared game ${urlGameId.slice(0, 5).toUpperCase()}` };
+        suppressNextSaveForRemoteLoad.current = true;
+        setRoomLoadStatus("loading");
         currentSignature.current = gameSignature(placeholder);
         setGame(placeholder);
         setUrlGameId(urlGameId);
@@ -377,6 +381,8 @@ export default function RummyApp() {
   useEffect(() => {
     if (!localLibraryLoaded.current) return;
 
+    if (suppressNextSaveForRemoteLoad.current && roomLoadStatus === "loading") return;
+
     const signature = gameSignature(game);
     currentSignature.current = signature;
 
@@ -414,6 +420,17 @@ export default function RummyApp() {
 
     async function loadCloud() {
       setSyncStatus("loading");
+      setRoomLoadStatus("loading");
+
+      if (!supabase) {
+        cloudLoaded.current = true;
+        initialSyncFinished.current = true;
+        suppressNextSaveForRemoteLoad.current = false;
+        setSyncStatus("offline");
+        setRoomLoadStatus("missing");
+        return;
+      }
+
       const { data, error } = await supabase
         .from("rummy_current_game")
         .select("game_state, updated_at")
@@ -425,13 +442,15 @@ export default function RummyApp() {
       if (error) {
         cloudLoaded.current = true;
         initialSyncFinished.current = true;
+        suppressNextSaveForRemoteLoad.current = false;
         setSyncStatus("offline");
+        setRoomLoadStatus("missing");
         return;
       }
 
       if (data?.game_state) {
         const remoteRaw = data.game_state as CloudGame;
-        const remoteGame = stripSync(remoteRaw);
+        const remoteGame = { ...stripSync(remoteRaw), gameId: activeCloudId, updatedAt: data.updated_at || new Date().toISOString() };
         const remoteSignature = gameSignature(remoteGame);
         const localUpdated = localStorage.getItem(cloudUpdatedKey(activeCloudId)) || "";
         const remoteUpdated = data.updated_at || "";
@@ -444,12 +463,28 @@ export default function RummyApp() {
           applyingRemote.current = true;
           currentSignature.current = remoteSignature;
           setGame(remoteGame);
+          setSavedGames((previous) => {
+            const next = upsertGameInLibrary(previous, remoteGame);
+            writeGameLibrary(next);
+            return next;
+          });
           try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteGame));
+            localStorage.setItem(ACTIVE_GAME_KEY, activeCloudId);
             localStorage.setItem(cloudUpdatedKey(activeCloudId), remoteUpdated);
           } catch {}
+          suppressNextSaveForRemoteLoad.current = false;
+          setRoomLoadStatus("loaded");
           setTimeout(() => { applyingRemote.current = false; }, 0);
         }
+      }
+
+      if (!data?.game_state) {
+        setRoomLoadStatus("missing");
+        suppressNextSaveForRemoteLoad.current = false;
+      } else {
+        setRoomLoadStatus("loaded");
+        suppressNextSaveForRemoteLoad.current = false;
       }
 
       cloudLoaded.current = true;
@@ -479,7 +514,7 @@ export default function RummyApp() {
             return;
           }
 
-          const remoteGame = stripSync(row.game_state);
+          const remoteGame = { ...stripSync(row.game_state), gameId: activeCloudId, updatedAt: row.updated_at || new Date().toISOString() };
           if (isUntouchedDefault(remoteGame)) return;
 
           const remoteSignature = gameSignature(remoteGame);
@@ -495,18 +530,29 @@ export default function RummyApp() {
           applyingRemote.current = true;
           currentSignature.current = remoteSignature;
           setGame(remoteGame);
+          setSavedGames((previous) => {
+            const next = upsertGameInLibrary(previous, remoteGame);
+            writeGameLibrary(next);
+            return next;
+          });
           try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteGame));
+            localStorage.setItem(ACTIVE_GAME_KEY, activeCloudId);
             if (row.updated_at) localStorage.setItem(cloudUpdatedKey(activeCloudId), row.updated_at);
           } catch {}
 
+          suppressNextSaveForRemoteLoad.current = false;
+          setRoomLoadStatus("loaded");
           setTimeout(() => { applyingRemote.current = false; }, 0);
           setSyncStatus("synced");
         }
       )
       .subscribe((status) => {
         if (status === "SUBSCRIBED") setSyncStatus("synced");
-        if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") setSyncStatus("offline");
+        if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+          setSyncStatus("offline");
+          if (roomLoadStatus === "loading") setRoomLoadStatus("missing");
+        }
       });
 
     return () => {
@@ -998,7 +1044,7 @@ export default function RummyApp() {
           <section className="glass modal settings-modal">
             <div className="modal-title">Settings</div>
             <div className="sync-line">Cloud sync: {syncStatus}</div>
-            <div className="sync-line">Room {shortGameCode(game.gameId)}</div>
+            <div className="sync-line">Room {shortGameCode(game.gameId)} · {roomLoadStatus}</div>
             <div className="analytics-grid">
               <div><span>Rounds</span><strong>{analytics.roundsPlayed}</strong></div>
               <div><span>Avg</span><strong>{analytics.averageRoundPoints}</strong></div>
@@ -1030,6 +1076,7 @@ export default function RummyApp() {
           <section className="glass sheet invite-panel">
             <div className="modal-title">Invite Players</div>
             <div className="sync-line">Share this game with anyone who should play or follow along.</div>
+            <div className={`room-status room-status-${roomLoadStatus}`}>Room status: {roomLoadStatus}</div>
 
             <div className="invite-card">
               <div className="invite-code-label">Game code</div>
@@ -1045,6 +1092,10 @@ export default function RummyApp() {
                 </div>
               ))}
             </div>
+
+            {roomLoadStatus === "missing" && (
+              <div className="room-warning">This room has not been found in cloud sync yet. Create or save the game on the original phone, then reopen this link.</div>
+            )}
 
             <div className="modal-grid">
               <button type="button" onClick={copyCurrentGameLink} className="glass-soft modal-btn">{shareStatus === "copied" ? "Copied" : "Copy link"}</button>

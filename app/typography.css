@@ -245,3 +245,11 @@
   font-size:var(--font-size-caption);
   font-weight:var(--font-weight-label);
 }
+
+
+/* V143 shared URL QA/status */
+.room-status,
+.room-warning{
+  font-size:var(--font-size-caption);
+  font-weight:var(--font-weight-label);
+}

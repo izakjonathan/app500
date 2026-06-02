@@ -134,3 +134,11 @@ input::placeholder{
 .invite-url{
   opacity:.78;
 }
+
+
+/* V143 shared URL QA/status */
+.room-warning{
+  background:var(--passport-bg);
+  border:1.5px solid var(--passport-blue);
+  color:var(--passport-blue);
+}
