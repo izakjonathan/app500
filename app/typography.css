@@ -1,7 +1,4 @@
-/* ===== V129 CLEAN TYPOGRAPHY CONTROLS =====
-   Only current UI Studio typography controls and active selectors.
-*/
-
+/* Final typography controls */
 :root{
   --font-size-caption:10px;
   --font-size-body:14px;
@@ -22,8 +19,16 @@
   letter-spacing:.18em;
   text-transform:uppercase;
 }
-.label{ text-align:center; margin-bottom:10px; }
-.modal-title{ text-align:center; margin-bottom:12px; }
+
+.label{
+  text-align:center;
+  margin-bottom:10px;
+}
+
+.modal-title{
+  text-align:center;
+  margin-bottom:12px;
+}
 
 .player-name,.add-round,.empty-title{
   font-size:var(--font-size-title);
@@ -47,6 +52,7 @@
   font-size:var(--font-size-input);
   font-weight:var(--font-weight-score);
   letter-spacing:-.06em;
+  text-align:center;
 }
 
 .last-round-player-score,.analytics-grid strong{
@@ -62,34 +68,69 @@
   line-height:1;
 }
 
-.empty-sub{ margin-top:8px; }
-.sync-line{ margin:0 0 12px; text-align:center; }
-.analytics-grid span,.analytics-grid strong{ display:block; width:100%; text-align:center; margin:0; }
-.analytics-grid span{ letter-spacing:.14em; text-transform:uppercase; }
-.analytics-grid strong{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
-.icon-btn,.closed-toggle{ font-size:27px; font-weight:800; }
-.add-round-plus{ font-size:23px; font-weight:780; }
-.ui-value-button{ font-size:var(--font-size-body); font-weight:var(--font-weight-title); text-align:center; }
-.color-value-button{ font-size:11px; letter-spacing:-.02em; }
-.mini-reset{ font-size:10px; font-weight:800; letter-spacing:.02em; }
-
-.app.players-4 .player-name{ font-size:calc(var(--font-size-title) * .92); }
-.app.players-4 .input-name{ font-size:calc(var(--font-size-title) * .86); }
-.app.players-4 .round-input{ font-size:calc(var(--font-size-input) * .86); }
-.app.players-4 .total{ font-size:calc(var(--font-size-score) * .84); }
-.app.players-4 .last-round-label{ font-size:calc(var(--font-size-caption) * .9); }
-.app.players-4 .last-round-player-name{ font-size:calc(var(--font-size-body) * .82); }
-.app.players-4 .last-round-player-score{ font-size:calc(var(--font-size-display) * .78); }
-.app.players-4 .quick,.app.players-4 .penalty{ font-size:calc(var(--font-size-body) * .9); }
-
-@media (max-height:760px){
-  .total{ font-size:calc(var(--font-size-score) * .88); }
+.empty-sub{
+  margin-top:8px;
 }
 
-
-/* ===== V130 CSS CLEANUP QA FIX ===== */
-
-.round-input{
+.sync-line{
+  margin:0 0 12px;
   text-align:center;
+}
+
+.analytics-grid span,.analytics-grid strong{
+  display:block;
+  width:100%;
+  text-align:center;
+  margin:0;
+}
+
+.analytics-grid span{
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+.analytics-grid strong{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.icon-btn,.closed-toggle{
+  font-size:27px;
+  font-weight:800;
+}
+
+.add-round-plus{
+  font-size:23px;
+  font-weight:780;
+}
+
+.ui-value-button{
+  font-size:var(--font-size-body);
+  font-weight:var(--font-weight-title);
+  text-align:center;
+}
+
+.color-value-button{
+  font-size:11px;
+  letter-spacing:-.02em;
+}
+
+.mini-reset{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.02em;
+}
+
+.app.players-4 .player-name{font-size:calc(var(--font-size-title) * .92)}
+.app.players-4 .input-name{font-size:calc(var(--font-size-title) * .86)}
+.app.players-4 .round-input{font-size:calc(var(--font-size-input) * .86)}
+.app.players-4 .total{font-size:calc(var(--font-size-score) * .84)}
+.app.players-4 .last-round-label{font-size:calc(var(--font-size-caption) * .9)}
+.app.players-4 .last-round-player-name{font-size:calc(var(--font-size-body) * .82)}
+.app.players-4 .last-round-player-score{font-size:calc(var(--font-size-display) * .78)}
+.app.players-4 .quick,.app.players-4 .penalty{font-size:calc(var(--font-size-body) * .9)}
+
+@media (max-height:760px){
+  .total{font-size:calc(var(--font-size-score) * .88)}
 }

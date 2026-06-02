@@ -1,0 +1,79 @@
+V134 Final CSS Dead-Code Pass
+
+Built from rummy500-v133-ui-studio-controls-reconnected.zip.
+
+Final CSS architecture:
+- app/globals.css: imports only
+- app/globals-base.css: layout, sizing, spacing, radius/density hooks
+- app/theme.css: blueprint colors/fills/borders
+- app/typography.css: typography variables and text mappings
+
+Removed:
+- old development report files
+- old audit files
+- old versioned override comments
+- old glass/blur/shadow leftovers
+- duplicate CSS declarations from previous passes
+- CSS branches for controls that are no longer part of the current UI
+
+Kept:
+- Type controls
+- Space controls
+- Radius controls
+- Color controls
+- Layout/density controls
+- Preset compatibility
+- 2/3/4 player responsive rules
+- modal/settings/UI Studio styling
+- Safari/iPhone viewport handling
+
+CSS size:
+{
+  "globals.css": {
+    "lines": 3,
+    "chars": 81
+  },
+  "globals-base.css": {
+    "lines": 615,
+    "chars": 11047
+  },
+  "theme.css": {
+    "lines": 101,
+    "chars": 3160
+  },
+  "typography.css": {
+    "lines": 136,
+    "chars": 3124
+  }
+}
+
+Static unused CSS class scan:
+[
+  "02em",
+  "045em",
+  "04em",
+  "05",
+  "06em",
+  "075em",
+  "14em",
+  "18",
+  "18em",
+  "42",
+  "5px",
+  "7",
+  "74",
+  "75",
+  "78",
+  "82",
+  "84",
+  "86",
+  "88",
+  "9",
+  "92",
+  "95",
+  "css",
+  "dock-panel",
+  "type-control"
+]
+
+No game/scoring/sync logic intentionally changed.
