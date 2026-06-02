@@ -274,3 +274,10 @@
   font-weight:var(--font-weight-title) !important;
   letter-spacing:-.035em !important;
 }
+
+
+/* V148 Add Round outline button */
+.add-round{
+  font-weight:var(--font-weight-title) !important;
+  letter-spacing:-.035em !important;
+}

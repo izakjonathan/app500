@@ -167,3 +167,17 @@ input::placeholder{
 .add-round span{
   color:var(--passport-bg) !important;
 }
+
+
+/* V148 Add Round outline button */
+.add-round,
+.add-round.glass-soft{
+  background:var(--passport-bg) !important;
+  background-color:var(--passport-bg) !important;
+  border:1.5px solid var(--passport-blue) !important;
+  border-color:var(--passport-blue) !important;
+  color:var(--passport-blue) !important;
+}
+.add-round span{
+  color:var(--passport-blue) !important;
+}

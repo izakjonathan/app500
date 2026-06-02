@@ -474,3 +474,16 @@ input{min-width:0;border:0;outline:none}
 .add-round-plus{
   display:none !important;
 }
+
+
+/* V148 Add Round outline button */
+.add-round{
+  grid-template-columns:1fr !important;
+}
+.add-round span:first-child{
+  justify-self:center !important;
+  transform:none !important;
+}
+.add-round-plus{
+  display:none !important;
+}
