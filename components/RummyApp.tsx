@@ -28,6 +28,8 @@ const SAVE_DEBOUNCE_MS = 700;
 const PENDING_SYNC_KEY = "rummy500_clean_v52_pending_sync";
 
 const GAME_LIBRARY_KEY = "rummy500_multi_game_library_v139";
+const GAME_LIBRARY_BACKUP_KEY = "rummy500_multi_game_library_backup_v149";
+const GAME_LIBRARY_INDEX_KEY = "rummy500_multi_game_index_v149";
 const ACTIVE_GAME_KEY = "rummy500_active_game_id_v139";
 const DEVICE_NAME_KEY = "rummy500_device_name_v144";
 
@@ -50,31 +52,127 @@ function setUrlGameId(gameId: string) {
     window.history.replaceState({}, "", url.toString());
   } catch {}
 }
-function readGameLibrary(): Game[] {
-  if (typeof window === "undefined") return [];
+function gameStorageKey(gameId: string) { return `rummy500_saved_game_${gameId}`; }
+
+function readStoredGame(gameId: string): Game | null {
+  if (typeof window === "undefined" || !gameId) return null;
+
   try {
-    const raw = localStorage.getItem(GAME_LIBRARY_KEY);
+    const raw = localStorage.getItem(gameStorageKey(gameId));
+    return raw ? JSON.parse(raw) as Game : null;
+  } catch {
+    return null;
+  }
+}
+
+function mergeGameLists(...lists: Game[][]) {
+  const byId = new Map<string, Game>();
+
+  lists.flat().forEach((item) => {
+    if (!item?.gameId) return;
+
+    const previous = byId.get(item.gameId);
+    if (!previous) {
+      byId.set(item.gameId, item);
+      return;
+    }
+
+    const previousUpdated = String(previous.updatedAt || "");
+    const itemUpdated = String(item.updatedAt || "");
+
+    byId.set(item.gameId, itemUpdated >= previousUpdated ? item : previous);
+  });
+
+  return sortGameLibrary(Array.from(byId.values()));
+}
+
+function readGameArray(key: string): Game[] {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const raw = localStorage.getItem(key);
     const parsed = raw ? JSON.parse(raw) : [];
     return Array.isArray(parsed) ? parsed as Game[] : [];
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 }
+
+function readGameLibrary(): Game[] {
+  if (typeof window === "undefined") return [];
+
+  const primary = readGameArray(GAME_LIBRARY_KEY);
+  const backup = readGameArray(GAME_LIBRARY_BACKUP_KEY);
+
+  let indexed: Game[] = [];
+  try {
+    const rawIndex = localStorage.getItem(GAME_LIBRARY_INDEX_KEY);
+    const ids = rawIndex ? JSON.parse(rawIndex) : [];
+    if (Array.isArray(ids)) {
+      indexed = ids
+        .map((id) => readStoredGame(String(id)))
+        .filter(Boolean) as Game[];
+    }
+  } catch {}
+
+  let legacy: Game[] = [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) as Game : null;
+    if (parsed?.gameId) legacy = [parsed];
+  } catch {}
+
+  return mergeGameLists(primary, backup, indexed, legacy);
+}
+
 function writeGameLibrary(games: Game[]) {
   if (typeof window === "undefined") return;
-  try { localStorage.setItem(GAME_LIBRARY_KEY, JSON.stringify(games)); } catch {}
+
+  const next = sortGameLibrary(games.filter((item) => item?.gameId));
+
+  try {
+    localStorage.setItem(GAME_LIBRARY_KEY, JSON.stringify(next));
+    localStorage.setItem(GAME_LIBRARY_BACKUP_KEY, JSON.stringify(next));
+    localStorage.setItem(GAME_LIBRARY_INDEX_KEY, JSON.stringify(next.map((item) => item.gameId)));
+    next.forEach((item) => {
+      if (item.gameId) localStorage.setItem(gameStorageKey(item.gameId), JSON.stringify(item));
+    });
+  } catch {}
 }
+
+function removeGameFromStorage(gameId: string) {
+  if (typeof window === "undefined" || !gameId) return;
+
+  try {
+    localStorage.removeItem(gameStorageKey(gameId));
+    const remaining = readGameLibrary().filter((item) => item.gameId !== gameId);
+    localStorage.setItem(GAME_LIBRARY_INDEX_KEY, JSON.stringify(remaining.map((item) => item.gameId)));
+    localStorage.setItem(GAME_LIBRARY_KEY, JSON.stringify(remaining));
+    localStorage.setItem(GAME_LIBRARY_BACKUP_KEY, JSON.stringify(remaining));
+  } catch {}
+}
+
 function touchGame(game: Game) {
   return { ...game, updatedAt: new Date().toISOString() };
 }
+
 function sortGameLibrary(games: Game[]) {
   return [...games].sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
 }
+
 function upsertGameInLibrary(games: Game[], game: Game) {
   if (!game.gameId) return games;
+
   const previous = games.find((item) => item.gameId === game.gameId);
+  const isPlaceholder = game.gameName.startsWith("Loading shared game") && game.rounds.length === 0;
+
+  if (previous && isPlaceholder) return sortGameLibrary(games);
+
   const saved = touchGame({ ...game, archived: game.archived ?? previous?.archived ?? false });
-  const next = [saved, ...games.filter((item) => item.gameId !== game.gameId)];
-  return sortGameLibrary(next).slice(0, 50);
+  const next = mergeGameLists([saved], games.filter((item) => item.gameId !== game.gameId));
+  return next;
 }
+
 function visibleSavedGames(games: Game[], showArchived: boolean) {
   return sortGameLibrary(games).filter((item) => showArchived || !item.archived);
 }
@@ -332,9 +430,9 @@ export default function RummyApp() {
 
       setSavedGames(sortGameLibrary(nextLibrary));
 
-      const selectedGame =
-        nextLibrary.find((item) => item.gameId === activeGameId) ||
-        (savedGame ? JSON.parse(savedGame) as Game : null);
+      const selectedGame = activeGameId
+        ? nextLibrary.find((item) => item.gameId === activeGameId) || null
+        : (savedGame ? JSON.parse(savedGame) as Game : null);
 
       if (selectedGame) {
         currentSignature.current = gameSignature(selectedGame);
@@ -347,6 +445,11 @@ export default function RummyApp() {
         currentSignature.current = gameSignature(placeholder);
         setGame(placeholder);
         setUrlGameId(urlGameId);
+      } else if (savedGame) {
+        const parsed = JSON.parse(savedGame) as Game;
+        currentSignature.current = gameSignature(parsed);
+        setGame(parsed);
+        if (parsed.gameId) setUrlGameId(parsed.gameId);
       }
 
       if (savedHistory) setHistory(JSON.parse(savedHistory));
@@ -891,6 +994,13 @@ export default function RummyApp() {
     setGamesOpen(true);
   }
 
+  function repairSavedGamesLibrary() {
+    const repaired = readGameLibrary();
+    setSavedGames(repaired);
+    writeGameLibrary(repaired);
+    haptic(8);
+  }
+
   function switchSavedGame(nextGame: Game) {
     const opened = touchGame(nextGame);
     applyingRemote.current = true;
@@ -914,6 +1024,7 @@ export default function RummyApp() {
   function deleteSavedGame(gameId: string) {
     const next = savedGames.filter((item) => item.gameId !== gameId);
     setSavedGames(next);
+    removeGameFromStorage(gameId);
     writeGameLibrary(next);
 
     if (game.gameId === gameId) {
@@ -1208,6 +1319,7 @@ export default function RummyApp() {
               <button type="button" onClick={() => setShowArchivedGames((value) => !value)} className="glass-soft modal-btn">
                 {showArchivedGames ? "Hide archived" : "Show archived"}
               </button>
+              <button type="button" onClick={repairSavedGamesLibrary} className="glass-soft modal-btn">Repair list</button>
             </div>
 
             <div className="history game-library-list">
