@@ -176,6 +176,60 @@ function upsertGameInLibrary(games: Game[], game: Game) {
 function visibleSavedGames(games: Game[], showArchived: boolean) {
   return sortGameLibrary(games).filter((item) => showArchived || !item.archived);
 }
+
+function libraryRowFromGame(game: Game) {
+  const players = game.players.map((player) => player.name).join(" · ");
+  return {
+    id: game.gameId,
+    game_name: game.gameName || "Untitled game",
+    game_state: game,
+    players,
+    player_count: game.players.length,
+    target_score: game.targetScore,
+    rounds_count: activeRounds(game.rounds).length,
+    archived: Boolean(game.archived),
+    updated_at: game.updatedAt || new Date().toISOString()
+  };
+}
+
+async function upsertGameLibraryRow(game: Game) {
+  if (!supabase || !game.gameId) return false;
+
+  const { error } = await supabase
+    .from("rummy_game_library")
+    .upsert(libraryRowFromGame(touchGame(game)), { onConflict: "id" });
+
+  return !error;
+}
+
+async function deleteGameLibraryRow(gameId: string) {
+  if (!supabase || !gameId) return false;
+
+  const { error } = await supabase
+    .from("rummy_game_library")
+    .delete()
+    .eq("id", gameId);
+
+  return !error;
+}
+
+async function loadCloudGameLibrary() {
+  if (!supabase) return [];
+
+  const { data, error } = await supabase
+    .from("rummy_game_library")
+    .select("game_state, updated_at")
+    .order("updated_at", { ascending: false });
+
+  if (error || !data) return [];
+
+  return data
+    .map((row: { game_state?: Game; updated_at?: string }) => {
+      if (!row.game_state?.gameId) return null;
+      return { ...row.game_state, updatedAt: row.updated_at || row.game_state.updatedAt };
+    })
+    .filter(Boolean) as Game[];
+}
 function shortGameCode(gameId?: string | null) {
   return gameId ? gameId.slice(0, 6).toUpperCase() : "LOCAL";
 }
@@ -383,6 +437,7 @@ export default function RummyApp() {
   const [isCommitting, setIsCommitting] = useState(false);
   const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "shared">("idle");
   const [connectedDevices, setConnectedDevices] = useState<DevicePresence[]>([]);
+  const [librarySyncStatus, setLibrarySyncStatus] = useState<"idle" | "loading" | "synced" | "offline">("idle");
 
   const clientId = useRef("");
   const cloudLoaded = useRef(false);
@@ -507,6 +562,8 @@ export default function RummyApp() {
         try { localStorage.setItem(cloudUpdatedKey(cloudId), data.updated_at); } catch {}
       }
 
+      await upsertGameLibraryRow({ ...gameToSave, updatedAt: data?.updated_at || new Date(version).toISOString() });
+
       pendingGame.current = null;
       try { localStorage.removeItem(pendingSyncKey(cloudId)); } catch {}
       setSyncStatus("synced");
@@ -535,6 +592,7 @@ export default function RummyApp() {
         writeGameLibrary(next);
         return next;
       });
+      upsertGameLibraryRow(game).catch(() => setLibrarySyncStatus("offline"));
     }
 
     if (!applyingRemote.current) {
@@ -544,6 +602,36 @@ export default function RummyApp() {
   }, [game, queueCloudSave]);
 
   useEffect(() => { try { localStorage.setItem(HISTORY_KEY, JSON.stringify(history)); } catch {} }, [history]);
+
+  useEffect(() => {
+    if (!localLibraryLoaded.current || !supabase) return;
+
+    let cancelled = false;
+
+    async function syncCloudLibrary() {
+      setLibrarySyncStatus("loading");
+
+      const cloudGames = await loadCloudGameLibrary();
+      if (cancelled) return;
+
+      if (!cloudGames.length) {
+        setLibrarySyncStatus("synced");
+        return;
+      }
+
+      setSavedGames((previous) => {
+        const next = mergeGameLists(previous, cloudGames);
+        writeGameLibrary(next);
+        return next;
+      });
+
+      setLibrarySyncStatus("synced");
+    }
+
+    syncCloudLibrary().catch(() => setLibrarySyncStatus("offline"));
+
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -603,6 +691,8 @@ export default function RummyApp() {
             writeGameLibrary(next);
             return next;
           });
+          upsertGameLibraryRow(remoteGame).catch(() => setLibrarySyncStatus("offline"));
+          upsertGameLibraryRow(remoteGame).catch(() => setLibrarySyncStatus("offline"));
           try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteGame));
             localStorage.setItem(ACTIVE_GAME_KEY, activeCloudId);
@@ -774,6 +864,7 @@ export default function RummyApp() {
       return next;
     });
     if (nextGame.gameId) setUrlGameId(nextGame.gameId);
+    upsertGameLibraryRow(nextGame).catch(() => setLibrarySyncStatus("offline"));
     setInputs({}); setClosedBy(null); setGameOpen(false); haptic([8, 18, 8]);
   }
 
@@ -994,10 +1085,14 @@ export default function RummyApp() {
     setGamesOpen(true);
   }
 
-  function repairSavedGamesLibrary() {
-    const repaired = readGameLibrary();
+  async function repairSavedGamesLibrary() {
+    const local = readGameLibrary();
+    const cloud = await loadCloudGameLibrary().catch(() => []);
+    const repaired = mergeGameLists(local, cloud);
     setSavedGames(repaired);
     writeGameLibrary(repaired);
+    repaired.forEach((item) => upsertGameLibraryRow(item).catch(() => setLibrarySyncStatus("offline")));
+    setLibrarySyncStatus(cloud.length ? "synced" : librarySyncStatus);
     haptic(8);
   }
 
@@ -1018,6 +1113,7 @@ export default function RummyApp() {
       writeGameLibrary(next);
       return next;
     });
+    upsertGameLibraryRow(opened).catch(() => setLibrarySyncStatus("offline"));
     setTimeout(() => { applyingRemote.current = false; }, 0);
   }
 
@@ -1026,6 +1122,7 @@ export default function RummyApp() {
     setSavedGames(next);
     removeGameFromStorage(gameId);
     writeGameLibrary(next);
+    deleteGameLibraryRow(gameId).catch(() => setLibrarySyncStatus("offline"));
 
     if (game.gameId === gameId) {
       const fallback = next[0] || createDefaultGame();
@@ -1044,6 +1141,7 @@ export default function RummyApp() {
       archived: false
     });
     setGame(copy);
+    upsertGameLibraryRow(copy).catch(() => setLibrarySyncStatus("offline"));
     setInputs({});
     setClosedBy(null);
     setGamesOpen(false);
@@ -1102,6 +1200,7 @@ export default function RummyApp() {
     const next = upsertGameInLibrary(savedGames.filter((item) => item.gameId !== gameId), renamed);
     setSavedGames(next);
     writeGameLibrary(next);
+    upsertGameLibraryRow(renamed).catch(() => setLibrarySyncStatus("offline"));
 
     if (game.gameId === gameId) setGame(renamed);
   }
@@ -1114,6 +1213,7 @@ export default function RummyApp() {
     const next = upsertGameInLibrary(savedGames.filter((item) => item.gameId !== gameId), archived);
     setSavedGames(next);
     writeGameLibrary(next);
+    upsertGameLibraryRow(archived).catch(() => setLibrarySyncStatus("offline"));
 
     if (game.gameId === gameId) setGame(archived);
   }
@@ -1311,6 +1411,7 @@ export default function RummyApp() {
           <section className="glass sheet game-library-panel">
             <div className="modal-title">Saved Games</div>
             <div className="sync-line">Each game has its own shared link and sync room.</div>
+            <div className="sync-line">Cloud library: {librarySyncStatus}</div>
 
             <div className="game-library-toolbar">
               <button type="button" onClick={() => { setGamesOpen(false); setGameOpen(true); }} className="glass-soft modal-btn">New game</button>

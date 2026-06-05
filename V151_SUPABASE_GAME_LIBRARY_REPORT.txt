@@ -1,0 +1,22 @@
+V151 Supabase Game Library
+
+Built from V150.
+
+Added:
+- Supabase `rummy_game_library` table support.
+- SQL schema file: `SUPABASE_GAME_LIBRARY_SCHEMA.sql`.
+- Saved Games list now syncs/rebuilds from Supabase, not only localStorage.
+- Each game is upserted into `rummy_game_library` when saved/created/opened/renamed/archived/duplicated.
+- Delete removes the cloud library row.
+- Repair list now merges local backups and Supabase library rows.
+- Saved Games panel shows Cloud library status.
+
+Why:
+Local browser storage can disappear over time, especially on iOS/Safari. The game library table gives the app a cloud-side list of saved games so the Saved Games list can be restored from Supabase.
+
+Important:
+- This uses public read/write policies to match the current “anyone with link can edit” app model.
+- Run `SUPABASE_GAME_LIBRARY_SCHEMA.sql` in Supabase before relying on the cloud library.
+- Existing per-game sync in `rummy_current_game` is unchanged.
+
+No scoring logic changed.

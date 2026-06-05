@@ -1,0 +1,24 @@
+V150 Final Stability / Build Audit
+
+Built from rummy500-v149-saved-games-persistence-fix.zip.
+
+Results:
+- npm install: passed, with expected local Node version warning because this audit environment uses Node 22 while package.json targets Node 24.x.
+- npm run build: passed.
+- Static checks: 16 / 16 passed.
+
+Confirmed:
+- Vercel-stable build script is present.
+- Node 24 engine is set.
+- Multi-game backup/persistence code is present.
+- Shared URL code is present.
+- Presence code is present.
+- Auto-rotate starter code is present.
+- Dedicated -50 player buttons are removed.
+- Add Round button remains without the plus/circle.
+- Supabase client file exists.
+
+Packaging:
+- Removed node_modules, .next, package-lock.json, and old V*. report files from final ZIP.
+
+No app/scoring/sync logic intentionally changed.
