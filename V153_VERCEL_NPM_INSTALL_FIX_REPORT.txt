@@ -1,0 +1,29 @@
+V153 Vercel npm Install Fix
+
+Built from V152.
+
+The screenshot shows Vercel failing during the install phase:
+
+npm error Exit handler never called!
+Error: Command "npm install" exited with 1
+
+This is an npm crash, not an app build error.
+
+Fixes:
+- Switched Node engine from 24.x to 22.x LTS.
+- Removed package-lock.json to avoid npm 11/Node 24 install crash on Vercel.
+- Kept exact dependency pins in package.json.
+- Added .npmrc:
+  - legacy-peer-deps=true
+  - fund=false
+  - audit=false
+  - progress=false
+- Kept stable single-worker Next build:
+  - NEXT_PRIVATE_BUILD_WORKER=1 next build
+
+Expected Vercel settings:
+- Install command: npm install
+- Build command: npm run build
+- Node version: use project package.json / 22.x
+
+No app/scoring/sync logic changed.
