@@ -25,7 +25,5 @@
   "engines": {
     "node": "22.x"
   },
-  "build": "NEXT_PRIVATE_BUILD_WORKER=1 next build",
-  "vercel-build": "NEXT_PRIVATE_BUILD_WORKER=1 next build",
-  "build:fast": "next build"
+  "packageManager": "pnpm@9.15.9"
 }

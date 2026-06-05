@@ -1,0 +1,30 @@
+V154 pnpm Vercel Install Fix
+
+Built from V153.
+
+The Vercel log still shows npm crashing before the app builds:
+
+npm error Exit handler never called!
+Error: Command "npm install" exited with 1
+
+This version bypasses npm install completely on Vercel.
+
+Changes:
+- Added packageManager: pnpm@9.15.9
+- Changed vercel.json installCommand to:
+  corepack enable && pnpm install --no-frozen-lockfile
+- Changed vercel.json buildCommand to:
+  pnpm run vercel-build
+- Removed accidental top-level package.json keys from V152/V153.
+- Removed npm lock files if present.
+- Kept Node 22.x.
+- Kept stable Next build:
+  NEXT_PRIVATE_BUILD_WORKER=1 next build
+
+Vercel should now show:
+Running "install" command: `corepack enable && pnpm install --no-frozen-lockfile`
+
+If Vercel still shows `npm install`, the project has an Install Command override in Vercel dashboard settings. Clear it or set it to:
+corepack enable && pnpm install --no-frozen-lockfile
+
+No app/scoring/sync logic changed.
