@@ -1,5 +1,0 @@
-Cleanup pass 1
-
-Removed duplicate selector blocks from globals-base.css where ownership already exists in theme.css or typography.css.
-
-Removed:

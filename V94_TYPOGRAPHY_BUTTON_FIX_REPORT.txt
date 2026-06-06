@@ -1,9 +1,0 @@
-V94 TYPOGRAPHY BUTTON FIX
-
-Cause:
-The Typography panel existed in the source, but the visible Settings modal did not contain a Typography button.
-
-Fix:
-- Added a visible Typography button to the Settings modal.
-- Button closes Settings and opens Typography panel.
-- Added CSS to make the button full-width in the settings grid.

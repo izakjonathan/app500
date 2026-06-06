@@ -1,3 +1,0 @@
-Second pass completed.
-
-Updated inline typography: components/RummyApp.tsx

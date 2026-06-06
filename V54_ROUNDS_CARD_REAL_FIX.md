@@ -1,1 +1,0 @@
-Removed the inner invisible rounds card entirely. The rounds card is now a single button.glass.rounds-card element with direct children only. Old v47/v48/v53 conflicting CSS blocks were removed/overridden.

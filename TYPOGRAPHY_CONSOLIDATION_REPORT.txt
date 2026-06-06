@@ -1,1 +1,0 @@
-Before: 148 font-size, 55 font-weight. Added centralized token system and remapped primary UI typography.
