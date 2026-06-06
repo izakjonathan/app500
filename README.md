@@ -1,32 +1,17 @@
 # Rummy 500
 
-Final cleaned app package.
+Final production package.
 
-## Install
+## Features
 
-```bash
-npm install
-```
-
-## Build
-
-```bash
-npm run build
-```
-
-## Vercel
-
-Build command:
-
-```bash
-npm run build
-```
-
-The package is set to use Node 24 and a single Next build worker for deployment stability.
-
-## Notes
-
+- 2 / 3 / 4-player Rummy 500 scoring
+- Shared game links
+- Saved Games library
+- Supabase per-game sync
+- Supabase cloud game library
+- Connected-device presence
+- UI Studio controls
+- Auto-rotating starter
 - Blueprint visual design
-- UI Studio controls: Type, Space, Radius, Color, Layout, Presets
-- 2/3/4-player responsive layout
-- Supabase/local sync logic preserved
+
+See `DEPLOYMENT.md` for deployment settings.
