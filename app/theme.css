@@ -181,3 +181,14 @@ input::placeholder{
 .add-round span{
   color:var(--passport-blue) !important;
 }
+
+
+/* V157 rounds overview polish */
+.rounds-overview-stats>div{
+  background:var(--passport-bg);
+  border:1.5px solid var(--passport-blue);
+  color:var(--passport-blue);
+}
+.round-final-total{
+  color:var(--passport-blue);
+}

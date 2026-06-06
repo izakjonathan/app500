@@ -347,6 +347,56 @@ function totals(game: Game) {
 }
 
 function signed(value: number) { return value > 0 ? `+${value}` : String(value); }
+
+function getRoundScore(round: Round, playerId: string) {
+  return Number(round.scores[playerId] || 0) + (round.closedBy === playerId ? 15 : 0);
+}
+
+function getRoundsOverviewRows(game: Game) {
+  const runningTotals: Record<string, number> = {};
+  game.players.forEach((player) => { runningTotals[player.id] = 0; });
+
+  return activeRounds(game.rounds).map((round, index) => {
+    const playerScores = game.players.map((player) => {
+      const score = getRoundScore(round, player.id);
+      runningTotals[player.id] = (runningTotals[player.id] || 0) + score;
+      return { player, score, total: runningTotals[player.id] || 0 };
+    });
+
+    return {
+      round,
+      index,
+      playerScores,
+      totals: { ...runningTotals }
+    };
+  });
+}
+
+function getRoundsOverviewStats(game: Game) {
+  const rounds = activeRounds(game.rounds);
+  const closedCounts: Record<string, number> = {};
+  let highest: { playerName: string; score: number } | null = null;
+
+  game.players.forEach((player) => { closedCounts[player.id] = 0; });
+
+  rounds.forEach((round) => {
+    if (round.closedBy) closedCounts[round.closedBy] = (closedCounts[round.closedBy] || 0) + 1;
+
+    game.players.forEach((player) => {
+      const score = getRoundScore(round, player.id);
+      if (!highest || score > highest.score) highest = { playerName: player.name, score };
+    });
+  });
+
+  const closedLeader = game.players
+    .map((player) => ({ playerName: player.name, count: closedCounts[player.id] || 0 }))
+    .sort((a, b) => b.count - a.count)[0];
+
+  return {
+    closedMost: closedLeader && closedLeader.count > 0 ? `${closedLeader.playerName} (${closedLeader.count})` : "None",
+    highestRound: highest ? `${highest.playerName} ${signed(highest.score)}` : "None"
+  };
+}
 function haptic(pattern: number | number[] = 8) { if (typeof navigator !== "undefined" && "vibrate" in navigator) navigator.vibrate(pattern); }
 function stripSync(raw: unknown): Game {
   const value = raw as CloudGame;
@@ -853,6 +903,8 @@ export default function RummyApp() {
   const winner = game.winnerId ? game.players.find((player) => player.id === game.winnerId) : null;
   const latestRound = rounds[rounds.length - 1];
   const analytics = useMemo(() => getAnalytics(game, history), [game, history]);
+  const roundsOverviewRows = useMemo(() => getRoundsOverviewRows(game), [game]);
+  const roundsOverviewStats = useMemo(() => getRoundsOverviewStats(game), [game]);
 
   function createGame() {
     const players = DEFAULT_PLAYERS.slice(0, playerCount).map((player, index) => ({ ...player, name: names[index]?.trim() || player.name }));
@@ -1306,7 +1358,7 @@ export default function RummyApp() {
                 <input disabled={isCommitting} value={inputs[player.id] || ""} onChange={(event) => setInputs((previous: Record<string, string>) => ({ ...previous, [player.id]: event.target.value }))} inputMode="decimal" placeholder="0" className="round-input" />
                 <button type="button" disabled={isCommitting} onClick={() => setClosedBy(closedBy === player.id ? null : player.id)} className={`icon-btn closed-toggle ${closedBy === player.id ? "active" : ""}`} aria-label={`Mark ${player.name} closed`}>✓</button>
               </div>
-              <div className="quick-grid">{[5, 10, 25, 50].map((amount) => <button key={amount} disabled={isCommitting} type="button" onClick={() => quick(player.id, amount)} className="quick">+{amount}</button>)}</div>
+              <div className="quick-grid">{[5, 10, 20, 50].map((amount) => <button key={amount} disabled={isCommitting} type="button" onClick={() => quick(player.id, amount)} className="quick">+{amount}</button>)}</div>
             </div>
           ))}
           <button type="button" disabled={isCommitting} onClick={addRound} className="glass-soft add-round"><span>{isCommitting ? "Adding…" : "Add round"}</span></button>
@@ -1452,16 +1504,32 @@ export default function RummyApp() {
           <div className="modal-shade" onClick={() => setShowRoundsPopup(false)} />
           <div className="sheet glass">
             <div className="modal-title rounds-popup-title">Rounds Overview</div>
-            <div className="history">
-              {rounds.length === 0 ? <div className="history-item">No rounds yet</div> : rounds.map((round, index) => (
-                <div key={round.id} className="history-item">
-                  <div><strong>Round {index + 1}</strong></div>
-                  <div style={{ display: "grid", gridTemplateColumns: `repeat(${game.players.length}, auto)`, gap: "12px" }}>
-                    {game.players.map((player) => {
-                      const score = Number(round.scores[player.id] || 0) + (round.closedBy === player.id ? 15 : 0);
-                      return <div key={player.id}><span style={{ color: player.color }}>{player.name}</span> {signed(score)}</div>;
-                    })}
-                  </div>
+
+            <div className="rounds-overview-stats">
+              <div>
+                <span>Closed most</span>
+                <strong>{roundsOverviewStats.closedMost}</strong>
+              </div>
+              <div>
+                <span>Highest round</span>
+                <strong>{roundsOverviewStats.highestRound}</strong>
+              </div>
+            </div>
+
+            <div className="history rounds-overview-list">
+              {roundsOverviewRows.length === 0 ? <div className="history-item">No rounds yet</div> : roundsOverviewRows.map((row) => (
+                <div key={row.round.id} className="history-item round-overview-row">
+                  <span className="round-number">{row.index + 1}.</span>
+                  <span className="round-score-line">
+                    {row.playerScores.map(({ player, score }) => (
+                      <span key={`${row.round.id}-${player.id}`} className="round-player-score">
+                        <span style={{ color: player.color }}>{player.name}</span> {signed(score)}
+                      </span>
+                    ))}
+                    <span className="round-final-total">
+                      {row.playerScores.map(({ total }) => total).join("/")}
+                    </span>
+                  </span>
                 </div>
               ))}
             </div>

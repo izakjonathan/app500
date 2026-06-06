@@ -487,3 +487,59 @@ input{min-width:0;border:0;outline:none}
 .add-round-plus{
   display:none !important;
 }
+
+
+/* V157 rounds overview polish */
+.rounds-overview-stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:12px;
+}
+.rounds-overview-stats>div{
+  min-height:58px;
+  display:grid;
+  align-content:center;
+  justify-items:center;
+  gap:6px;
+  padding:8px;
+  border-radius:var(--radius-lg);
+}
+.rounds-overview-list{
+  gap:7px;
+}
+.round-overview-row{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  align-items:center;
+  gap:8px;
+  padding:9px 10px;
+}
+.round-number{
+  white-space:nowrap;
+}
+.round-score-line{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  overflow:hidden;
+  white-space:nowrap;
+}
+.round-player-score{
+  flex:0 0 auto;
+}
+.round-final-total{
+  flex:0 0 auto;
+  margin-left:auto;
+}
+@media (max-width:420px){
+  .rounds-overview-stats{
+    grid-template-columns:1fr;
+  }
+  .round-score-line{
+    gap:5px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+}

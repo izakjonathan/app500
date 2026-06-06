@@ -1,0 +1,15 @@
+V157 Rounds Overview Polish
+
+Built from V156.
+
+Changed:
+- In Add Points, the +25 quick button is now +20.
+- Rounds Overview no longer writes “Round X”.
+- Each round is displayed as one line:
+  1. Izak +40 Sor +30 120/130
+- The final numbers are the running total scores after that round.
+- Added Rounds Overview statistics:
+  - who closed the most, with count
+  - who had the highest round score, with score
+
+No scoring/sync/multi-game logic changed.
