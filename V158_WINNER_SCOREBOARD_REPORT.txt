@@ -1,0 +1,19 @@
+V158 Winner Scoreboard
+
+Built from V157.
+
+Added:
+- New Win Scoreboard menu.
+- New top pill between Starter and game menu.
+- App automatically adds +1 point to the winner when a game is won.
+- If the winner name already exists, it adds +1 to the existing name.
+- Only players who have won a game appear on the win scoreboard.
+- Win scoreboard is ranked from most points to least.
+- Scoreboard is saved locally and restored on reload.
+- Existing game history is used to seed the scoreboard if no saved win scoreboard exists yet.
+
+Notes:
+- A game is counted once using its game ID, so the same won game should not add duplicate points.
+- Clear button is included in the win scoreboard menu.
+
+No scoring/sync/multi-game logic changed.

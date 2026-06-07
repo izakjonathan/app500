@@ -8,6 +8,7 @@ import { CURRENT_GAME_ID, supabase } from "../lib/supabaseClient";
 type Player = { id: string; name: string; color: string };
 type Round = { id: string; scores: Record<string, number>; closedBy: string | null; starterId: string; deleted?: boolean };
 type HistoryItem = { gameId: string; gameName: string; winnerName: string; rounds: number; finishedAt: string };
+type WinnerScore = { name: string; points: number; gameIds: string[]; updatedAt: string };
 type Game = { gameId: string | null; gameName: string; players: Player[]; targetScore: number; starterId: string; rounds: Round[]; status: "active" | "finished"; winnerId: string | null; updatedAt?: string; archived?: boolean };
 type SyncStatus = "loading" | "synced" | "syncing" | "offline";
 type DevicePresence = { clientId: string; name: string; joinedAt: string; gameName: string };
@@ -32,6 +33,7 @@ const GAME_LIBRARY_BACKUP_KEY = "rummy500_multi_game_library_backup_v149";
 const GAME_LIBRARY_INDEX_KEY = "rummy500_multi_game_index_v149";
 const ACTIVE_GAME_KEY = "rummy500_active_game_id_v139";
 const DEVICE_NAME_KEY = "rummy500_device_name_v144";
+const WINNER_SCOREBOARD_KEY = "rummy500_winner_scoreboard_v158";
 
 function cloudUpdatedKey(gameId: string) { return `${CLOUD_UPDATED_KEY}_${gameId}`; }
 function pendingSyncKey(gameId: string) { return `${PENDING_SYNC_KEY}_${gameId}`; }
@@ -397,6 +399,66 @@ function getRoundsOverviewStats(game: Game) {
     highestRound: highest ? `${highest.playerName} ${signed(highest.score)}` : "None"
   };
 }
+
+function normalizeWinnerName(name: string) {
+  return name.trim().toLowerCase();
+}
+
+function sortWinnerScoreboard(rows: WinnerScore[]) {
+  return [...rows].sort((a, b) => b.points - a.points || a.name.localeCompare(b.name));
+}
+
+function readWinnerScoreboard(): WinnerScore[] {
+  if (typeof window === "undefined") return [];
+
+  try {
+    const raw = localStorage.getItem(WINNER_SCOREBOARD_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(parsed)) return [];
+    return sortWinnerScoreboard(parsed.filter((row) => row?.name && Number(row.points) > 0));
+  } catch {
+    return [];
+  }
+}
+
+function writeWinnerScoreboard(rows: WinnerScore[]) {
+  if (typeof window === "undefined") return;
+
+  try {
+    localStorage.setItem(WINNER_SCOREBOARD_KEY, JSON.stringify(sortWinnerScoreboard(rows)));
+  } catch {}
+}
+
+function addWinnerScore(rows: WinnerScore[], winnerName: string, gameId: string) {
+  const cleanName = winnerName.trim();
+  if (!cleanName || !gameId) return rows;
+
+  const existingIndex = rows.findIndex((row) => normalizeWinnerName(row.name) === normalizeWinnerName(cleanName));
+  const now = new Date().toISOString();
+
+  if (existingIndex >= 0) {
+    const existing = rows[existingIndex];
+    if (existing.gameIds.includes(gameId)) return rows;
+
+    const next = [...rows];
+    next[existingIndex] = {
+      ...existing,
+      points: existing.points + 1,
+      gameIds: [...existing.gameIds, gameId],
+      updatedAt: now
+    };
+    return sortWinnerScoreboard(next);
+  }
+
+  return sortWinnerScoreboard([
+    ...rows,
+    { name: cleanName, points: 1, gameIds: [gameId], updatedAt: now }
+  ]);
+}
+
+function winnerScoreboardFromHistory(history: HistoryItem[]) {
+  return history.reduce<WinnerScore[]>((rows, item) => addWinnerScore(rows, item.winnerName, item.gameId), []);
+}
 function haptic(pattern: number | number[] = 8) { if (typeof navigator !== "undefined" && "vibrate" in navigator) navigator.vibrate(pattern); }
 function stripSync(raw: unknown): Game {
   const value = raw as CloudGame;
@@ -466,6 +528,7 @@ export default function RummyApp() {
   const [game, setGame] = useState<Game>(() => createDefaultGame());
   const [savedGames, setSavedGames] = useState<Game[]>([]);
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [winnerScoreboard, setWinnerScoreboard] = useState<WinnerScore[]>([]);
   const [inputs, setInputs] = useState<Record<string, string>>({});
   const [closedBy, setClosedBy] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -473,6 +536,7 @@ export default function RummyApp() {
   const [uiStudioTab, setUiStudioTab] = useState<UiStudioTab>("type");
   const [uiValues, setUiValues] = useState<Record<string, string>>(() => ({ ...UI_STUDIO_DEFAULTS }));
   const [showRoundsPopup, setShowRoundsPopup] = useState(false);
+  const [winnerScoreboardOpen, setWinnerScoreboardOpen] = useState(false);
   const [gamesOpen, setGamesOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
   const [showArchivedGames, setShowArchivedGames] = useState(false);
@@ -521,6 +585,7 @@ export default function RummyApp() {
       const library = readGameLibrary();
       const savedGame = localStorage.getItem(STORAGE_KEY);
       const savedHistory = localStorage.getItem(HISTORY_KEY);
+      const savedWinnerScoreboard = localStorage.getItem(WINNER_SCOREBOARD_KEY);
       const urlGameId = getUrlGameId();
       const activeGameId = urlGameId || localStorage.getItem(ACTIVE_GAME_KEY) || "";
       let nextLibrary = library;
@@ -557,7 +622,20 @@ export default function RummyApp() {
         if (parsed.gameId) setUrlGameId(parsed.gameId);
       }
 
-      if (savedHistory) setHistory(JSON.parse(savedHistory));
+      if (savedHistory) {
+        const parsedHistory = JSON.parse(savedHistory) as HistoryItem[];
+        setHistory(parsedHistory);
+
+        if (savedWinnerScoreboard) {
+          setWinnerScoreboard(readWinnerScoreboard());
+        } else {
+          const seeded = winnerScoreboardFromHistory(parsedHistory);
+          setWinnerScoreboard(seeded);
+          writeWinnerScoreboard(seeded);
+        }
+      } else if (savedWinnerScoreboard) {
+        setWinnerScoreboard(readWinnerScoreboard());
+      }
     } catch {}
 
     localLibraryLoaded.current = true;
@@ -652,6 +730,7 @@ export default function RummyApp() {
   }, [game, queueCloudSave]);
 
   useEffect(() => { try { localStorage.setItem(HISTORY_KEY, JSON.stringify(history)); } catch {} }, [history]);
+  useEffect(() => { writeWinnerScoreboard(winnerScoreboard); }, [winnerScoreboard]);
 
   useEffect(() => {
     if (!localLibraryLoaded.current || !supabase) return;
@@ -905,6 +984,16 @@ export default function RummyApp() {
   const analytics = useMemo(() => getAnalytics(game, history), [game, history]);
   const roundsOverviewRows = useMemo(() => getRoundsOverviewRows(game), [game]);
   const roundsOverviewStats = useMemo(() => getRoundsOverviewStats(game), [game]);
+  const winnerScoreLeader = winnerScoreboard[0];
+
+  useEffect(() => {
+    if (game.status !== "finished" || !game.winnerId || !game.gameId) return;
+
+    const winnerPlayer = game.players.find((player) => player.id === game.winnerId);
+    if (!winnerPlayer) return;
+
+    setWinnerScoreboard((previous) => addWinnerScore(previous, winnerPlayer.name, game.gameId || ""));
+  }, [game.status, game.winnerId, game.gameId, game.players]);
 
   function createGame() {
     const players = DEFAULT_PLAYERS.slice(0, playerCount).map((player, index) => ({ ...player, name: names[index]?.trim() || player.name }));
@@ -1270,6 +1359,12 @@ export default function RummyApp() {
     if (game.gameId === gameId) setGame(archived);
   }
 
+  function clearWinnerScoreboard() {
+    if (typeof window !== "undefined" && !window.confirm("Clear the winner scoreboard?")) return;
+    setWinnerScoreboard([]);
+    writeWinnerScoreboard([]);
+  }
+
   function saveGame() { queueCloudSave(game); setSettingsOpen(false); }
 
   async function shareGame() {
@@ -1303,6 +1398,9 @@ export default function RummyApp() {
       <div className="ui">
         <header className="header">
           <button type="button" onClick={toggleStarter} className="glass-soft pill">Starter: {game.players.find((player) => player.id === game.starterId)?.name || "You"}</button>
+          <button type="button" onClick={() => setWinnerScoreboardOpen(true)} className="glass-soft pill winner-score-pill">
+            {winnerScoreLeader ? `Wins: ${winnerScoreLeader.name} ${winnerScoreLeader.points}` : "Wins"}
+          </button>
           <button type="button" onClick={() => setSettingsOpen(true)} className="glass-soft pill">{game.gameId ? `${game.gameName} · ${game.targetScore}` : "No game"}<span className={`sync-dot sync-${syncStatus}`} /></button>
         </header>
 
@@ -1364,6 +1462,33 @@ export default function RummyApp() {
           <button type="button" disabled={isCommitting} onClick={addRound} className="glass-soft add-round"><span>{isCommitting ? "Adding…" : "Add round"}</span></button>
         </div>
       </section>
+
+      {winnerScoreboardOpen && (
+        <>
+          <div className="modal-shade" onClick={() => setWinnerScoreboardOpen(false)} />
+          <section className="glass sheet winner-scoreboard-panel">
+            <div className="modal-title">Win Scoreboard</div>
+            <div className="sync-line">1 point is added automatically when a player wins a game.</div>
+
+            <div className="winner-score-list">
+              {winnerScoreboard.length === 0 ? (
+                <div className="history-item">No won games yet</div>
+              ) : winnerScoreboard.map((row, index) => (
+                <div key={row.name} className="winner-score-row">
+                  <span className="winner-rank">{index + 1}.</span>
+                  <span className="winner-name">{row.name}</span>
+                  <strong className="winner-points">{row.points}</strong>
+                </div>
+              ))}
+            </div>
+
+            <div className="modal-grid winner-score-actions">
+              <button type="button" onClick={() => setWinnerScoreboardOpen(false)} className="glass-soft modal-btn">Done</button>
+              <button type="button" onClick={clearWinnerScoreboard} className="glass-soft modal-btn">Clear</button>
+            </div>
+          </section>
+        </>
+      )}
 
       {settingsOpen && (
         <>

@@ -302,3 +302,17 @@
 .round-final-total{
   font-weight:var(--font-weight-title);
 }
+
+
+/* V158 winner scoreboard */
+.winner-score-pill{
+  font-size:calc(var(--font-size-body) * .88) !important;
+}
+.winner-score-row{
+  font-size:var(--font-size-body);
+  font-weight:var(--font-weight-body);
+}
+.winner-rank,
+.winner-points{
+  font-weight:var(--font-weight-title);
+}

@@ -543,3 +543,45 @@ input{min-width:0;border:0;outline:none}
     -webkit-overflow-scrolling:touch;
   }
 }
+
+
+/* V158 winner scoreboard */
+.header{
+  grid-template-columns:1fr .9fr 1fr;
+}
+.winner-score-pill{
+  padding-inline:10px;
+}
+.winner-scoreboard-panel{
+  top:calc(var(--safe-top) + 58px);
+  bottom:calc(var(--safe-bottom) + 24px);
+  max-height:none;
+}
+.winner-score-list{
+  display:grid;
+  gap:8px;
+  margin-bottom:12px;
+}
+.winner-score-row{
+  min-height:48px;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  padding:0 12px;
+  border-radius:var(--radius-lg);
+}
+.winner-name{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.winner-points{
+  min-width:34px;
+  text-align:right;
+}
+@media (max-width:380px){
+  .header{grid-template-columns:1fr .72fr 1fr}
+  .winner-score-pill{padding-inline:6px}
+}

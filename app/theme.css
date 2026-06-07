@@ -192,3 +192,11 @@ input::placeholder{
 .round-final-total{
   color:var(--passport-blue);
 }
+
+
+/* V158 winner scoreboard */
+.winner-score-row{
+  background:var(--passport-bg);
+  border:1.5px solid var(--passport-blue);
+  color:var(--passport-blue);
+}
