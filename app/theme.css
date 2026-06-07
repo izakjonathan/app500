@@ -200,3 +200,12 @@ input::placeholder{
   border:1.5px solid var(--passport-blue);
   color:var(--passport-blue);
 }
+
+
+/* V159 header/starter polish */
+.starter-name-button{
+  color:var(--passport-blue);
+}
+.starter-symbol{
+  color:var(--passport-blue);
+}

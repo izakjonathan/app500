@@ -316,3 +316,13 @@
 .winner-points{
   font-weight:var(--font-weight-title);
 }
+
+
+/* V159 header/starter polish */
+.starter-symbol{
+  font-size:10px;
+  font-weight:var(--font-weight-title);
+}
+.starter-name-button{
+  font:inherit;
+}

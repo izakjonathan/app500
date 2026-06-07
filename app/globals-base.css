@@ -585,3 +585,31 @@ input{min-width:0;border:0;outline:none}
   .header{grid-template-columns:1fr .72fr 1fr}
   .winner-score-pill{padding-inline:6px}
 }
+
+
+/* V159 header/starter polish */
+.header{
+  grid-template-columns:1fr 1fr !important;
+}
+.starter-name-button{
+  display:inline-grid;
+  grid-template-columns:16px minmax(0,auto);
+  align-items:center;
+  gap:4px;
+  max-width:100%;
+  padding:0;
+  margin:0;
+  border:0;
+  background:transparent;
+  text-align:left;
+}
+.starter-symbol{
+  width:16px;
+  min-width:16px;
+  display:inline-grid;
+  place-items:center;
+  line-height:1;
+}
+.player-card.is-starter{
+  box-shadow:inset 0 0 0 1px var(--passport-blue);
+}

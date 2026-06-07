@@ -1,0 +1,15 @@
+V159 Header / Starter / Scoreboard Polish
+
+Built from V158.
+
+Changed:
+- Top right pill is now just named Settings.
+- Removed the statistics block from the Settings menu.
+- Middle/top scoreboard pill is now named Scoreboard.
+- Scoreboard pill no longer shows the current leader.
+- Removed the top-left Starter pill.
+- Added a starter symbol to the player who starts.
+- Starter still automatically moves to the next player after Add Round.
+- Starter can now be changed by tapping a player name in the main scoreboard.
+
+No scoring/sync/multi-game logic changed.

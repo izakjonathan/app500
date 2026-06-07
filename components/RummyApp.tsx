@@ -501,19 +501,23 @@ function getShareUrl(game: Game) {
 }
 
 
-type ScoreboardProps = { game: Game; scoreTotals: Record<string, number> };
-const Scoreboard = memo(function Scoreboard({ game, scoreTotals }: ScoreboardProps) {
+type ScoreboardProps = { game: Game; scoreTotals: Record<string, number>; onSetStarter: (playerId: string) => void };
+const Scoreboard = memo(function Scoreboard({ game, scoreTotals, onSetStarter }: ScoreboardProps) {
   return (
     <section className="glass scoreboard scoreboard-stable">
       <div className="label">Scoreboard</div>
       {game.players.map((player) => {
         const total = scoreTotals[player.id] || 0;
         const progress = Math.max(0, Math.min(100, Math.round((total / game.targetScore) * 100)));
+        const isStarter = player.id === game.starterId;
         return (
-          <div key={player.id} className="glass-soft player-card score-transition">
+          <div key={player.id} className={`glass-soft player-card score-transition ${isStarter ? "is-starter" : ""}`}>
             <div className="ring" style={{ color: player.color }}>{progress}%</div>
             <div>
-              <div className="player-name">{player.name}</div>
+              <button type="button" className="player-name starter-name-button" onClick={() => onSetStarter(player.id)} aria-label={`Set ${player.name} as starter`}>
+                <span className="starter-symbol" aria-hidden="true">{isStarter ? "◆" : ""}</span>
+                <span>{player.name}</span>
+              </button>
               <div className="progress"><div className="progress-fill" style={{ width: `${progress}%`, background: player.color }} /></div>
             </div>
             <div className="total score-transition">{total}</div>
@@ -1009,6 +1013,14 @@ export default function RummyApp() {
     setInputs({}); setClosedBy(null); setGameOpen(false); haptic([8, 18, 8]);
   }
 
+  function setStarter(playerId: string) {
+    setGame((previous: Game) => {
+      if (!previous.players.some((player) => player.id === playerId)) return previous;
+      return { ...previous, starterId: playerId };
+    });
+    haptic(8);
+  }
+
   function toggleStarter() {
     setGame((previous: Game) => ({ ...previous, starterId: nextStarterId(previous.players, previous.starterId) }));
   }
@@ -1397,14 +1409,11 @@ export default function RummyApp() {
       <div className="bg" aria-hidden="true" />
       <div className="ui">
         <header className="header">
-          <button type="button" onClick={toggleStarter} className="glass-soft pill">Starter: {game.players.find((player) => player.id === game.starterId)?.name || "You"}</button>
-          <button type="button" onClick={() => setWinnerScoreboardOpen(true)} className="glass-soft pill winner-score-pill">
-            {winnerScoreLeader ? `Wins: ${winnerScoreLeader.name} ${winnerScoreLeader.points}` : "Wins"}
-          </button>
-          <button type="button" onClick={() => setSettingsOpen(true)} className="glass-soft pill">{game.gameId ? `${game.gameName} · ${game.targetScore}` : "No game"}<span className={`sync-dot sync-${syncStatus}`} /></button>
+          <button type="button" onClick={() => setWinnerScoreboardOpen(true)} className="glass-soft pill winner-score-pill">Scoreboard</button>
+          <button type="button" onClick={() => setSettingsOpen(true)} className="glass-soft pill">Settings<span className={`sync-dot sync-${syncStatus}`} /></button>
         </header>
 
-        <Scoreboard game={game} scoreTotals={scoreTotals} />
+        <Scoreboard game={game} scoreTotals={scoreTotals} onSetStarter={setStarter} />
 
         <section className="rounds">
           <button
@@ -1467,7 +1476,7 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setWinnerScoreboardOpen(false)} />
           <section className="glass sheet winner-scoreboard-panel">
-            <div className="modal-title">Win Scoreboard</div>
+            <div className="modal-title">Scoreboard</div>
             <div className="sync-line">1 point is added automatically when a player wins a game.</div>
 
             <div className="winner-score-list">
@@ -1502,12 +1511,7 @@ export default function RummyApp() {
               <span>Anyone with link can edit</span>
               <span>{connectedDevices.length} connected</span>
             </div>
-            <div className="analytics-grid">
-              <div><span>Rounds</span><strong>{analytics.roundsPlayed}</strong></div>
-              <div><span>Avg</span><strong>{analytics.averageRoundPoints}</strong></div>
-              <div><span>Leader</span><strong>{analytics.leaderName}</strong></div>
-              <div><span>Games</span><strong>{analytics.gamesFinished}</strong></div>
-            </div>
+
             <button type="button" onClick={shareGame} className="glass-soft modal-btn share-game-btn">
               {shareStatus === "copied" ? "Copied link" : shareStatus === "shared" ? "Shared" : "Share current game"}
             </button>
