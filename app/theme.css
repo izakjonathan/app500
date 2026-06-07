@@ -209,3 +209,13 @@ input::placeholder{
 .starter-symbol{
   color:var(--passport-blue);
 }
+
+
+/* V160 starter star + player-name typography restore */
+.starter-name-button,
+.starter-name-button span{
+  color:var(--passport-blue) !important;
+}
+.starter-symbol{
+  color:var(--passport-blue) !important;
+}

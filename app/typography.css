@@ -326,3 +326,19 @@
 .starter-name-button{
   font:inherit;
 }
+
+
+/* V160 starter star + player-name typography restore */
+.starter-name-button{
+  font-size:var(--font-size-title) !important;
+  font-weight:var(--font-weight-title) !important;
+  letter-spacing:-.045em !important;
+}
+.starter-symbol{
+  font-size:10px !important;
+  font-weight:var(--font-weight-title) !important;
+  letter-spacing:0 !important;
+}
+.app.players-4 .starter-name-button{
+  font-size:calc(var(--font-size-title) * .92) !important;
+}

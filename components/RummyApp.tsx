@@ -515,8 +515,8 @@ const Scoreboard = memo(function Scoreboard({ game, scoreTotals, onSetStarter }:
             <div className="ring" style={{ color: player.color }}>{progress}%</div>
             <div>
               <button type="button" className="player-name starter-name-button" onClick={() => onSetStarter(player.id)} aria-label={`Set ${player.name} as starter`}>
-                <span className="starter-symbol" aria-hidden="true">{isStarter ? "◆" : ""}</span>
                 <span>{player.name}</span>
+                {isStarter && <span className="starter-symbol" aria-hidden="true">★</span>}
               </button>
               <div className="progress"><div className="progress-fill" style={{ width: `${progress}%`, background: player.color }} /></div>
             </div>

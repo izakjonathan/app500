@@ -1,0 +1,13 @@
+V160 Starter Star + Player Name Typography
+
+Built from V159.
+
+Changed:
+- Player name button typography is restored to the previous player-name font size/weight.
+- Starter symbol is now a small star.
+- Star is placed after the player name.
+- Added space between the player name and the star.
+- Tapping the player name still changes the starter.
+- Auto-rotate starter after Add Round still works.
+
+No scoring/sync/multi-game logic changed.
