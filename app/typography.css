@@ -342,3 +342,9 @@
 .app.players-4 .starter-name-button{
   font-size:calc(var(--font-size-title) * .92) !important;
 }
+
+
+/* V161 scoreboard target + swipe reset */
+.scoreboard .label{
+  white-space:normal;
+}

@@ -1,0 +1,12 @@
+V161 Scoreboard Target + Swipe Reset
+
+Built from V160.
+
+Changed:
+- Main scoreboard title now shows the target:
+  SCOREBOARD - 500 POINTS
+- Swiping horizontally on a player's point input field resets that input to 0.
+- Normal typing and quick buttons still work.
+- Add Round functionality is unchanged.
+
+No scoring/sync/multi-game logic changed.

@@ -640,3 +640,9 @@ input{min-width:0;border:0;outline:none}
   line-height:1 !important;
   transform:translateY(-1px);
 }
+
+
+/* V161 scoreboard target + swipe reset */
+.round-input{
+  touch-action:pan-y;
+}

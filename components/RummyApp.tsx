@@ -505,7 +505,7 @@ type ScoreboardProps = { game: Game; scoreTotals: Record<string, number>; onSetS
 const Scoreboard = memo(function Scoreboard({ game, scoreTotals, onSetStarter }: ScoreboardProps) {
   return (
     <section className="glass scoreboard scoreboard-stable">
-      <div className="label">Scoreboard</div>
+      <div className="label">Scoreboard - {game.targetScore} points</div>
       {game.players.map((player) => {
         const total = scoreTotals[player.id] || 0;
         const progress = Math.max(0, Math.min(100, Math.round((total / game.targetScore) * 100)));
@@ -568,6 +568,7 @@ export default function RummyApp() {
   const syncInFlight = useRef(false);
   const localLibraryLoaded = useRef(false);
   const suppressNextSaveForRemoteLoad = useRef(false);
+  const inputSwipeStart = useRef<Record<string, { x: number; y: number }>>({});
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -1025,6 +1026,32 @@ export default function RummyApp() {
     setGame((previous: Game) => ({ ...previous, starterId: nextStarterId(previous.players, previous.starterId) }));
   }
 
+  function resetPlayerInput(playerId: string) {
+    if (isCommitting) return;
+    setInputs((previous: Record<string, string>) => ({ ...previous, [playerId]: "0" }));
+    haptic(8);
+  }
+
+  function handleInputTouchStart(playerId: string, event: React.TouchEvent<HTMLInputElement>) {
+    const touch = event.touches[0];
+    if (!touch) return;
+    inputSwipeStart.current[playerId] = { x: touch.clientX, y: touch.clientY };
+  }
+
+  function handleInputTouchEnd(playerId: string, event: React.TouchEvent<HTMLInputElement>) {
+    const start = inputSwipeStart.current[playerId];
+    const touch = event.changedTouches[0];
+    if (!start || !touch) return;
+
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    delete inputSwipeStart.current[playerId];
+
+    if (Math.abs(dx) >= 36 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+      resetPlayerInput(playerId);
+    }
+  }
+
   function quick(playerId: string, amount: number) {
     if (isCommitting) return;
     setInputs((previous: Record<string, string>) => ({ ...previous, [playerId]: String((Number(previous[playerId] || 0) || 0) + amount) }));
@@ -1462,7 +1489,7 @@ export default function RummyApp() {
               <div className="input-main">
                 <div className="input-name" style={{ color: player.color }}>{player.name}</div>
                 <button type="button" disabled={isCommitting} onClick={() => negative(player.id)} className="icon-btn">−</button>
-                <input disabled={isCommitting} value={inputs[player.id] || ""} onChange={(event) => setInputs((previous: Record<string, string>) => ({ ...previous, [player.id]: event.target.value }))} inputMode="decimal" placeholder="0" className="round-input" />
+                <input disabled={isCommitting} value={inputs[player.id] || ""} onChange={(event) => setInputs((previous: Record<string, string>) => ({ ...previous, [player.id]: event.target.value }))} onTouchStart={(event) => handleInputTouchStart(player.id, event)} onTouchEnd={(event) => handleInputTouchEnd(player.id, event)} inputMode="decimal" placeholder="0" className="round-input" />
                 <button type="button" disabled={isCommitting} onClick={() => setClosedBy(closedBy === player.id ? null : player.id)} className={`icon-btn closed-toggle ${closedBy === player.id ? "active" : ""}`} aria-label={`Mark ${player.name} closed`}>✓</button>
               </div>
               <div className="quick-grid">{[5, 10, 20, 50].map((amount) => <button key={amount} disabled={isCommitting} type="button" onClick={() => quick(player.id, amount)} className="quick">+{amount}</button>)}</div>
