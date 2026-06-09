@@ -1,0 +1,12 @@
+V162 UI Studio Color Coverage Fix
+
+Built from V161.
+
+Fixed:
+- Scoreboard progress track no longer keeps the old blue.
+- Scoreboard progress fill now follows the UI Studio text/border color.
+- Point input value color now follows the UI Studio text/border color on iOS/Safari.
+- Input placeholder color now follows the UI Studio text/border color.
+- Soft/faint line color is now derived from --passport-blue instead of hardcoded blue.
+
+No scoring/sync/multi-game logic changed.

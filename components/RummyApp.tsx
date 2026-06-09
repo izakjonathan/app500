@@ -518,7 +518,7 @@ const Scoreboard = memo(function Scoreboard({ game, scoreTotals, onSetStarter }:
                 <span>{player.name}</span>
                 {isStarter && <span className="starter-symbol" aria-hidden="true">★</span>}
               </button>
-              <div className="progress"><div className="progress-fill" style={{ width: `${progress}%`, background: player.color }} /></div>
+              <div className="progress"><div className="progress-fill" style={{ width: `${progress}%` }} /></div>
             </div>
             <div className="total score-transition">{total}</div>
           </div>

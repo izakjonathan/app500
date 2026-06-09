@@ -2,8 +2,8 @@
 :root{
   --passport-blue:#244cdd;
   --passport-bg:#efe9dc;
-  --passport-muted:#244cdd;
-  --passport-faint:rgba(36,76,221,.18);
+  --passport-muted:var(--passport-blue);
+  --passport-faint:color-mix(in srgb, var(--passport-blue) 18%, transparent);
 }
 
 html,body,.app{
@@ -77,7 +77,7 @@ button,input{
 }
 
 input::placeholder{
-  color:rgba(36,76,221,.42);
+  color:color-mix(in srgb, var(--passport-blue) 42%, transparent);
 }
 
 .round-input,input.round-input{
@@ -218,4 +218,24 @@ input::placeholder{
 }
 .starter-symbol{
   color:var(--passport-blue) !important;
+}
+
+
+/* V162 UI Studio color coverage fix */
+.progress{
+  background:color-mix(in srgb, var(--passport-blue) 18%, transparent) !important;
+  border-color:var(--passport-blue) !important;
+}
+.progress-fill{
+  background:var(--passport-blue) !important;
+}
+.round-input,
+input.round-input{
+  color:var(--passport-blue) !important;
+  -webkit-text-fill-color:var(--passport-blue) !important;
+  caret-color:var(--passport-blue) !important;
+}
+input.round-input::placeholder{
+  color:color-mix(in srgb, var(--passport-blue) 42%, transparent) !important;
+  -webkit-text-fill-color:color-mix(in srgb, var(--passport-blue) 42%, transparent) !important;
 }
