@@ -561,6 +561,8 @@ export default function RummyApp() {
   const [gameName, setGameName] = useState("");
   const [names, setNames] = useState<string[]>(DEFAULT_PLAYERS.map((p) => p.name));
   const [syncStatus, setSyncStatus] = useState<SyncStatus>("loading");
+  const [syncError, setSyncError] = useState("");
+  const [syncAttempt, setSyncAttempt] = useState(0);
   const [roomLoadStatus, setRoomLoadStatus] = useState<"idle" | "loading" | "loaded" | "missing">("idle");
   const [isCommitting, setIsCommitting] = useState(false);
   const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "shared">("idle");
@@ -662,6 +664,7 @@ export default function RummyApp() {
     const cloudId = gameCloudId(nextGame);
     pendingGame.current = nextGame;
     try { localStorage.setItem(pendingSyncKey(cloudId), JSON.stringify(nextGame)); } catch {}
+    setSyncError("");
     setSyncStatus("syncing");
 
     if (saveTimer.current) clearTimeout(saveTimer.current);
@@ -700,6 +703,7 @@ export default function RummyApp() {
           .single();
   
         if (error) {
+          setSyncError(error.message || "Cloud save failed.");
           setSyncStatus("offline");
           return;
         }
@@ -717,7 +721,8 @@ export default function RummyApp() {
         } else if (pendingGame.current) {
           saveTimer.current = setTimeout(flush, SAVE_DEBOUNCE_MS);
         }
-      } catch {
+      } catch (error) {
+        setSyncError(error instanceof Error ? error.message : "Could not reach cloud sync.");
         setSyncStatus("offline");
       } finally {
         syncInFlight.current = false;
@@ -799,6 +804,7 @@ export default function RummyApp() {
     pendingGame.current = null;
 
     async function loadCloud() {
+      setSyncError("");
       setSyncStatus("loading");
       setRoomLoadStatus("loading");
 
@@ -820,6 +826,7 @@ export default function RummyApp() {
       if (!mounted) return;
 
       if (error) {
+        setSyncError(error.message || "Could not load the shared game.");
         cloudLoaded.current = true;
         initialSyncFinished.current = true;
         suppressNextSaveForRemoteLoad.current = false;
@@ -828,6 +835,12 @@ export default function RummyApp() {
         return;
       }
 
+      let unsavedGame: Game | null = null;
+      try {
+        const raw = localStorage.getItem(pendingSyncKey(activeCloudId));
+        if (raw) unsavedGame = JSON.parse(raw) as Game;
+      } catch {}
+
       if (data?.game_state) {
         const remoteRaw = data.game_state as CloudGame;
         const remoteGame = { ...stripSync(remoteRaw), gameId: activeCloudId, updatedAt: data.updated_at || new Date().toISOString() };
@@ -835,6 +848,7 @@ export default function RummyApp() {
         const localUpdated = localStorage.getItem(cloudUpdatedKey(activeCloudId)) || "";
         const remoteUpdated = data.updated_at || "";
         const shouldApplyRemote =
+          !unsavedGame &&
           !isUntouchedDefault(remoteGame) &&
           remoteSignature !== currentSignature.current &&
           (!localUpdated || remoteUpdated >= localUpdated);
@@ -870,9 +884,21 @@ export default function RummyApp() {
       cloudLoaded.current = true;
       initialSyncFinished.current = true;
       setSyncStatus("synced");
+      if (unsavedGame && gameCloudId(unsavedGame) === activeCloudId) {
+        setGame(unsavedGame);
+        queueCloudSave(unsavedGame);
+      } else if (!data?.game_state && game.gameId) {
+        queueCloudSave(game);
+      }
     }
 
-    loadCloud();
+    loadCloud().catch((error) => {
+      if (!mounted) return;
+      cloudLoaded.current = true;
+      initialSyncFinished.current = true;
+      setSyncError(error instanceof Error ? error.message : "Could not reach cloud sync.");
+      setSyncStatus("offline");
+    });
 
     const channel = supabase
       .channel(`rummy-live-${activeCloudId}-${clientId.current || "client"}`)
@@ -927,9 +953,10 @@ export default function RummyApp() {
           setSyncStatus("synced");
         }
       )
-      .subscribe((status) => {
-        if (status === "SUBSCRIBED") setSyncStatus("synced");
+      .subscribe((status, error) => {
+        if (status === "SUBSCRIBED" && initialSyncFinished.current) setSyncStatus((previous) => previous === "offline" ? previous : "synced");
         if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+          setSyncError(error?.message || "Live connection interrupted. Retry cloud sync.");
           setSyncStatus("offline");
           if (roomLoadStatus === "loading") setRoomLoadStatus("missing");
         }
@@ -940,7 +967,7 @@ export default function RummyApp() {
       if (saveTimer.current) clearTimeout(saveTimer.current);
       supabase.removeChannel(channel);
     };
-  }, [game.gameId]);
+  }, [game.gameId, syncAttempt, queueCloudSave]);
 
 
   useEffect(() => {
@@ -1580,6 +1607,12 @@ export default function RummyApp() {
           <section className="glass modal settings-modal">
             <div className="modal-title">Settings</div>
             <div className="sync-line">Cloud sync: {syncStatus}</div>
+            {syncStatus === "offline" && (
+              <div className="room-warning" role="status">
+                <div>{syncError || "Cloud connection unavailable. Your scores are saved on this device."}</div>
+                <button type="button" className="glass-soft pill" style={{ marginTop: 8 }} onClick={() => setSyncAttempt((previous) => previous + 1)}>Retry cloud sync</button>
+              </div>
+            )}
             <div className="sync-line">Room {shortGameCode(game.gameId)} · {roomLoadStatus}</div>
             <div className="room-meta-row">
               <span>Shared game</span>
