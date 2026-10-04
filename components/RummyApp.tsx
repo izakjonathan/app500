@@ -524,8 +524,8 @@ const Scoreboard = memo(function Scoreboard({ game, scoreTotals, onSetStarter }:
                 {isStarter && <span className="starter-symbol" aria-hidden="true">★</span>}
               </button>
               {hasScoreDifference && total === lowestScore && (
-                <span style={{ display: "inline-block", marginTop: 4, marginBottom: 4, padding: "2px 8px", border: "1.5px solid var(--passport-blue)", borderRadius: 999, color: "var(--passport-blue)", background: "var(--passport-bg)", fontSize: "var(--font-size-caption)", fontWeight: 700, lineHeight: 1.4 }}>
-                  Bellind
+                <span style={{ display: "inline-block", marginTop: 10, marginBottom: 4, padding: "2px 8px", border: "1.5px solid var(--passport-blue)", borderRadius: 999, color: "var(--passport-blue)", background: "var(--passport-bg)", fontSize: "var(--font-size-caption)", fontWeight: 700, lineHeight: 1.4 }}>
+                  Bellend
                 </span>
               )}
               <div className="progress"><div className="progress-fill" style={{ width: `${progress}%` }} /></div>
