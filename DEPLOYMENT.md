@@ -19,7 +19,7 @@ npm run vercel-build
 Node:
 
 ```text
-20.x
+24.x
 ```
 
 ## Supabase setup
