@@ -503,6 +503,10 @@ function getShareUrl(game: Game) {
 
 type ScoreboardProps = { game: Game; scoreTotals: Record<string, number>; onSetStarter: (playerId: string) => void };
 const Scoreboard = memo(function Scoreboard({ game, scoreTotals, onSetStarter }: ScoreboardProps) {
+  const playerTotals = game.players.map((player) => scoreTotals[player.id] || 0);
+  const lowestScore = Math.min(...playerTotals);
+  const hasScoreDifference = playerTotals.some((total) => total !== lowestScore);
+
   return (
     <section className="glass scoreboard scoreboard-stable">
       <div className="label">Scoreboard - {game.targetScore} points</div>
@@ -518,6 +522,11 @@ const Scoreboard = memo(function Scoreboard({ game, scoreTotals, onSetStarter }:
                 <span>{player.name}</span>
                 {isStarter && <span className="starter-symbol" aria-hidden="true">★</span>}
               </button>
+              {hasScoreDifference && total === lowestScore && (
+                <span style={{ display: "inline-block", marginTop: 4, marginBottom: 4, padding: "2px 8px", border: "1.5px solid var(--passport-blue)", borderRadius: 999, color: "var(--passport-blue)", background: "var(--passport-bg)", fontSize: "var(--font-size-caption)", fontWeight: 700, lineHeight: 1.4 }}>
+                  Bellind
+                </span>
+              )}
               <div className="progress"><div className="progress-fill" style={{ width: `${progress}%` }} /></div>
             </div>
             <div className="total score-transition">{total}</div>
