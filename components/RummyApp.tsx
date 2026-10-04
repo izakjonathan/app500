@@ -47,10 +47,11 @@ function getUrlGameId() {
   try { return new URL(window.location.href).searchParams.get("game") || ""; } catch { return ""; }
 }
 function setUrlGameId(gameId: string) {
-  if (typeof window === "undefined" || !gameId) return;
+  if (typeof window === "undefined") return;
   try {
     const url = new URL(window.location.href);
-    url.searchParams.set("game", gameId);
+    if (gameId) url.searchParams.set("game", gameId);
+    else url.searchParams.delete("game");
     window.history.replaceState({}, "", url.toString());
   } catch {}
 }
@@ -664,8 +665,12 @@ export default function RummyApp() {
     setSyncStatus("syncing");
 
     if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = setTimeout(async () => {
-      if (!pendingGame.current || syncInFlight.current) return;
+    const flush = async () => {
+      if (!pendingGame.current) return;
+      if (syncInFlight.current) {
+        saveTimer.current = setTimeout(flush, SAVE_DEBOUNCE_MS);
+        return;
+      }
 
       syncInFlight.current = true;
       const version = Date.now();
@@ -680,36 +685,45 @@ export default function RummyApp() {
         }
       };
 
-      const { data, error } = await supabase
-        .from("rummy_current_game")
-        .upsert(
-          {
-            id: cloudId,
-            game_state: cloudGame,
-            updated_at: new Date(version).toISOString()
-          },
-          { onConflict: "id" }
-        )
-        .select("updated_at")
-        .single();
-
-      syncInFlight.current = false;
-
-      if (error) {
+      try {
+        const { data, error } = await supabase
+          .from("rummy_current_game")
+          .upsert(
+            {
+              id: cloudId,
+              game_state: cloudGame,
+              updated_at: new Date(version).toISOString()
+            },
+            { onConflict: "id" }
+          )
+          .select("updated_at")
+          .single();
+  
+        if (error) {
+          setSyncStatus("offline");
+          return;
+        }
+  
+        if (data?.updated_at) {
+          try { localStorage.setItem(cloudUpdatedKey(cloudId), data.updated_at); } catch {}
+        }
+  
+        await upsertGameLibraryRow({ ...gameToSave, updatedAt: data?.updated_at || new Date(version).toISOString() });
+  
+        if (pendingGame.current === gameToSave) {
+          pendingGame.current = null;
+          try { localStorage.removeItem(pendingSyncKey(cloudId)); } catch {}
+          setSyncStatus("synced");
+        } else if (pendingGame.current) {
+          saveTimer.current = setTimeout(flush, SAVE_DEBOUNCE_MS);
+        }
+      } catch {
         setSyncStatus("offline");
-        return;
+      } finally {
+        syncInFlight.current = false;
       }
-
-      if (data?.updated_at) {
-        try { localStorage.setItem(cloudUpdatedKey(cloudId), data.updated_at); } catch {}
-      }
-
-      await upsertGameLibraryRow({ ...gameToSave, updatedAt: data?.updated_at || new Date(version).toISOString() });
-
-      pendingGame.current = null;
-      try { localStorage.removeItem(pendingSyncKey(cloudId)); } catch {}
-      setSyncStatus("synced");
-    }, SAVE_DEBOUNCE_MS);
+    };
+    saveTimer.current = setTimeout(flush, SAVE_DEBOUNCE_MS);
   }, []);
 
   useEffect(() => {
@@ -834,8 +848,6 @@ export default function RummyApp() {
             writeGameLibrary(next);
             return next;
           });
-          upsertGameLibraryRow(remoteGame).catch(() => setLibrarySyncStatus("offline"));
-          upsertGameLibraryRow(remoteGame).catch(() => setLibrarySyncStatus("offline"));
           try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteGame));
             localStorage.setItem(ACTIVE_GAME_KEY, activeCloudId);
@@ -1007,11 +1019,21 @@ export default function RummyApp() {
     if (!winnerPlayer) return;
 
     setWinnerScoreboard((previous) => addWinnerScore(previous, winnerPlayer.name, game.gameId || ""));
+    setHistory((previous) => {
+      if (previous.some((item) => item.gameId === game.gameId)) return previous;
+      const item: HistoryItem = { gameId: game.gameId!, gameName: game.gameName, winnerName: winnerPlayer.name, rounds: activeRounds(game.rounds).length, finishedAt: new Date().toISOString() };
+      return [item, ...previous].slice(0, 20);
+    });
   }, [game.status, game.winnerId, game.gameId, game.players]);
 
   function createGame() {
+    const targetScore = target === "custom" ? Number(customTarget || 1500) : target;
+    if (!Number.isSafeInteger(targetScore) || targetScore <= 0) {
+      window.alert("Enter a positive whole number for the target score.");
+      return;
+    }
     const players = DEFAULT_PLAYERS.slice(0, playerCount).map((player, index) => ({ ...player, name: names[index]?.trim() || player.name }));
-    const nextGame: Game = touchGame({ gameId: crypto.randomUUID(), gameName: gameName.trim() || `Game ${new Date().toLocaleDateString()}`, players, targetScore: target === "custom" ? Number(customTarget || 1500) : target, starterId: players[0].id, rounds: [], status: "active", winnerId: null, archived: false });
+    const nextGame: Game = touchGame({ gameId: crypto.randomUUID(), gameName: gameName.trim() || `Game ${new Date().toLocaleDateString()}`, players, targetScore, starterId: players[0].id, rounds: [], status: "active", winnerId: null, archived: false });
     setGame(nextGame);
     setSavedGames((previous) => {
       const next = upsertGameInLibrary(previous, nextGame);
@@ -1079,10 +1101,18 @@ export default function RummyApp() {
     if (isCommitting) return;
     if (!game.gameId) { setGameOpen(true); return; }
 
-    setIsCommitting(true);
+    if (game.status === "finished") return;
 
     const scores: Record<string, number> = {};
-    game.players.forEach((player) => { scores[player.id] = Number(String(inputs[player.id] || "0").replace(",", ".")) || 0; });
+    for (const player of game.players) {
+      const value = Number(String(inputs[player.id] || "0").replace(",", "."));
+      if (!Number.isSafeInteger(value)) {
+        window.alert(`Enter a whole-number score for ${player.name}.`);
+        return;
+      }
+      scores[player.id] = value;
+    }
+    setIsCommitting(true);
     const round: Round = { id: crypto.randomUUID(), scores, closedBy, starterId: game.starterId };
 
     setGame((previous: Game) => {
@@ -1092,8 +1122,6 @@ export default function RummyApp() {
       const nextTotals = totals(draft);
       const winnerPlayer = previous.players.find((player) => (nextTotals[player.id] || 0) >= previous.targetScore);
       if (winnerPlayer) {
-        const item: HistoryItem = { gameId: previous.gameId || crypto.randomUUID(), gameName: previous.gameName, winnerName: winnerPlayer.name, rounds: activeRounds(nextRounds).length, finishedAt: new Date().toISOString() };
-        setHistory((old: HistoryItem[]) => [item, ...old].slice(0, 20));
         return { ...draft, status: "finished", winnerId: winnerPlayer.id };
       }
       return draft;
@@ -1105,20 +1133,31 @@ export default function RummyApp() {
     setTimeout(() => setIsCommitting(false), 220);
   }
 
+  function removeRecordedWin() {
+    if (!game.gameId) return;
+    setHistory((previous) => previous.filter((item) => item.gameId !== game.gameId));
+    setWinnerScoreboard((previous) => sortWinnerScoreboard(previous.map((row) => {
+      if (!row.gameIds.includes(game.gameId!)) return row;
+      return { ...row, points: Math.max(0, row.points - 1), gameIds: row.gameIds.filter((id) => id !== game.gameId) };
+    }).filter((row) => row.points > 0)));
+  }
+
   function undo() {
+    removeRecordedWin();
     setGame((previous: Game) => {
       const nextRounds = [...previous.rounds];
+      let starterId = previous.starterId;
       for (let index = nextRounds.length - 1; index >= 0; index -= 1) {
-        if (!nextRounds[index].deleted) { nextRounds[index] = { ...nextRounds[index], deleted: true }; break; }
+        if (!nextRounds[index].deleted) { starterId = nextRounds[index].starterId; nextRounds[index] = { ...nextRounds[index], deleted: true }; break; }
       }
-      return { ...previous, rounds: nextRounds, status: "active", winnerId: null };
+      return { ...previous, rounds: nextRounds, starterId, status: "active", winnerId: null };
     });
     haptic([10, 24, 10]);
   }
 
-  function resetGame() { setGame((previous: Game) => ({ ...previous, rounds: [], status: "active", winnerId: null })); setInputs({}); setClosedBy(null); setSettingsOpen(false); }
+  function resetGame() { removeRecordedWin(); setGame((previous: Game) => ({ ...previous, rounds: [], status: "active", winnerId: null })); setInputs({}); setClosedBy(null); setSettingsOpen(false); }
   function rematch() { setGame((previous: Game) => ({ ...previous, gameId: crypto.randomUUID(), gameName: `${previous.gameName} rematch`, rounds: [], status: "active", winnerId: null })); setInputs({}); setClosedBy(null); }
-  function newSetup() { setGame(createDefaultGame()); setInputs({}); setClosedBy(null); setGameOpen(true); }
+  function newSetup() { setUrlGameId(""); setGame(createDefaultGame()); setInputs({}); setClosedBy(null); setGameOpen(true); }
 
   
   function uiValue(name: string) {
@@ -1316,7 +1355,7 @@ export default function RummyApp() {
     if (game.gameId === gameId) {
       const fallback = next[0] || createDefaultGame();
       setGame(fallback);
-      if (fallback.gameId) setUrlGameId(fallback.gameId);
+      setUrlGameId(fallback.gameId || "");
     }
   }
 
