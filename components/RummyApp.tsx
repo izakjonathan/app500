@@ -10,7 +10,7 @@ type Round = { id: string; scores: Record<string, number>; closedBy: string | nu
 type HistoryItem = { gameId: string; gameName: string; winnerName: string; rounds: number; finishedAt: string };
 type WinnerScore = { name: string; points: number; gameIds: string[]; updatedAt: string };
 type Game = { gameId: string | null; gameName: string; players: Player[]; targetScore: number; starterId: string; rounds: Round[]; status: "active" | "finished"; winnerId: string | null; updatedAt?: string; archived?: boolean };
-type SyncStatus = "loading" | "synced" | "syncing" | "offline";
+type SyncStatus = "idle" | "loading" | "synced" | "syncing" | "offline";
 type DevicePresence = { clientId: string; name: string; joinedAt: string; gameName: string };
 type CloudGame = Game & { __sync?: { clientId: string; version: number } };
 
@@ -803,6 +803,15 @@ export default function RummyApp() {
     initialSyncFinished.current = false;
     pendingGame.current = null;
 
+    if (!game.gameId) {
+      cloudLoaded.current = true;
+      initialSyncFinished.current = true;
+      setSyncError("");
+      setSyncStatus("idle");
+      setRoomLoadStatus("idle");
+      return;
+    }
+
     async function loadCloud() {
       setSyncError("");
       setSyncStatus("loading");
@@ -956,7 +965,7 @@ export default function RummyApp() {
       .subscribe((status, error) => {
         if (status === "SUBSCRIBED" && initialSyncFinished.current) setSyncStatus((previous) => previous === "offline" ? previous : "synced");
         if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
-          setSyncError(error?.message || "Live connection interrupted. Retry cloud sync.");
+          setSyncError((previous) => previous || error?.message || (status === "TIMED_OUT" ? "Live connection timed out. Check your connection and retry." : "Could not connect to Supabase Realtime. Check that the Supabase project is active and retry."));
           setSyncStatus("offline");
           if (roomLoadStatus === "loading") setRoomLoadStatus("missing");
         }
@@ -982,7 +991,7 @@ export default function RummyApp() {
       gameName: game.gameName || "Rummy 500"
     };
 
-    if (!supabase || !activeCloudId) {
+    if (!supabase || !game.gameId) {
       setConnectedDevices([localPresence]);
       return;
     }
@@ -1606,19 +1615,19 @@ export default function RummyApp() {
           <div className="modal-shade" onClick={() => setSettingsOpen(false)} />
           <section className="glass modal settings-modal">
             <div className="modal-title">Settings</div>
-            <div className="sync-line">Cloud sync: {syncStatus}</div>
+            <div className="sync-line">{game.gameId ? `Cloud sync: ${syncStatus}` : "Create or open a game to start cloud sync."}</div>
             {syncStatus === "offline" && (
               <div className="room-warning" role="status">
                 <div>{syncError || "Cloud connection unavailable. Your scores are saved on this device."}</div>
                 <button type="button" className="glass-soft pill" style={{ marginTop: 8 }} onClick={() => setSyncAttempt((previous) => previous + 1)}>Retry cloud sync</button>
               </div>
             )}
-            <div className="sync-line">Room {shortGameCode(game.gameId)} · {roomLoadStatus}</div>
-            <div className="room-meta-row">
+            {game.gameId && <div className="sync-line">Room {shortGameCode(game.gameId)} · {roomLoadStatus}</div>}
+            {game.gameId && <div className="room-meta-row">
               <span>Shared game</span>
               <span>Anyone with link can edit</span>
               <span>{connectedDevices.length} connected</span>
-            </div>
+            </div>}
 
             <button type="button" onClick={shareGame} className="glass-soft modal-btn share-game-btn">
               {shareStatus === "copied" ? "Copied link" : shareStatus === "shared" ? "Shared" : "Share current game"}
