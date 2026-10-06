@@ -349,6 +349,14 @@ function totals(game: Game) {
   return result;
 }
 
+function getWinningPlayer(game: Game): Player | null {
+  const scores = totals(game);
+  const highest = Math.max(...game.players.map((player) => scores[player.id] || 0));
+  if (highest < game.targetScore) return null;
+  const leaders = game.players.filter((player) => (scores[player.id] || 0) === highest);
+  return leaders.length === 1 ? leaders[0] : null;
+}
+
 function signed(value: number) { return value > 0 ? `+${value}` : String(value); }
 
 function getRoundScore(round: Round, playerId: string) {
@@ -1041,7 +1049,24 @@ export default function RummyApp() {
 
   const rounds = useMemo(() => activeRounds(game.rounds), [game.rounds]);
   const scoreTotals = useMemo(() => totals(game), [game]);
-  const winner = game.winnerId ? game.players.find((player) => player.id === game.winnerId) : null;
+  const winner = game.status === "finished" ? getWinningPlayer(game) : null;
+
+  useEffect(() => {
+    if (game.status !== "finished") return;
+    const correctWinner = getWinningPlayer(game);
+    if (game.winnerId === (correctWinner?.id || null)) return;
+    const gameId = game.gameId;
+    // Remove the previous credit so the corrected result is counted once.
+    setWinnerScoreboard((previous) => sortWinnerScoreboard(previous.map((row) => {
+      if (!gameId || !row.gameIds.includes(gameId)) return row;
+      return { ...row, points: Math.max(0, row.points - 1), gameIds: row.gameIds.filter((id) => id !== gameId) };
+    }).filter((row) => row.points > 0)));
+    setHistory((previous) => previous.filter((item) => item.gameId !== gameId));
+    setGame((previous) => {
+      if (previous !== game) return previous;
+      return { ...previous, status: correctWinner ? "finished" : "active", winnerId: correctWinner?.id || null };
+    });
+  }, [game]);
   const latestRound = rounds[rounds.length - 1];
   const analytics = useMemo(() => getAnalytics(game, history), [game, history]);
   const roundsOverviewRows = useMemo(() => getRoundsOverviewRows(game), [game]);
@@ -1051,8 +1076,8 @@ export default function RummyApp() {
   useEffect(() => {
     if (game.status !== "finished" || !game.winnerId || !game.gameId) return;
 
-    const winnerPlayer = game.players.find((player) => player.id === game.winnerId);
-    if (!winnerPlayer) return;
+    const winnerPlayer = getWinningPlayer(game);
+    if (!winnerPlayer || winnerPlayer.id !== game.winnerId) return;
 
     setWinnerScoreboard((previous) => addWinnerScore(previous, winnerPlayer.name, game.gameId || ""));
     setHistory((previous) => {
@@ -1155,8 +1180,7 @@ export default function RummyApp() {
       const nextRounds = [...previous.rounds, round];
       const nextStarter = nextStarterId(previous.players, previous.starterId);
       const draft = { ...previous, rounds: nextRounds, starterId: nextStarter };
-      const nextTotals = totals(draft);
-      const winnerPlayer = previous.players.find((player) => (nextTotals[player.id] || 0) >= previous.targetScore);
+      const winnerPlayer = getWinningPlayer(draft);
       if (winnerPlayer) {
         return { ...draft, status: "finished", winnerId: winnerPlayer.id };
       }
