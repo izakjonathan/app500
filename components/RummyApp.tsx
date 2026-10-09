@@ -1663,7 +1663,7 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setWinnerScoreboardOpen(false)} />
           <section className="glass sheet winner-scoreboard-panel">
-            <div className="menu-heading"><div className="modal-title">Scoreboard</div><button type="button" className="menu-close" onClick={() => setWinnerScoreboardOpen(false)} aria-label="Close scoreboard">×</button></div>
+            <div className="menu-heading"><div className="modal-title">Scoreboard</div><button type="button" className="menu-close" onClick={() => setWinnerScoreboardOpen(false)} aria-label="Close scoreboard"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button></div>
             <div className="sync-line">1 point is added automatically when a player wins a game.</div>
 
             <div className="winner-score-list">
@@ -1690,7 +1690,7 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setSettingsOpen(false)} />
           <section className="glass modal settings-modal">
-            <div className="menu-heading"><div className="modal-title">Settings</div><button type="button" className="menu-close" onClick={() => setSettingsOpen(false)} aria-label="Close settings">×</button></div>
+            <div className="menu-heading"><div className="modal-title">Settings</div><button type="button" className="menu-close" onClick={() => setSettingsOpen(false)} aria-label="Close settings"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button></div>
             <div className="sync-line">{game.gameId ? `Cloud sync: ${syncStatus}` : "Create or open a game to start cloud sync."}</div>
             {syncStatus === "offline" && (
               <div className="room-warning" role="status">
@@ -1728,7 +1728,7 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setInviteOpen(false)} />
           <section className="glass sheet invite-panel">
-            <div className="menu-heading"><div className="modal-title">Invite Players</div><button type="button" className="menu-close" onClick={() => setInviteOpen(false)} aria-label="Close invite players">×</button></div>
+            <div className="menu-heading"><div className="modal-title">Invite Players</div><button type="button" className="menu-close" onClick={() => setInviteOpen(false)} aria-label="Close invite players"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button></div>
             <div className="sync-line">Share this game with anyone who should play or follow along.</div>
             <div className={`room-status room-status-${roomLoadStatus}`}>Room status: {roomLoadStatus}</div>
             <div className="room-meta-row">
@@ -1783,7 +1783,7 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setGamesOpen(false)} />
           <section className="glass sheet game-library-panel">
-            <div className="menu-heading"><div className="modal-title">Saved Games</div><button type="button" className="menu-close" onClick={() => setGamesOpen(false)} aria-label="Close saved games">×</button></div>
+            <div className="menu-heading"><div className="modal-title">Saved Games</div><button type="button" className="menu-close" onClick={() => setGamesOpen(false)} aria-label="Close saved games"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button></div>
             <div className="sync-line">Each game has its own shared link and sync room.</div>
             <div className="sync-line">Cloud library: {librarySyncStatus}</div>
 
@@ -1825,7 +1825,7 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setShowRoundsPopup(false)} />
           <div className="sheet glass">
-            <div className="modal-title rounds-popup-title">Rounds Overview</div>
+            <div className="menu-heading"><div className="modal-title">Rounds Overview</div><button type="button" className="menu-close" onClick={() => setShowRoundsPopup(false)} aria-label="Close rounds overview"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button></div>
 
             <div className="rounds-overview-stats">
               <div>
@@ -1838,22 +1838,19 @@ export default function RummyApp() {
               </div>
             </div>
 
-            <div className="history rounds-overview-list">
-              {roundsOverviewRows.length === 0 ? <div className="history-item">No rounds yet</div> : roundsOverviewRows.map((row) => (
-                <div key={row.round.id} className="history-item round-overview-row">
-                  <span className="round-number">{row.index + 1}.</span>
-                  <span className="round-score-line">
-                    {row.playerScores.map(({ player, score }) => (
-                      <span key={`${row.round.id}-${player.id}`} className="round-player-score">
-                        <span style={{ color: player.color }}>{player.name}</span> {signed(score)}
-                      </span>
-                    ))}
-                    <span className="round-final-total">
-                      {row.playerScores.map(({ total }) => total).join("/")}
-                    </span>
-                  </span>
-                </div>
-              ))}
+            <div className="rounds-table-card">
+              <table className="rounds-table">
+                <caption className="sr-only">Points scored by each player in every round, including the closing bonus</caption>
+                <thead><tr><th scope="col">Round</th>{game.players.map((player) => <th key={player.id} scope="col">{player.name}</th>)}</tr></thead>
+                <tbody>
+                  {roundsOverviewRows.length === 0 ? <tr><td colSpan={game.players.length + 1}>No rounds yet</td></tr> : roundsOverviewRows.map((row) => (
+                    <tr key={row.round.id}>
+                      <th scope="row">{row.index + 1}</th>
+                      {row.playerScores.map(({ player, score, total }) => <td key={player.id}><strong>{signed(score)}</strong><span className="round-running-total">{total} total</span></td>)}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </>
@@ -1864,7 +1861,7 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setTypographyOpen(false)} />
           <section className="glass sheet typography-panel ui-studio-panel">
-            <div className="menu-heading"><div className="modal-title">UI Studio</div><button type="button" className="menu-close" onClick={() => setTypographyOpen(false)} aria-label="Close ui studio">×</button></div>
+            <div className="menu-heading"><div className="modal-title">UI Studio</div><button type="button" className="menu-close" onClick={() => setTypographyOpen(false)} aria-label="Close ui studio"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button></div>
 
             <div className="sync-line" role="status">{uiSyncStatus}</div>
             <div className="ui-studio-tabs">
@@ -2056,7 +2053,7 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setGameOpen(false)} />
           <section className="glass sheet">
-            <div className="menu-heading"><div className="modal-title">Game</div><button type="button" className="menu-close" onClick={() => setGameOpen(false)} aria-label="Close game">×</button></div>
+            <div className="menu-heading"><div className="modal-title">Game</div><button type="button" className="menu-close" onClick={() => setGameOpen(false)} aria-label="Close game"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg></button></div>
             <div className="form-grid">
               <label className="menu-field-label">Game name</label>
               <input value={gameName} onChange={(event) => setGameName(event.target.value)} placeholder="Game name" className="form-input" />
