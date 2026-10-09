@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Rummy 500 scoring app",
   manifest: "/manifest.webmanifest",
   icons: { apple: "/apple-touch-icon.png", icon: "/icon-192.png" },
-  appleWebApp: { capable: true, title: "Rummy 500", statusBarStyle: "default" }
+  appleWebApp: { capable: true, title: "Rummy 500", statusBarStyle: "black-translucent" }
 };
 
 export const viewport: Viewport = {
