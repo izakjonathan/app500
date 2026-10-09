@@ -282,3 +282,6 @@ input.round-input::placeholder{
 .color-control-row{grid-template-columns:minmax(70px,1fr) 36px minmax(80px,auto) 48px}
 .ui-studio-section{margin:18px 0 8px;font-size:var(--font-size-caption);letter-spacing:.06em}
 .sheet .history{margin-top:16px}
+
+.settings-modal .room-meta-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;flex-wrap:nowrap;gap:5px}
+.settings-modal .room-meta-row span{min-width:0;white-space:nowrap;text-align:center;padding:7px 5px;font-size:clamp(8px,2.35vw,12px);letter-spacing:-.02em}
