@@ -1611,7 +1611,7 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setWinnerScoreboardOpen(false)} />
           <section className="glass sheet winner-scoreboard-panel">
-            <div className="modal-title">Scoreboard</div>
+            <div className="menu-heading"><div className="modal-title">Scoreboard</div><button type="button" className="menu-close" onClick={() => setWinnerScoreboardOpen(false)} aria-label="Close scoreboard">×</button></div>
             <div className="sync-line">1 point is added automatically when a player wins a game.</div>
 
             <div className="winner-score-list">
@@ -1638,7 +1638,7 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setSettingsOpen(false)} />
           <section className="glass modal settings-modal">
-            <div className="modal-title">Settings</div>
+            <div className="menu-heading"><div className="modal-title">Settings</div><button type="button" className="menu-close" onClick={() => setSettingsOpen(false)} aria-label="Close settings">×</button></div>
             <div className="sync-line">{game.gameId ? `Cloud sync: ${syncStatus}` : "Create or open a game to start cloud sync."}</div>
             {syncStatus === "offline" && (
               <div className="room-warning" role="status">
@@ -2003,7 +2003,7 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setGameOpen(false)} />
           <section className="glass sheet">
-            <div className="modal-title">Game</div>
+            <div className="menu-heading"><div className="modal-title">Game</div><button type="button" className="menu-close" onClick={() => setGameOpen(false)} aria-label="Close game">×</button></div>
             <div className="form-grid">
               <input value={gameName} onChange={(event) => setGameName(event.target.value)} placeholder="Game name" className="form-input" />
               <div className="segment" style={{ "--count": 5 } as React.CSSProperties}>{[500, 1000, 1500, 2000, "custom"].map((value) => <button key={String(value)} type="button" onClick={() => setTarget(value as number | "custom")} className={target === value ? "selected" : ""}>{value === "custom" ? "Custom" : value}</button>)}</div>

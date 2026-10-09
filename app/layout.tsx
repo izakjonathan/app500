@@ -5,7 +5,8 @@ export const metadata: Metadata = {
   title: "Rummy 500",
   description: "Rummy 500 scoring app",
   manifest: "/manifest.webmanifest",
-  appleWebApp: { capable: true, title: "Rummy 500", statusBarStyle: "black-translucent" }
+  icons: { apple: "/apple-touch-icon.png", icon: "/icon-192.png" },
+  appleWebApp: { capable: true, title: "Rummy 500", statusBarStyle: "default" }
 };
 
 export const viewport: Viewport = {
@@ -14,7 +15,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-  themeColor: "#050506"
+  themeColor: "#efe9dc"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
