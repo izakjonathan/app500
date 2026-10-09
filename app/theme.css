@@ -266,3 +266,19 @@ input.round-input::placeholder{
 .sheet .segment button{padding:8px 2px;min-height:44px;font-size:var(--font-size-body);border-radius:var(--radius-sm)}
 .sheet .segment button.selected{background:var(--passport-blue);color:var(--passport-bg);box-shadow:none}
 .header,.header::before,.header::after{filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important;background-image:none!important}
+
+/* Menu hierarchy: bottom sheets, sticky headers and readable editing controls. */
+.settings-modal{top:auto;bottom:calc(var(--safe-bottom) + 12px);max-height:calc(100dvh - var(--safe-top) - var(--safe-bottom) - 24px)}
+.menu-heading{position:sticky;top:-18px;background:var(--passport-bg);z-index:3;padding:12px 0;margin-top:-6px;border-bottom:1px solid var(--passport-blue)}
+.modal-title{font-size:var(--font-size-title);letter-spacing:.08em}
+.menu-field-label{font-size:var(--font-size-caption);font-weight:var(--font-weight-label);margin-top:4px;letter-spacing:.04em}
+.settings-modal .modal-grid{margin-top:16px;padding-top:16px;border-top:1px solid var(--passport-blue)}
+.settings-modal .modal-btn{text-align:left;padding:14px 16px}
+.ui-studio-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:12px 0}
+.ui-studio-tabs button{min-height:40px;border-radius:var(--radius-sm);font-size:var(--font-size-body)}
+.ui-studio-tabs button.active{background:var(--passport-blue);color:var(--passport-bg);box-shadow:none}
+.ui-control-row{display:grid;grid-template-columns:minmax(70px,1fr) 34px minmax(56px,auto) 34px 48px;gap:5px;padding:10px 0;border:0;border-bottom:1px solid color-mix(in srgb,var(--passport-blue) 20%,transparent);font-size:var(--font-size-body)}
+.ui-control-row button{min-height:36px;border-radius:var(--radius-sm);font-size:var(--font-size-caption);padding:4px}
+.color-control-row{grid-template-columns:minmax(70px,1fr) 36px minmax(80px,auto) 48px}
+.ui-studio-section{margin:18px 0 8px;font-size:var(--font-size-caption);letter-spacing:.06em}
+.sheet .history{margin-top:16px}

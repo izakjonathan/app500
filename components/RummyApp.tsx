@@ -512,10 +512,6 @@ function getShareUrl(game: Game) {
 
 type ScoreboardProps = { game: Game; scoreTotals: Record<string, number>; onSetStarter: (playerId: string) => void };
 const Scoreboard = memo(function Scoreboard({ game, scoreTotals, onSetStarter }: ScoreboardProps) {
-  const playerTotals = game.players.map((player) => scoreTotals[player.id] || 0);
-  const lowestScore = Math.min(...playerTotals);
-  const hasScoreDifference = playerTotals.some((total) => total !== lowestScore);
-
   return (
     <section className="glass scoreboard scoreboard-stable">
       <div className="label">Scoreboard - {game.targetScore} points</div>
@@ -531,11 +527,6 @@ const Scoreboard = memo(function Scoreboard({ game, scoreTotals, onSetStarter }:
                 <span>{player.name}</span>
                 {isStarter && <span className="starter-symbol" aria-hidden="true">★</span>}
               </button>
-              {hasScoreDifference && total === lowestScore && (
-                <span style={{ display: "inline-block", marginTop: 10, marginBottom: 4, padding: "2px 8px", border: "1.5px solid var(--passport-blue)", borderRadius: 999, color: "var(--passport-blue)", background: "var(--passport-bg)", fontSize: "var(--font-size-caption)", fontWeight: 700, lineHeight: 1.4 }}>
-                  Bellend
-                </span>
-              )}
               <div className="progress"><div className="progress-fill" style={{ width: `${progress}%` }} /></div>
             </div>
             <div className="total score-transition">{total}</div>
@@ -556,6 +547,8 @@ export default function RummyApp() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [typographyOpen, setTypographyOpen] = useState(false);
   const [uiStudioTab, setUiStudioTab] = useState<UiStudioTab>("type");
+  const uiPending = useRef<Record<string, string>>({});
+  const [uiSyncStatus, setUiSyncStatus] = useState("Loading shared appearance…");
   const [uiValues, setUiValues] = useState<Record<string, string>>(() => ({ ...UI_STUDIO_DEFAULTS }));
   const [showRoundsPopup, setShowRoundsPopup] = useState(false);
   const [winnerScoreboardOpen, setWinnerScoreboardOpen] = useState(false);
@@ -709,19 +702,19 @@ export default function RummyApp() {
           )
           .select("updated_at")
           .single();
-  
+
         if (error) {
           setSyncError(error.message || "Cloud save failed.");
           setSyncStatus("offline");
           return;
         }
-  
+
         if (data?.updated_at) {
           try { localStorage.setItem(cloudUpdatedKey(cloudId), data.updated_at); } catch {}
         }
-  
+
         await upsertGameLibraryRow({ ...gameToSave, updatedAt: data?.updated_at || new Date(version).toISOString() });
-  
+
         if (pendingGame.current === gameToSave) {
           pendingGame.current = null;
           try { localStorage.removeItem(pendingSyncKey(cloudId)); } catch {}
@@ -1219,12 +1212,55 @@ export default function RummyApp() {
   function rematch() { setGame((previous: Game) => ({ ...previous, gameId: crypto.randomUUID(), gameName: `${previous.gameName} rematch`, rounds: [], status: "active", winnerId: null })); setInputs({}); setClosedBy(null); }
   function newSetup() { setUrlGameId(""); setGame(createDefaultGame()); setInputs({}); setClosedBy(null); setGameOpen(true); }
 
-  
+
+  useEffect(() => {
+    let cancelled = false;
+    let busy = false;
+    try { uiPending.current = JSON.parse(localStorage.getItem("rummy-ui-pending-global") || "{}"); } catch {}
+    async function syncAppearance() {
+      if (busy || cancelled) return;
+      busy = true;
+      try {
+        const pending = { ...uiPending.current };
+        const changes = Object.entries(pending).filter(([name]) => name in UI_STUDIO_DEFAULTS);
+        if (changes.length) {
+          const { error } = await supabase.from("rummy_current_game").upsert(changes.map(([name, value]) => ({ id: `ui-studio-global:${name}`, game_state: { name, value }, updated_at: new Date().toISOString() })), { onConflict: "id" });
+          if (error) throw error;
+          changes.forEach(([name, value]) => { if (uiPending.current[name] === value) delete uiPending.current[name]; });
+          localStorage.setItem("rummy-ui-pending-global", JSON.stringify(uiPending.current));
+        }
+        const { data, error } = await supabase.from("rummy_current_game").select("game_state").like("id", "ui-studio-global:%");
+        if (error) throw error;
+        if (cancelled) return;
+        const shared: Record<string, string> = {};
+        (data || []).forEach(({ game_state }) => {
+          const { name, value } = game_state || {};
+          if (!(name in UI_STUDIO_DEFAULTS) || typeof value !== "string" || name in uiPending.current) return;
+          shared[name] = value;
+          document.documentElement.style.setProperty(name, value);
+          localStorage.setItem(`rummy-type-${name}`, value);
+        });
+        setUiValues((previous) => ({ ...previous, ...shared }));
+        setUiSyncStatus(Object.keys(uiPending.current).length ? "Saving for all devices…" : "Shared across all devices");
+      } catch {
+        if (!cancelled) setUiSyncStatus("Saved on this device · cloud appearance unavailable");
+      } finally { busy = false; }
+    }
+    syncAppearance();
+    const timer = window.setInterval(syncAppearance, 3000);
+    window.addEventListener("online", syncAppearance);
+    return () => { cancelled = true; clearInterval(timer); window.removeEventListener("online", syncAppearance); };
+  }, []);
+
   function uiValue(name: string) {
     return uiValues[name] || UI_STUDIO_DEFAULTS[name] || "0";
   }
 
   function setUiVar(name: string, value: string) {
+    if (!(name in UI_STUDIO_DEFAULTS) || !CSS.supports(name.startsWith("--passport") ? "color" : name.includes("weight") || name.includes("scale") ? "opacity" : "width", name.includes("weight") ? "1" : value)) return;
+    uiPending.current[name] = value;
+    setUiSyncStatus("Saving for all devices…");
+    try { localStorage.setItem("rummy-ui-pending-global", JSON.stringify(uiPending.current)); } catch {}
     if (typeof document !== "undefined") {
       document.documentElement.style.setProperty(name, value);
     }
@@ -1664,7 +1700,7 @@ export default function RummyApp() {
               <button type="button" onClick={() => { setSettingsOpen(false); setGameOpen(true); }} className="glass-soft modal-btn">Game</button>
               <button type="button" onClick={saveGame} className="glass-soft modal-btn">Save</button>
               <button type="button" onClick={resetGame} className="glass-soft modal-btn danger">Reset</button>
-              
+
             </div>
           </section>
         </>
@@ -1676,7 +1712,7 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setInviteOpen(false)} />
           <section className="glass sheet invite-panel">
-            <div className="modal-title">Invite Players</div>
+            <div className="menu-heading"><div className="modal-title">Invite Players</div><button type="button" className="menu-close" onClick={() => setInviteOpen(false)} aria-label="Close invite players">×</button></div>
             <div className="sync-line">Share this game with anyone who should play or follow along.</div>
             <div className={`room-status room-status-${roomLoadStatus}`}>Room status: {roomLoadStatus}</div>
             <div className="room-meta-row">
@@ -1731,7 +1767,7 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setGamesOpen(false)} />
           <section className="glass sheet game-library-panel">
-            <div className="modal-title">Saved Games</div>
+            <div className="menu-heading"><div className="modal-title">Saved Games</div><button type="button" className="menu-close" onClick={() => setGamesOpen(false)} aria-label="Close saved games">×</button></div>
             <div className="sync-line">Each game has its own shared link and sync room.</div>
             <div className="sync-line">Cloud library: {librarySyncStatus}</div>
 
@@ -1812,8 +1848,9 @@ export default function RummyApp() {
         <>
           <div className="modal-shade" onClick={() => setTypographyOpen(false)} />
           <section className="glass sheet typography-panel ui-studio-panel">
-            <div className="modal-title">UI Studio</div>
+            <div className="menu-heading"><div className="modal-title">UI Studio</div><button type="button" className="menu-close" onClick={() => setTypographyOpen(false)} aria-label="Close ui studio">×</button></div>
 
+            <div className="sync-line" role="status">{uiSyncStatus}</div>
             <div className="ui-studio-tabs">
               {[
                 ["type", "Type"],
@@ -2005,9 +2042,12 @@ export default function RummyApp() {
           <section className="glass sheet">
             <div className="menu-heading"><div className="modal-title">Game</div><button type="button" className="menu-close" onClick={() => setGameOpen(false)} aria-label="Close game">×</button></div>
             <div className="form-grid">
+              <label className="menu-field-label">Game name</label>
               <input value={gameName} onChange={(event) => setGameName(event.target.value)} placeholder="Game name" className="form-input" />
+              <label className="menu-field-label">Target score</label>
               <div className="segment" style={{ "--count": 5 } as React.CSSProperties}>{[500, 1000, 1500, 2000, "custom"].map((value) => <button key={String(value)} type="button" onClick={() => setTarget(value as number | "custom")} className={target === value ? "selected" : ""}>{value === "custom" ? "Custom" : value}</button>)}</div>
               {target === "custom" && <input value={customTarget} onChange={(event) => setCustomTarget(event.target.value)} inputMode="numeric" placeholder="Custom target" className="form-input" />}
+              <label className="menu-field-label">Players</label>
               <div className="segment" style={{ "--count": 3 } as React.CSSProperties}>{[2, 3, 4].map((count) => <button key={count} type="button" onClick={() => setPlayerCount(count)} className={playerCount === count ? "selected" : ""}>{count}</button>)}</div>
               {Array.from({ length: playerCount }, (_, index) => <input key={index} value={names[index] || ""} onChange={(event) => setNames((previous: string[]) => previous.map((name, nameIndex) => nameIndex === index ? event.target.value : name))} placeholder={DEFAULT_PLAYERS[index]?.name || `Player ${index + 1}`} className="form-input" />)}
               <button type="button" onClick={createGame} className="primary">Create / save game</button>
