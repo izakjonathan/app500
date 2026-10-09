@@ -325,6 +325,19 @@ const UI_STUDIO_PRESETS: Record<string, Record<string, string>> = {
 };
 
 
+function updateBrowserBackground(value: string) {
+  if (typeof document === "undefined") return;
+  let meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.name = "theme-color";
+    document.head.appendChild(meta);
+  }
+  meta.content = value;
+  document.documentElement.style.backgroundColor = value;
+  document.body.style.backgroundColor = value;
+}
+
 function createDefaultGame(): Game {
   return { gameId: null, gameName: "No game", players: DEFAULT_PLAYERS.slice(0, 2), targetScore: 1500, starterId: "p1", rounds: [], status: "active", winnerId: null };
 }
@@ -1238,6 +1251,7 @@ export default function RummyApp() {
           if (!(name in UI_STUDIO_DEFAULTS) || typeof value !== "string" || name in uiPending.current) return;
           shared[name] = value;
           document.documentElement.style.setProperty(name, value);
+          if (name === "--passport-bg") updateBrowserBackground(value);
           localStorage.setItem(`rummy-type-${name}`, value);
         });
         setUiValues((previous) => ({ ...previous, ...shared }));
@@ -1263,6 +1277,7 @@ export default function RummyApp() {
     try { localStorage.setItem("rummy-ui-pending-global", JSON.stringify(uiPending.current)); } catch {}
     if (typeof document !== "undefined") {
       document.documentElement.style.setProperty(name, value);
+          if (name === "--passport-bg") updateBrowserBackground(value);
     }
 
     setUiValues((previous) => ({ ...previous, [name]: value }));
@@ -1397,6 +1412,7 @@ export default function RummyApp() {
         const value = saved || UI_STUDIO_DEFAULTS[name];
         nextValues[name] = value;
         document.documentElement.style.setProperty(name, value);
+          if (name === "--passport-bg") updateBrowserBackground(value);
       } catch {}
     });
 
