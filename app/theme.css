@@ -285,3 +285,11 @@ input.round-input::placeholder{
 
 .settings-modal .room-meta-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;flex-wrap:nowrap;gap:5px}
 .settings-modal .room-meta-row span{min-width:0;white-space:nowrap;text-align:center;padding:7px 5px;font-size:clamp(8px,2.35vw,12px);letter-spacing:-.02em}
+
+/* Secondary round adjustments stay quiet and follow the shared UI palette. */
+.round-adjustments{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:4px}
+.round-adjustments button{display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;min-height:36px;padding:6px 2px;border:0;border-radius:var(--radius-sm);background:transparent;color:var(--passport-blue);font:inherit;font-size:var(--font-size-caption);line-height:1.25;cursor:pointer}
+.round-adjustments button span{white-space:nowrap;font-variant-numeric:tabular-nums}
+.round-adjustments button:active{background:var(--passport-faint)}
+.round-adjustments button:focus-visible{outline:2px solid var(--passport-blue);outline-offset:1px}
+.round-adjustments button:disabled{opacity:.45;cursor:default}
