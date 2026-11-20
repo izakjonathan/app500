@@ -1653,6 +1653,10 @@ export default function RummyApp() {
                 <button type="button" disabled={isCommitting} onClick={() => setClosedBy(closedBy === player.id ? null : player.id)} className={`icon-btn closed-toggle ${closedBy === player.id ? "active" : ""}`} aria-label={`Mark ${player.name} closed`}>✓</button>
               </div>
               <div className="quick-grid">{[5, 10, 20, 50].map((amount) => <button key={amount} disabled={isCommitting} type="button" onClick={() => quick(player.id, amount)} className="quick">+{amount}</button>)}</div>
+              <div className="round-adjustments" role="group" aria-label={`Round bonuses and penalties for ${player.name}`}>
+                <button type="button" disabled={isCommitting} onClick={() => quick(player.id, 10)} aria-label={`Add 10 points to ${player.name} for putting down the first meld`} title="First meld: add 10 points">First meld <span>+10</span></button>
+                <button type="button" disabled={isCommitting} onClick={() => quick(player.id, -50)} aria-label={`Subtract 50 points from ${player.name} for not putting down a meld after picking up the pile`} title="No meld after picking up the pile: subtract 50 points">Pile penalty <span>−50</span></button>
+              </div>
             </div>
           ))}
           <button type="button" disabled={isCommitting} onClick={addRound} className="glass-soft add-round"><span>{isCommitting ? "Adding…" : "Add round"}</span></button>
